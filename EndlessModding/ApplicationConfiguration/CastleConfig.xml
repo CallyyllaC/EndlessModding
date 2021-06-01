@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<envelope>
+  <!--<include uri="file://SimulatorSettings.xml" />
+  <include uri="file://MachineSettings.xml" />
+  <include uri="file://ConveyorLoadingParameters.xml" />
+  <include uri="file://DelaySettings.xml" />
+  <include uri="file://VCONDeviceSettings.xml" />-->
+  <components>
+  </components>
+</envelope>

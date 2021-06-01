@@ -1,0 +1,46 @@
+﻿<Window x:Class="EndlessModding.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Endless Modding" MinHeight="450" MinWidth="800">
+
+    <Grid x:Name="Main" Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Margin="5" Grid.Row="0">
+            <TextBlock Text="Endless Modding is a tool for a variety of endless games. Made by Cali."/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Margin="5" Grid.Column="0">
+                <Button x:Name="Endless_Legend" IsEnabled="False">
+                    Endless Legend
+                </Button>
+                <Button x:Name="Dungeon_of_the_Endless" IsEnabled="False">
+                    Dungeon of the Endless
+                </Button>
+                <Button x:Name="Endless_Space_2" Command="{Binding EndlessSpace2Clicked}" IsEnabled="True">
+                    Endless Space 2
+                </Button>
+                <Button x:Name="Humankind" IsEnabled="False">
+                    Humankind
+                </Button>
+            </StackPanel>
+
+            <StackPanel Margin="5" Grid.Column="1">
+                <Button>
+                    Steam
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
