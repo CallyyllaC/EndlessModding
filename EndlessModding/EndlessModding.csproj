@@ -152,9 +152,25 @@
     </Compile>
     <Compile Include="Common\Bootstrapper.cs" />
     <Compile Include="Common\ComponentInstaller.cs" />
+    <Compile Include="Common\Import\Import.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\UI\UIHandler.cs" />
     <Compile Include="Common\XML\XMLHandler.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\HeroMasteryDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IEncounterPlayDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroClassDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroAffinityDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroPoliticsDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroSimulationDescriptor.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroSkillDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroSkillTreeDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\ILevelUpRuleDefinitions.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IModifier.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IShipDesignDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\ISimulationDescriptor.cs" />
+    <Compile Include="EndlessSpace2\Common\Interfaces\IMasteryLevelDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\Modifier.cs" />
     <Compile Include="EndlessSpace2\EndlessSpace2ViewModel.cs" />
     <Compile Include="EndlessSpace2\EndlessSpace2View.xaml.cs">
       <DependentUpon>EndlessSpace2View.xaml</DependentUpon>
@@ -265,8 +281,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EndlessSpace2\Common\Classes\" />
-    <Folder Include="EndlessSpace2\Common\Interfaces\" />
+    <Folder Include="Common\Export\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationConfiguration\CastleConfig.xml">
