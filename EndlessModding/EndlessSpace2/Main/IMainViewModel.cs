@@ -12,7 +12,7 @@ namespace EndlessModding.EndlessSpace2.Main
 {
     public interface IMainViewModel : INotifyPropertyChanged
     {
-        EndlessSpace2ViewModel MainWindow { get; set; }
+        IEndlessSpace2ViewModel MainWindow { get; set; }
 
 
         ICommand ButtonGameDirClick { get; }

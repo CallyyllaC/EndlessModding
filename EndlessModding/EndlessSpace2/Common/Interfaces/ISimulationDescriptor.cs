@@ -17,7 +17,7 @@ namespace EndlessModding.EndlessSpace2.Common.Interfaces
      *
      *</Datatable>
      */
-    class ISimulationDescriptor
+    interface ISimulationDescriptor
     {
         string NamespaceSchema { get; set; }
         string Name { get; set; }

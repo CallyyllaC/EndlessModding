@@ -1,4 +1,5 @@
 ﻿using Castle.Core.Logging;
+using EndlessModding.Common.Import;
 using EndlessModding.EndlessSpace2.Government;
 using EndlessModding.EndlessSpace2.Hero;
 using EndlessModding.EndlessSpace2.Law;
@@ -40,6 +41,7 @@ namespace EndlessModding.EndlessSpace2
         public IGovernmentViewModel GovernmentViewModel { get; set; }
         public ILawViewModel LawViewModel { get; set; }
         public ISystemImprovementViewModel SystemImprovementViewModel { get; set; }
+        public Import ImportHandle { get; set; } = new Import();
 
         public bool Tab_Government = false;
         public bool Tab_Hero = false;

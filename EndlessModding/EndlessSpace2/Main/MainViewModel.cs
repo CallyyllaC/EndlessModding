@@ -19,7 +19,7 @@ namespace EndlessModding.EndlessSpace2.Main
     public class MainViewModel : IMainViewModel
     {
         //Public View Models
-        public EndlessSpace2ViewModel MainWindow { get; set; } // change me back to an interface when you get time
+        public IEndlessSpace2ViewModel MainWindow { get; set; } // change me back to an interface when you get time
 
         //Commands
         public ICommand ButtonGameDirClick { get; }
@@ -106,8 +106,7 @@ namespace EndlessModding.EndlessSpace2.Main
             catch (Exception e)
             {
                 _logger.Error(e.Message);
-                //handle me
-                throw;
+                return false;
             }
             return true;
         }
@@ -127,6 +126,7 @@ namespace EndlessModding.EndlessSpace2.Main
                 GameDirStatus_Text = "Game Directory Found";
                 GameDirStatus_Foreground = Brushes.Green;
                 MainWindow.ToggleTabs(true);
+                MainWindow.ImportHandle.ImportAll(LocGameDir_Text);
             }
             else
             {

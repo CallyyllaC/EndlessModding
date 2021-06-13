@@ -52,7 +52,7 @@ namespace EndlessModding.EndlessSpace2.Common.Interfaces
     }
     interface IHeroSkillTreeSkillDefinition
     {
-        IHeroSkillDefinition2 SkillDefinition { get; set; }
-        List<IHeroSkillDefinition2> RequiredSkill { get; set; }
+        IHeroSkillDefinition SkillDefinition { get; set; }
+        List<IHeroSkillDefinition> RequiredSkill { get; set; }
     }
 }

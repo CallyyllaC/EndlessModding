@@ -1,4 +1,5 @@
-﻿using EndlessModding.EndlessSpace2.Government;
+﻿using EndlessModding.Common.Import;
+using EndlessModding.EndlessSpace2.Government;
 using EndlessModding.EndlessSpace2.Hero;
 using EndlessModding.EndlessSpace2.Law;
 using EndlessModding.EndlessSpace2.Main;
@@ -37,6 +38,9 @@ namespace EndlessModding.EndlessSpace2
         IGovernmentViewModel GovernmentViewModel { get; set; }
         ILawViewModel LawViewModel { get; set; }
         ISystemImprovementViewModel SystemImprovementViewModel { get; set; }
+
+        Import ImportHandle { get; set; }
+        void ToggleTabs(bool enable);
 
         /*bool Tab_Government { get; set; }
         bool Tab_Hero { get; set; }

@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ControlzEx.Theming;
 using EndlessModding.EndlessSpace2;
+using MahApps.Metro.Controls;
 using static EndlessModding.Common.BootStrapper;
 
 namespace EndlessModding
@@ -20,11 +22,13 @@ namespace EndlessModding
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         public MainWindow()
         {
             DataContext = ApplicationBootStrapper.MainWindowViewModel;
+            ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncAll;
+            ThemeManager.Current.SyncTheme();
             InitializeComponent();
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.Common.Interfaces
 {
-    interface HeroMasteryDefinition
+    interface IHeroMasteryDefinition
     {
         string Name { get; set; }//HeroMasteryWit, HeroMasteryLabour, HeroMasteryCommand, HeroMasteryCuriosity
     }

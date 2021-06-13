@@ -76,7 +76,7 @@ namespace EndlessModding.EndlessSpace2.Common.Interfaces
         /// <summary>
         /// The hero skills
         /// </summary>
-        List<IHeroSkillDefinition2> Skills {get; set;}
+        List<IHeroSkillDefinition> Skills {get; set;}
         /// <summary>
         /// Gets or sets the faction affinity.
         /// </summary>
