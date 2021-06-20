@@ -24,58 +24,164 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2
 {
-    public class EndlessSpace2ViewModel : IEndlessSpace2ViewModel
+    public class EndlessSpace2ViewModel : INotifyPropertyChanged
     {
         //Public View Models
-        public IMainViewModel MainViewModel { get; set; }
-        public IWorkshopViewModel WorkshopViewModel { get; set; }
-        public IHeroViewModel HeroViewModel { get; set; }
-        public ISkillViewModel SkillViewModel { get; set; }
-        public ISkillTreeViewModel SkillTreeViewModel { get; set; }
-        public IQuestViewModel QuestViewModel { get; set; }
-        public IPlanetViewModel PlanetViewModel { get; set; }
-        public ITechViewModel TechViewModel { get; set; }
-        public ITraitViewModel TraitViewModel { get; set; }
-        public IMinorFactionViewModel MinorFactionViewModel { get; set; }
-        public IMajorFactionViewModel MajorFactionViewModel { get; set; }
-        public IGovernmentViewModel GovernmentViewModel { get; set; }
-        public ILawViewModel LawViewModel { get; set; }
-        public ISystemImprovementViewModel SystemImprovementViewModel { get; set; }
-        public Import ImportHandle { get; set; } = new Import();
+        public MainViewModel MainViewModel { get; set; }
+        public WorkshopViewModel WorkshopViewModel { get; set; }
+        public HeroViewModel HeroViewModel { get; set; }
+        public SkillViewModel SkillViewModel { get; set; }
+        public SkillTreeViewModel SkillTreeViewModel { get; set; }
+        public QuestViewModel QuestViewModel { get; set; }
+        public PlanetViewModel PlanetViewModel { get; set; }
+        public TechViewModel TechViewModel { get; set; }
+        public TraitViewModel TraitViewModel { get; set; }
+        public MinorFactionViewModel MinorFactionViewModel { get; set; }
+        public MajorFactionViewModel MajorFactionViewModel { get; set; }
+        public GovernmentViewModel GovernmentViewModel { get; set; }
+        public LawViewModel LawViewModel { get; set; }
+        public SystemImprovementViewModel SystemImprovementViewModel { get; set; }
+        public bool Tab_Government
+        {
+            get => tab_Government; set
+            {
+                tab_Government = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Hero
+        {
+            get => tab_Hero; set
+            {
+                tab_Hero = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Law
+        {
+            get => tab_Law; set
+            {
+                tab_Law = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Minor_Faction
+        {
+            get => tab_Minor_Faction; set
+            {
+                tab_Minor_Faction = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Major_Faction
+        {
+            get => tab_Major_Faction; set
+            {
+                tab_Major_Faction = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Planet
+        {
+            get => tab_Planet; set
+            {
+                tab_Planet = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Quest
+        {
+            get => tab_Quest; set
+            {
+                tab_Quest = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Skill
+        {
+            get => tab_Skill; set
+            {
+                tab_Skill = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Skill_Tree
+        {
+            get => tab_Skill_Tree; set
+            {
+                tab_Skill_Tree = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_System_Improvement
+        {
+            get => tab_System_Improvement; set
+            {
+                tab_System_Improvement = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Tech
+        {
+            get => tab_Tech; set
+            {
+                tab_Tech = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Trait
+        {
+            get => tab_Trait; set
+            {
+                tab_Trait = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_Workshop
+        {
+            get => tab_Workshop; set
+            {
+                tab_Workshop = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        public bool Tab_Government = false;
-        public bool Tab_Hero = false;
-        public bool Tab_Law = false;
-        public bool Tab_Minor_Faction = false;
-        public bool Tab_Major_Faction = false;
-        public bool Tab_Planet = false;
-        public bool Tab_Quest = false;
-        public bool Tab_Skill = false;
-        public bool Tab_Skill_Tree = false;
-        public bool Tab_System_Improvement = false;
-        public bool Tab_Tech = false;
-        public bool Tab_Trait = false;
-        public bool Tab_Workshop = false;
+        private bool tab_Government = false;
+        private bool tab_Hero = false;
+        private bool tab_Law = false;
+        private bool tab_Minor_Faction = false;
+        private bool tab_Major_Faction = false;
+        private bool tab_Planet = false;
+        private bool tab_Quest = false;
+        private bool tab_Skill = false;
+        private bool tab_Skill_Tree = false;
+        private bool tab_System_Improvement = false;
+        private bool tab_Tech = false;
+        private bool tab_Trait = false;
+        private bool tab_Workshop = false;
 
         //Fields
         private readonly ILogger _logger;
+        private Import _import;
 
         public EndlessSpace2ViewModel(
-            IMainViewModel mainViewModel,
-            IWorkshopViewModel workshopViewModel,
-            IHeroViewModel heroViewModel,
-            ISkillViewModel skillViewModel,
-            ISkillTreeViewModel skillTreeViewModel,
-            IQuestViewModel questViewModel,
-            IPlanetViewModel planetViewModel,
-            ITechViewModel techViewModel,
-            ITraitViewModel traitViewModel,
-            IMinorFactionViewModel minorFactionViewModel,
-            IMajorFactionViewModel majorFactionViewModel,
-            IGovernmentViewModel governmentViewModel,
-            ILawViewModel lawViewModel,
-            ISystemImprovementViewModel systemImprovementViewModel)
+            Import import,
+            MainViewModel mainViewModel,
+            WorkshopViewModel workshopViewModel,
+            HeroViewModel heroViewModel,
+            SkillViewModel skillViewModel,
+            SkillTreeViewModel skillTreeViewModel,
+            QuestViewModel questViewModel,
+            PlanetViewModel planetViewModel,
+            TechViewModel techViewModel,
+            TraitViewModel traitViewModel,
+            MinorFactionViewModel minorFactionViewModel,
+            MajorFactionViewModel majorFactionViewModel,
+            GovernmentViewModel governmentViewModel,
+            LawViewModel lawViewModel,
+            SystemImprovementViewModel systemImprovementViewModel)
         {
+            _import = import;
             MainViewModel = mainViewModel;
             WorkshopViewModel = workshopViewModel;
             HeroViewModel = heroViewModel;
@@ -90,6 +196,23 @@ namespace EndlessModding.EndlessSpace2
             GovernmentViewModel = governmentViewModel;
             LawViewModel = lawViewModel;
             SystemImprovementViewModel = systemImprovementViewModel;
+
+            MainViewModel.MainWindow = this;
+            WorkshopViewModel.MainWindow = this;
+            HeroViewModel.MainWindow = this;
+            SkillViewModel.MainWindow = this;
+            SkillTreeViewModel.MainWindow = this;
+            QuestViewModel.MainWindow = this;
+            PlanetViewModel.MainWindow = this;
+            TechViewModel.MainWindow = this;
+            TraitViewModel.MainWindow = this;
+            MinorFactionViewModel.MainWindow = this;
+            MajorFactionViewModel.MainWindow = this;
+            GovernmentViewModel.MainWindow = this;
+            LawViewModel.MainWindow = this;
+            SystemImprovementViewModel.MainWindow = this;
+
+            RaisePropertyChanged();
         }
         public void ToggleTabs(bool enable)
         {

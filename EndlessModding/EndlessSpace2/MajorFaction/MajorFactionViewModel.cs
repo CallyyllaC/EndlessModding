@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.MajorFaction
 {
-    class MajorFactionViewModel : IMajorFactionViewModel
+    public class MajorFactionViewModel
     {
+        public EndlessSpace2ViewModel MainWindow { get; set; }
         #region INotifyPropertyChanged
         /// <summary>
         /// Occurs when [property changed].

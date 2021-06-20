@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.SkillTree
 {
-    class SkillTreeViewModel : ISkillTreeViewModel
+    public class SkillTreeViewModel
     {
+        public EndlessSpace2ViewModel MainWindow { get; set; }
         #region INotifyPropertyChanged
         /// <summary>
         /// Occurs when [property changed].

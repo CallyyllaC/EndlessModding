@@ -52,9 +52,6 @@
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.4.4.0\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="Dragablz, Version=0.0.3.223, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dragablz.0.0.3.223\lib\net45\Dragablz.dll</HintPath>
-    </Reference>
     <Reference Include="LoadingIndicators.WPF, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LoadingIndicators.WPF.0.0.1\lib\LoadingIndicators.WPF.dll</HintPath>
     </Reference>
@@ -254,10 +251,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MahApps.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -368,6 +361,112 @@
     <Compile Include="EndlessSpace2\Common\Classes\HeroAffinityDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\HeroClassDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\HeroDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\HeroMasteryDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\HeroPoliticsDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\HeroSkillDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\HeroSkillTreeDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\HeroUnlockGaugeDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\HonorThresholdSetDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\HullDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ImprovementListDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\IndustryConstructibleElement.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\LawDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\LevelUpRuleDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\LibrarianQuestionDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\LoadingTipGuiElement.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MajorFaction.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ManpowerUpgradeDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MarketplaceAdvertisementDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MarketplaceEventDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MedalDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MinigameDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MinorFaction.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MinorFactionPersonalityDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MinorStateDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ModuleDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\MouseCursorRule.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\NamedShipsDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\NodeEffectDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\NodeVisibilityConditionsDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\Palette.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PaletteChroma.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PanelFeatureModuleEffectsDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PersonalityDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PiratePowerLevelDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PirateRelationThresholdDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PlanetColonizationConstructibleElement.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PlanetCuriosityExpeditionDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PlanetImprovementMappingDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PlanetRemappingDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PlanetReserveDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PoliticsDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PoliticsExperienceStatusDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PoliticsSupportStatusDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationAspirationDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationCollectionBonusTrait.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationEventDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationLossResourceGainDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationModifiersTrait.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationPoliticalTraitDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationStateDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PopulationTrait.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PropagatedPlanetDescriptorDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PropagatedPlanetPropertyDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\PropertyFilteringRuleDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\QuestDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\QuestEffectDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\QuestTriggeringMutualExclusionDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\QuestTriggeringProbabilityDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RankDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RankPatternDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RealizationEventDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RecipeIngredientDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RecipeSlotDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RecipeSpecialEffectDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RemainsDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\RemappingDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ResourceConverterDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ResourceDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ResourceDepositDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SalvoDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ScienceConstructibleElement.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ScoreProviderListDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SenatorInteractionDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ShipConditionalConstructionEffectDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ShipDesignDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ShipDesignTemplateDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ShipRoleDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SpecialNodeDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SquadronFormationDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SquadronMetaFormationDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SquadronMissionDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SquadronStanceDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SquadronStanceSelectorDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\StarDestructionDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\StarSystemNodeDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SystemDefenseThresholdDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SystemDiscoverySequenceDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\SystemSupervisorDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TechnologyHelperVariableDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TechnologyLinkDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TechnologyQuadrantDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TechnologyStageDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TemporaryEffectDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TimeBubbleDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TradableCategoryDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TradableDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TradableSubCategoryDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TradingCompanyDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TradingCompanyImprovementDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TraitorBonusThresholdDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TraitorLossResourceGainDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\TutorialDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\UniquePlanetQuestBindingDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\UnlockDatatableElement.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\VictoryConditionDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\WarPointsRewardDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Classes\ZoneEffectDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Handles\HeroMasteryDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Handles\EncounterPlayDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Handles\HeroAffinityDefinition.cs" />
@@ -405,74 +504,58 @@
       <DependentUpon>GovernmentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Government\GovernmentViewModel.cs" />
-    <Compile Include="EndlessSpace2\Government\IGovernmentViewModel.cs" />
     <Compile Include="EndlessSpace2\Hero\HeroView.xaml.cs">
       <DependentUpon>HeroView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Hero\HeroViewModel.cs" />
-    <Compile Include="EndlessSpace2\Hero\IHeroViewModel.cs" />
-    <Compile Include="EndlessSpace2\IEndlessSpace2ViewModel.cs" />
-    <Compile Include="EndlessSpace2\Law\ILawViewModel.cs" />
     <Compile Include="EndlessSpace2\Law\LawView.xaml.cs">
       <DependentUpon>LawView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Law\LawViewModel.cs" />
-    <Compile Include="EndlessSpace2\Main\IMainViewModel.cs" />
     <Compile Include="EndlessSpace2\Main\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Main\MainViewModel.cs" />
-    <Compile Include="EndlessSpace2\MajorFaction\IMajorFactionViewModel.cs" />
     <Compile Include="EndlessSpace2\MajorFaction\MajorFactionView.xaml.cs">
       <DependentUpon>MajorFactionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\MajorFaction\MajorFactionViewModel.cs" />
-    <Compile Include="EndlessSpace2\MinorFaction\IMinorFactionViewModel.cs" />
     <Compile Include="EndlessSpace2\MinorFaction\MinorFactionView.xaml.cs">
       <DependentUpon>MinorFactionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\MinorFaction\MinorFactionViewModel.cs" />
-    <Compile Include="EndlessSpace2\Planet\IPlanetViewModel.cs" />
     <Compile Include="EndlessSpace2\Planet\PlanetView.xaml.cs">
       <DependentUpon>PlanetView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Planet\PlanetViewModel.cs" />
-    <Compile Include="EndlessSpace2\Quest\IQuestViewModel.cs" />
     <Compile Include="EndlessSpace2\Quest\QuestView.xaml.cs">
       <DependentUpon>QuestView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Quest\QuestViewModel.cs" />
-    <Compile Include="EndlessSpace2\SkillTree\ISkillTreeViewModel.cs" />
     <Compile Include="EndlessSpace2\SkillTree\SkillTreeView.xaml.cs">
       <DependentUpon>SkillTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\SkillTree\SkillTreeViewModel.cs" />
-    <Compile Include="EndlessSpace2\Skill\ISkillViewModel.cs" />
     <Compile Include="EndlessSpace2\Skill\SkillView.xaml.cs">
       <DependentUpon>SkillView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Skill\SkillViewModel.cs" />
-    <Compile Include="EndlessSpace2\SystemImprovment\ISystemImprovementViewModel.cs" />
     <Compile Include="EndlessSpace2\SystemImprovment\SystemImprovementView.xaml.cs">
       <DependentUpon>SystemImprovementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\SystemImprovment\SystemImprovementViewModel.cs" />
-    <Compile Include="EndlessSpace2\Tech\ITechViewModel.cs" />
     <Compile Include="EndlessSpace2\Tech\TechView.xaml.cs">
       <DependentUpon>TechView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Tech\TechViewModel.cs" />
-    <Compile Include="EndlessSpace2\Trait\ITraitViewModel.cs" />
     <Compile Include="EndlessSpace2\Trait\TraitView.xaml.cs">
       <DependentUpon>TraitView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Trait\TraitViewModel.cs" />
-    <Compile Include="EndlessSpace2\Workshop\IWorkshopViewModel.cs" />
     <Compile Include="EndlessSpace2\Workshop\WorkshopView.xaml.cs">
       <DependentUpon>WorkshopView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Workshop\WorkshopViewModel.cs" />
-    <Compile Include="IMainWindowViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

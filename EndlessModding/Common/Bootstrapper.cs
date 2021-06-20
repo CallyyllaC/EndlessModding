@@ -35,18 +35,18 @@ namespace EndlessModding.Common
 			/// <value>
 			/// The main window view model.
 			/// </value>
-			public static IMainWindowViewModel MainWindowViewModel
+			public static MainWindowViewModel MainWindowViewModel
 			{
 				get;
 			} = ResolveMainWindowViewModel();
 
-			private static IMainWindowViewModel ResolveMainWindowViewModel()
+			private static MainWindowViewModel ResolveMainWindowViewModel()
 			{
 				Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
 
 				try
 				{
-					IMainWindowViewModel mainWindowViewModel = WindsorContainer.Resolve<IMainWindowViewModel>();
+					MainWindowViewModel mainWindowViewModel = WindsorContainer.Resolve<MainWindowViewModel>();
 					return mainWindowViewModel;
 				}
 				catch (Exception e)
@@ -56,18 +56,18 @@ namespace EndlessModding.Common
 				}
 			}
 
-			public static IEndlessSpace2ViewModel EndlessSpace2ViewModel
+			public static EndlessSpace2ViewModel EndlessSpace2ViewModel
 			{
 				get;
 			} = ResolveEndlessSpace2ViewModel();
 
-			private static IEndlessSpace2ViewModel ResolveEndlessSpace2ViewModel()
+			private static EndlessSpace2ViewModel ResolveEndlessSpace2ViewModel()
 			{
 				Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
 
 				try
 				{
-					IEndlessSpace2ViewModel EndlessSpace2ViewModel = WindsorContainer.Resolve<IEndlessSpace2ViewModel>();
+					EndlessSpace2ViewModel EndlessSpace2ViewModel = WindsorContainer.Resolve<EndlessSpace2ViewModel>();
 					return EndlessSpace2ViewModel;
 				}
 				catch (Exception e)

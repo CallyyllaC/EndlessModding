@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.Planet
 {
-    class PlanetViewModel : IPlanetViewModel
+    public class PlanetViewModel
     {
+        public EndlessSpace2ViewModel MainWindow { get; set; }
         #region INotifyPropertyChanged
         /// <summary>
         /// Occurs when [property changed].

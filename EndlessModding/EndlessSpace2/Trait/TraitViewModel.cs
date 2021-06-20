@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.Trait
 {
-    class TraitViewModel : ITraitViewModel
+    public class TraitViewModel
     {
+        //Public View Models
+        public EndlessSpace2ViewModel MainWindow { get; set; }
         #region INotifyPropertyChanged
         /// <summary>
         /// Occurs when [property changed].

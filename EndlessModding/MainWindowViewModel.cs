@@ -12,10 +12,10 @@ using System.Windows.Input;
 
 namespace EndlessModding
 {
-    public class MainWindowViewModel : IMainWindowViewModel
+    public class MainWindowViewModel
     {
         //Public View Models
-        public IEndlessSpace2ViewModel EndlessSpace2 { get; }
+        public EndlessSpace2ViewModel EndlessSpace2 { get; }
 
         //Private Views
         private EndlessSpace2View EndlessSpace2Window;
@@ -34,7 +34,7 @@ namespace EndlessModding
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
         /// <param name="es2vm">The endless space 2 view model.</param>
-        public MainWindowViewModel(ILogger castleLogger, IEndlessSpace2ViewModel es2vm)
+        public MainWindowViewModel(ILogger castleLogger, EndlessSpace2ViewModel es2vm)
         {
             //setup injections
             _logger = castleLogger;
@@ -54,8 +54,15 @@ namespace EndlessModding
             {
                 EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View();
             }
-
-            EndlessSpace2Window.Show();
+            try
+            {
+                EndlessSpace2Window.Show();
+            }
+            catch
+            {
+                EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View();
+                EndlessSpace2Window.Show();
+            }
         }
         private bool Can_Endless_Space_2_Click(object obj)
         {

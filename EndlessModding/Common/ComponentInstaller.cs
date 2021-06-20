@@ -37,22 +37,23 @@ namespace EndlessModding.Common
 		/// <param name="store">The configuration store.</param>
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
-			container.Register(Component.For<IMainWindowViewModel>().ImplementedBy<MainWindowViewModel>());
-			container.Register(Component.For<IEndlessSpace2ViewModel>().ImplementedBy<EndlessSpace2ViewModel>());
-			container.Register(Component.For<IMainViewModel>().ImplementedBy<MainViewModel>());
-			container.Register(Component.For<IWorkshopViewModel>().ImplementedBy<WorkshopViewModel>());
-			container.Register(Component.For<IHeroViewModel>().ImplementedBy<HeroViewModel>());
-			container.Register(Component.For<ISkillViewModel>().ImplementedBy<SkillViewModel>());
-			container.Register(Component.For<ISkillTreeViewModel>().ImplementedBy<SkillTreeViewModel>());
-			container.Register(Component.For<IQuestViewModel>().ImplementedBy<QuestViewModel>());
-			container.Register(Component.For<IPlanetViewModel>().ImplementedBy<PlanetViewModel>());
-			container.Register(Component.For<ITechViewModel>().ImplementedBy<TechViewModel>());
-			container.Register(Component.For<ITraitViewModel>().ImplementedBy<TraitViewModel>());
-			container.Register(Component.For<IMinorFactionViewModel>().ImplementedBy<MinorFactionViewModel>());
-			container.Register(Component.For<IMajorFactionViewModel>().ImplementedBy<MajorFactionViewModel>());
-			container.Register(Component.For<IGovernmentViewModel>().ImplementedBy<GovernmentViewModel>());
-			container.Register(Component.For<ILawViewModel>().ImplementedBy<LawViewModel>());
-			container.Register(Component.For<ISystemImprovementViewModel>().ImplementedBy<SystemImprovementViewModel>());
+			container.Register(Component.For<Import.Import>().ImplementedBy<Import.Import>());
+			container.Register(Component.For<MainWindowViewModel>().ImplementedBy<MainWindowViewModel>());
+			container.Register(Component.For<EndlessSpace2ViewModel>().ImplementedBy<EndlessSpace2ViewModel>());
+			container.Register(Component.For<MainViewModel>().ImplementedBy<MainViewModel>());
+			container.Register(Component.For<WorkshopViewModel>().ImplementedBy<WorkshopViewModel>());
+			container.Register(Component.For<HeroViewModel>().ImplementedBy<HeroViewModel>());
+			container.Register(Component.For<SkillViewModel>().ImplementedBy<SkillViewModel>());
+			container.Register(Component.For<SkillTreeViewModel>().ImplementedBy<SkillTreeViewModel>());
+			container.Register(Component.For<QuestViewModel>().ImplementedBy<QuestViewModel>());
+			container.Register(Component.For<PlanetViewModel>().ImplementedBy<PlanetViewModel>());
+			container.Register(Component.For<TechViewModel>().ImplementedBy<TechViewModel>());
+			container.Register(Component.For<TraitViewModel>().ImplementedBy<TraitViewModel>());
+			container.Register(Component.For<MinorFactionViewModel>().ImplementedBy<MinorFactionViewModel>());
+			container.Register(Component.For<MajorFactionViewModel>().ImplementedBy<MajorFactionViewModel>());
+			container.Register(Component.For<GovernmentViewModel>().ImplementedBy<GovernmentViewModel>());
+			container.Register(Component.For<LawViewModel>().ImplementedBy<LawViewModel>());
+			container.Register(Component.For<SystemImprovementViewModel>().ImplementedBy<SystemImprovementViewModel>());
 	}
 }
 }

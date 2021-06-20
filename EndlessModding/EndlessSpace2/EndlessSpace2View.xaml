@@ -1,6 +1,5 @@
 ﻿<mah:MetroWindow x:Class="EndlessModding.EndlessSpace2.EndlessSpace2View"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -21,13 +20,22 @@
         xmlns:Workshop="clr-namespace:EndlessModding.EndlessSpace2.Workshop"
         xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
         mc:Ignorable="d"
-        Title="Endless Space 2" Height="720" Width="1280">
-
+        Title="Endless Space 2"
+        Height="720" Width="1280"
+        BorderThickness="0"
+        GlowBrush="Black"
+        ResizeMode="CanResizeWithGrip"><!--
+    Icon="mahapps.metro.logo2.ico"
+        ShowIconOnTitleBar="True">
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
-            <mah:HamburgerMenuIconItem/>
-        </DataTemplate>
+    <Image Margin="4"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   Source="{Binding}" />
+    </DataTemplate>
     </mah:MetroWindow.IconTemplate>
+
+    -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -39,99 +47,92 @@
                 <Button>Export</Button>
             </ToolBar>
         </ToolBarTray>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-        </ScrollViewer>
-        <dragablz:TabablzControl x:Name="Tabs" Grid.Row="1" Margin="4 0 4 4">
+        <mah:MetroAnimatedTabControl Grid.Row="1" Margin="4 0 4 4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-            <dragablz:TabablzControl.InterTabController>
-                    <dragablz:InterTabController/>
-                </dragablz:TabablzControl.InterTabController>
-
-
-                <TabItem x:Name="Tab_Main" Header="Main" TabIndex="0">
+            <mah:MetroTabItem x:Name="Tab_Main" Header="Main" TabIndex="0">
                     <Grid>
                         <Main:MainView  DataContext="{Binding MainViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Workshop" Header="Workshop" IsEnabled="{Binding Tab_Workshop}" TabIndex="1">
+            <mah:MetroTabItem x:Name="Tab_Workshop" Header="Workshop" IsEnabled="{Binding Tab_Workshop}" TabIndex="1">
                     <Grid>
                         <Workshop:WorkshopView  DataContext="{Binding WorkshopViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Hero" Header="Hero" IsEnabled="{Binding Tab_Hero}" TabIndex="2">
+            <mah:MetroTabItem x:Name="Tab_Hero" Header="Hero" IsEnabled="{Binding Tab_Hero}" TabIndex="2">
                     <Grid>
                         <Hero:HeroView  DataContext="{Binding HeroViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Skill" Header="Skill" IsEnabled="{Binding Tab_Skill}" TabIndex="3">
+            <mah:MetroTabItem x:Name="Tab_Skill" Header="Skill" IsEnabled="{Binding Tab_Skill}" TabIndex="3">
                     <Grid>
                         <Skill:SkillView  DataContext="{Binding SkillViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Skill_Tree" Header="Skill Tree" IsEnabled="{Binding Tab_Skill_Tree}" TabIndex="4">
+            <mah:MetroTabItem x:Name="Tab_Skill_Tree" Header="Skill Tree" IsEnabled="{Binding Tab_Skill_Tree}" TabIndex="4">
                     <Grid>
                         <SkillTree:SkillTreeView  DataContext="{Binding SkillTreeViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Quest" Header="Quest" IsEnabled="{Binding Tab_Quest}" TabIndex="5">
+            <mah:MetroTabItem x:Name="Tab_Quest" Header="Quest" IsEnabled="{Binding Tab_Quest}" TabIndex="5">
                     <Grid>
                         <Quest:QuestView  DataContext="{Binding QuestViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Planet" Header="Planet" IsEnabled="{Binding Tab_Planet}" TabIndex="6">
+            <mah:MetroTabItem x:Name="Tab_Planet" Header="Planet" IsEnabled="{Binding Tab_Planet}" TabIndex="6">
                     <Grid>
                         <Planet:PlanetView  DataContext="{Binding PlanetViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Tech" Header="Tech" IsEnabled="{Binding Tab_Tech}" TabIndex="7">
+            <mah:MetroTabItem x:Name="Tab_Tech" Header="Tech" IsEnabled="{Binding Tab_Tech}" TabIndex="7">
                     <Grid>
                         <Tech:TechView  DataContext="{Binding TechViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Trait" Header="Trait" IsEnabled="{Binding Tab_Trait}" TabIndex="8">
+            <mah:MetroTabItem x:Name="Tab_Trait" Header="Trait" IsEnabled="{Binding Tab_Trait}" TabIndex="8">
                     <Grid>
                         <Trait:TraitView  DataContext="{Binding TraitViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Minor_Faction" Header="Minor Faction" IsEnabled="{Binding Tab_Minor_Faction}" TabIndex="9">
+            <mah:MetroTabItem x:Name="Tab_Minor_Faction" Header="Minor Faction" IsEnabled="{Binding Tab_Minor_Faction}" TabIndex="9">
                     <Grid>
                         <MinorFaction:MinorFactionView  DataContext="{Binding MinorFactionViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="9">
+            <mah:MetroTabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="9">
                     <Grid>
                         <MajorFaction:MajorFactionView  DataContext="{Binding MajorFactionViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="10">
+            <mah:MetroTabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="10">
                     <Grid>
                         <Government:GovernmentView  DataContext="{Binding GovernmentViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="11">
+            <mah:MetroTabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="11">
                     <Grid>
                         <Law:LawView  DataContext="{Binding LawViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
 
-                <TabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="12">
+            <mah:MetroTabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="12">
                     <Grid>
                         <SystemImprovement:SystemImprovementView  DataContext="{Binding SystemImprovementViewModel}"/>
                     </Grid>
-                </TabItem>
+                </mah:MetroTabItem>
+        </mah:MetroAnimatedTabControl>
 
-            </dragablz:TabablzControl>
     </Grid>
 </mah:MetroWindow>
