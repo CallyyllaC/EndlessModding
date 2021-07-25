@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 using System.Xml.Serialization;
-namespace EndlessModding.EndlessSpace2.Common.Classes.HeroClassDefinition
+namespace EndlessModding.EndlessSpace2.Common.Classes.HeroClassDefinitions
 {
 
     // 

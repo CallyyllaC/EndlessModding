@@ -3,81 +3,89 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1000">
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="auto">
-        <Grid MinHeight="200" MinWidth="400" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:MetroWindow}}, Path=ActualHeight}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:MetroWindow}}, Path=ActualWidth}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Update}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
             <GroupBox Header="Game Directory" Grid.Row="0">
                 <Grid>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Game Install Directory: " Grid.Column="0" Grid.Row="0"/>
-
                     <TextBox x:Name="TextBox_GameDir" Grid.Column="1" Grid.Row="0" Text="{Binding LocGameDir_Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
                     <Button x:Name="Button_GameDir" Grid.Column="2" Grid.Row="0" Content="Browse"  Command="{Binding ButtonGameDirClick}"/>
-
                     <TextBlock x:Name="Text_GameDirStatus" Text="{Binding GameDirStatus_Text}" Foreground="{Binding GameDirStatus_Foreground}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
-
                 </Grid>
             </GroupBox>
+            <GroupBox Header="Workshop Directory" Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1">
+                    <TextBlock Text="Workshop Directory: " Grid.Column="0" Grid.Row="0"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding LocOutDir_Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="2" Grid.Row="0" Content="Browse" Command="{Binding ButtonOutDirClick}"/>
+                    <CheckBox Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding LoadOtherMods}" Content="Load other mods"/>
+                </Grid>
+            </GroupBox>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
                 <StackPanel Grid.Column="0">
-
                     <GroupBox Header="About">
-
                         <TextBlock TextWrapping="Wrap" Text="{Binding About}"/>
-
                     </GroupBox>
-
                     <GroupBox Header="Steam">
-
                         <TextBlock TextWrapping="Wrap" Text="{Binding Steam}"/>
-
                     </GroupBox>
-
                     <GroupBox Header="Github">
-
                         <TextBlock TextWrapping="Wrap" Text="{Binding Github}"/>
-
                     </GroupBox>
-
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-
-                    <GroupBox Header="How to use">
-
-                        <TextBlock TextWrapping="Wrap" Text="{Binding HowTo}"/>
-
+                    <GroupBox Header="Known bugs">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Bugs}"/>
                     </GroupBox>
-
+                    <GroupBox Header="How to use">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding HowTo}"/>
+                    </GroupBox>
                 </StackPanel>
-
             </Grid>
-
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -146,6 +146,24 @@ namespace EndlessModding.EndlessSpace2
             }
         }
 
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+
+                ToggleTabs(!value);
+
+                RaisePropertyChanged();
+            }
+        }
+        public bool ShouldBeEnabled
+        {
+            get => !IsBusy;
+        }
+
+        private bool _isBusy = false;
         private bool tab_Government = false;
         private bool tab_Hero = false;
         private bool tab_Law = false;

@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace EndlessModding.Common.UI
+namespace EndlessModding.Common.IO
 {
-    public static class UIHandler
+    public static class IOHandler
     {
         public static async Task<string> OpenFolderExplorer(string desc = null)
         {
             var folderBrowserDialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
-
             if (desc != null)
             {
                 folderBrowserDialog.Description = desc;
@@ -27,17 +26,25 @@ namespace EndlessModding.Common.UI
             else
                 return await Task.FromResult<string>(null);
         }
-
-        public static T FindParent<T>(DependencyObject child) where T : DependencyObject
+        public static async Task<string> OpenFileExplorer(string desc = null, string ext = null)
         {
+            var fileBrowserDialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
+            if (desc != null)
+            {
+                fileBrowserDialog.Title = desc;
+            }
+            if (ext != null)
+            {
+                fileBrowserDialog.DefaultExt = ext;
+            }
+            fileBrowserDialog.AddExtension = true;
+            fileBrowserDialog.Multiselect = false;
+            bool? result = fileBrowserDialog.ShowDialog();
 
-            T parent = VisualTreeHelper.GetParent(child) as T;
-
-            if (parent != null)
-                return parent;
-
+            if (result == true)
+                return await Task.FromResult(fileBrowserDialog.FileName);
             else
-                return FindParent<T>(parent);
+                return await Task.FromResult<string>(null);
         }
     }
 }

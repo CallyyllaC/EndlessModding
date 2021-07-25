@@ -5,151 +5,248 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:EndlessModding.EndlessSpace2.Common.Converters"
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.Hero"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="1000">
+             d:DesignHeight="650" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <converters:HeroAffinityDefinitionToStringConverter x:Key="HeroAffinityDefinitionConverter"></converters:HeroAffinityDefinitionToStringConverter>
+        <converters:HeroClassDefinitionToStringConverter x:Key="HeroClassDefinitionConverter"></converters:HeroClassDefinitionToStringConverter>
+        <converters:HeroPoliticsDefinitionToStringConverter x:Key="HeroPoliticsDefinitionConverter"></converters:HeroPoliticsDefinitionToStringConverter>
+        <converters:ShipDesignDefinitionToStringConverter x:Key="ShipDesignDefinitionConverter"></converters:ShipDesignDefinitionToStringConverter>
+    </UserControl.Resources>
+
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:MetroWindow}}, Path=ActualHeight}" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:MetroWindow}}, Path=ActualWidth}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="200" />
                 <ColumnDefinition Width="3*" MinWidth="600"/>
             </Grid.ColumnDefinitions>
 
-            <Grid>
-                <GroupBox Header="Modules" Grid.Column="0">
-                    <ListView ItemsSource="{Binding Heros}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Left">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Width="120" DisplayMemberBinding="{Binding Name}">
-                                    <GridViewColumn.Header>
-                                        <GridViewColumnHeader >Name</GridViewColumnHeader>
-                                    </GridViewColumn.Header>
-                                </GridViewColumn>
-                                <GridViewColumn Width="80" DisplayMemberBinding="{Binding Class.Name}">
-                                    <GridViewColumn.Header>
-                                        <GridViewColumnHeader >Class</GridViewColumnHeader>
-                                    </GridViewColumn.Header>
-                                </GridViewColumn>
-                                <GridViewColumn Width="80" DisplayMemberBinding="{Binding Politics.Name}">
-                                    <GridViewColumn.Header>
-                                        <GridViewColumnHeader >Politics</GridViewColumnHeader>
-                                    </GridViewColumn.Header>
-                                </GridViewColumn>
-                                <GridViewColumn Width="80" DisplayMemberBinding="{Binding ShipDesign.Name}">
-                                    <GridViewColumn.Header>
-                                        <GridViewColumnHeader >Ship</GridViewColumnHeader>
-                                    </GridViewColumn.Header>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+            <Grid MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight, Mode=OneWay}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Modules" Grid.Row="0">
+                    <DataGrid ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Class, Converter={StaticResource HeroClassDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Class</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Politics, Converter={StaticResource HeroPoliticsDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Politics</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding ShipDesign, Converter={StaticResource ShipDesignDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Ship</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Affinity, Converter={StaticResource HeroAffinityDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Affinity</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </GroupBox>
+                <Button Grid.Row="1" Command="{Binding NewHero}">New Hero</Button>
             </Grid>
 
-            <Grid Grid.Column="1" MinHeight="400">
+            <Grid Grid.Column="1" MinHeight="400" x:Name="prop">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" MinWidth="300"/>
                     <ColumnDefinition Width="*" MinWidth="300"/>
                 </Grid.ColumnDefinitions>
                 <!--<li:LoadingIndicator Grid.Column="0" Grid.Row="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsArcsActive}" Mode="Arcs" />-->
-                <StackPanel Grid.Column="0" Margin="5">
-                    <TextBlock>Name:</TextBlock>
-                    <TextBox Text="{Binding Name}"/>
-                    <TextBlock>Hidden:</TextBlock>
-                    <CheckBox IsChecked="{Binding Hidden}"/>
-                    <TextBlock>Affinity:</TextBlock>
-                    <ComboBox SelectedItem="{Binding Affinity}" ItemsSource="{Binding Affinities}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBlock>Class:</TextBlock>
-                    <ComboBox SelectedItem="{Binding Class}" ItemsSource="{Binding Classes}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBlock>Politics:</TextBlock>
-                    <ComboBox SelectedItem="{Binding Politic}" ItemsSource="{Binding Politics}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBlock>Ship:</TextBlock>
-                    <ComboBox SelectedItem="{Binding Ship}" ItemsSource="{Binding Ships}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBlock>Max Level:</TextBlock>
-                    <TextBox/>
-                    <TextBlock>Starting Faction:</TextBlock>
-                    <ComboBox SelectedItem="{Binding StartingFaction}" ItemsSource="{Binding Factions}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
+                <GroupBox Header="Hero Details:">
+                    <StackPanel Grid.Column="0" Margin="5">
+                        <TextBlock>Name:</TextBlock>
+                        <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+
+                        <TextBlock>Hidden:</TextBlock>
+                        <CheckBox IsChecked="{Binding Hidden, Mode=TwoWay}"/>
+
+                        <TextBlock>Affinity:</TextBlock>
+                        <ComboBox SelectedItem="{Binding Affinity, Mode=TwoWay}" ItemsSource="{Binding Affinities, Mode=OneWay}"/>
+
+                        <TextBlock>Class:</TextBlock>
+                        <ComboBox SelectedItem="{Binding Class, Mode=TwoWay}" ItemsSource="{Binding Classes, Mode=OneWay}"/>
+
+                        <TextBlock>Politics:</TextBlock>
+                        <ComboBox SelectedItem="{Binding Politic, Mode=TwoWay}" ItemsSource="{Binding Politics, Mode=OneWay}"/>
+
+                        <TextBlock>Ship:</TextBlock>
+                        <ComboBox SelectedItem="{Binding Ship, Mode=TwoWay}" ItemsSource="{Binding Ships, Mode=OneWay}"/>
+
+                        <Grid MaxWidth="400">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0" MinWidth="100" MinHeight="100"   MaxWidth="400" MaxHeight="400" Source="{Binding MoodImage}" Stretch="Uniform"/>
+                            <!--<Canvas Grid.Row="0" MinWidth="100" MinHeight="100" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}">
+
+                            </Canvas>-->
+                            <Button Grid.Row="1" Command="{Binding LoadMoodImage}">Load Mood Image</Button>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Grid.Column="0" Grid.Row="0" MinWidth="100" MinHeight="100"  MaxWidth="200" MaxHeight="200" Source="{Binding LargeImage}" Stretch="Uniform"/>
+                            <Button Grid.Column="0" Grid.Row="1" Command="{Binding LoadLargeImage}">Load Large Image</Button>
+
+                            <Image Source="{Binding MediumImage}" Grid.Column="1" Grid.Row="0" MinWidth="100" MinHeight="100"  MaxWidth="200" MaxHeight="200" Stretch="Uniform"/>
+                            <Button Grid.Column="1" Grid.Row="1" Command="{Binding LoadMediumImage}">Load Medium Image</Button>
+                        </Grid>
+
+                    </StackPanel>
+                </GroupBox>
                 <StackPanel Grid.Column="1">
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto" MinHeight="100"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto" MinHeight="100"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.ColumnSpan="2">Skills:</TextBlock>
-                        <ListView Grid.Row="1" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                        <ComboBox Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Skills}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <Button Grid.Row="3" Grid.Column="0">Add</Button>
-                        <Button Grid.Row="3" Grid.Column="1">Remove</Button>
-                        <TextBlock Grid.Row="4" Grid.ColumnSpan="2">Skill Trees:</TextBlock>
-                        <ListView Grid.Row="5" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                        <ComboBox Grid.Row="6" Grid.ColumnSpan="2" ItemsSource="{Binding SkillTrees}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <Button Grid.Row="7" Grid.Column="0">Add</Button>
-                        <Button Grid.Row="7" Grid.Column="1">Remove</Button>
+                        <GroupBox Grid.Row="0" Grid.ColumnSpan="2" Header="Skills:">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" MinHeight="100"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedSkill, Mode=TwoWay}" ItemsSource="{Binding CurrentSkills, Mode=OneWay}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Name, Mode=OneWay}">
+                                                <GridViewColumn.Header>
+                                                    <GridViewColumnHeader>Name</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="250">
+                                                <GridViewColumn.Header>
+                                                    <GridViewColumnHeader >Levels</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <ListView SelectionMode="Single" ItemsSource="{Binding SkillLevel, Mode=OneWay}">
+                                                            <ListView.ItemContainerStyle>
+                                                                <Style TargetType="ListViewItem">
+                                                                    <Setter Property="Focusable" Value="false"/>
+                                                                </Style>
+                                                            </ListView.ItemContainerStyle>
+                                                            <ListView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                                                                </DataTemplate>
+                                                            </ListView.ItemTemplate>
+                                                        </ListView>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <ComboBox Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding SelectedCurrentSkill, Mode=TwoWay}" ItemsSource="{Binding Skills, Mode=OneWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddSkill}">Add</Button>
+                                <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveSkill}">Remove</Button>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Header="Skill Trees:">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" MinHeight="100"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedSkillTree, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillTrees, Mode=OneWay}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Name, Mode=OneWay}">
+                                                <GridViewColumn.Header>
+                                                    <GridViewColumnHeader >Name</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
+                                            </GridViewColumn>
+                                            <GridViewColumn Width="250">
+                                                <GridViewColumn.Header>
+                                                    <GridViewColumnHeader>Skill Tree</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Expander ExpandDirection="Down">
+                                                            <Expander.Header>
+                                                                <TextBlock Text="{Binding  Stage.Count, Mode=OneWay, StringFormat='Count: {0}'}"/>
+                                                            </Expander.Header>
+                                                            <ListView SelectionMode="Single" ItemsSource="{Binding Stage, Mode=OneWay}">
+                                                                <ListView.ItemContainerStyle>
+                                                                    <Style TargetType="ListViewItem">
+                                                                        <Setter Property="Focusable" Value="false"/>
+                                                                    </Style>
+                                                                </ListView.ItemContainerStyle>
+                                                                <ListView.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Expander ExpandDirection="Right">
+                                                                            <Expander.Header>
+                                                                                <TextBlock Text="{Binding Level, Mode=OneWay, StringFormat='Level: {0}'}"/>
+                                                                            </Expander.Header>
+                                                                            <ListView SelectionMode="Single" ItemsSource="{Binding Skill, Mode=OneWay}">
+                                                                                <ListView.ItemContainerStyle>
+                                                                                    <Style TargetType="ListViewItem">
+                                                                                        <Setter Property="Focusable" Value="false"/>
+                                                                                    </Style>
+                                                                                </ListView.ItemContainerStyle>
+                                                                                <ListView.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <TextBlock Text="{Binding SkillDefinition.Name, Mode=OneWay}"/>
+                                                                                    </DataTemplate>
+                                                                                </ListView.ItemTemplate>
+                                                                            </ListView>
+                                                                        </Expander>
+                                                                    </DataTemplate>
+                                                                </ListView.ItemTemplate>
+                                                            </ListView>
+                                                        </Expander>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <ComboBox Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding SelectedCurrentSkillTree, Mode=TwoWay}" ItemsSource="{Binding SkillTrees, Mode=OneWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddSkillTree}">Add</Button>
+                                <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveSkillTree}">Remove</Button>
+                            </Grid>
+                        </GroupBox>
                     </Grid>
                 </StackPanel>
             </Grid>

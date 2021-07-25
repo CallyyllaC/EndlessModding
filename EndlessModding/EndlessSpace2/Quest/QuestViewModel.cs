@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.Quest
 {
-    public class QuestViewModel
+    public class QuestViewModel : INotifyPropertyChanged
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
         #region INotifyPropertyChanged

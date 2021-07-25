@@ -49,6 +49,9 @@
     <Reference Include="Castle.Windsor, Version=5.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Windsor.5.1.1\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="CCSWE.Core, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CCSWE.Core.2.1.0\lib\net45\CCSWE.Core.dll</HintPath>
+    </Reference>
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.4.4.0\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
@@ -74,7 +77,7 @@
       <HintPath>..\packages\MahApps.Metro.IconPacks.4.8.0\lib\net47\MahApps.Metro.IconPacks.Codicons.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro.IconPacks.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0c0d510f9915137a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.IconPacks.MaterialDesign.4.8.0\lib\net47\MahApps.Metro.IconPacks.Core.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.IconPacks.Unicons.4.8.0\lib\net47\MahApps.Metro.IconPacks.Core.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro.IconPacks.Entypo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0c0d510f9915137a, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.IconPacks.4.8.0\lib\net47\MahApps.Metro.IconPacks.Entypo.dll</HintPath>
@@ -143,7 +146,7 @@
       <HintPath>..\packages\MahApps.Metro.IconPacks.4.8.0\lib\net47\MahApps.Metro.IconPacks.Typicons.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro.IconPacks.Unicons, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0c0d510f9915137a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.IconPacks.4.8.0\lib\net47\MahApps.Metro.IconPacks.Unicons.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.IconPacks.Unicons.4.8.0\lib\net47\MahApps.Metro.IconPacks.Unicons.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro.IconPacks.VaadinIcons, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0c0d510f9915137a, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.IconPacks.4.8.0\lib\net47\MahApps.Metro.IconPacks.VaadinIcons.dll</HintPath>
@@ -261,9 +264,10 @@
     </Compile>
     <Compile Include="Common\Bootstrapper.cs" />
     <Compile Include="Common\ComponentInstaller.cs" />
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\Import\Import.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="Common\UI\UIHandler.cs" />
+    <Compile Include="Common\IO\IOHandler.cs" />
     <Compile Include="Common\XML\XMLHandler.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\AcademyFaction.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\AcademyReparationScoresDefinition.cs" />
@@ -467,35 +471,9 @@
     <Compile Include="EndlessSpace2\Common\Classes\VictoryConditionDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\WarPointsRewardDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\ZoneEffectDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroMasteryDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\EncounterPlayDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroAffinityDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroClassDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroPoliticsDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroSimulationDescriptor.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroSkillDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\HeroSkillTreeDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\LevelUpRuleDefinitions.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\MasteryLevelDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\Modifier.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\ShipDesignDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Handles\SimulationDescriptor.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\ES2XMLClass.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\HeroMasteryDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IEncounterPlayDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroClassDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroAffinityDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroPoliticsDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroSimulationDescriptor.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroSkillDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IHeroSkillTreeDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\ILevelUpRuleDefinitions.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IModifier.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IShipDesignDefinition.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\ISimulationDescriptor.cs" />
-    <Compile Include="EndlessSpace2\Common\Interfaces\IMasteryLevelDefinition.cs" />
+    <Compile Include="EndlessSpace2\Common\Extensions\Converters.cs" />
+    <Compile Include="EndlessSpace2\Common\Extensions\Enums.cs" />
+    <Compile Include="EndlessSpace2\Common\Extensions\Extensions.cs" />
     <Compile Include="EndlessSpace2\EndlessSpace2ViewModel.cs" />
     <Compile Include="EndlessSpace2\EndlessSpace2View.xaml.cs">
       <DependentUpon>EndlessSpace2View.xaml</DependentUpon>
@@ -597,6 +575,9 @@
     <Content Include="ApplicationConfiguration\CastleConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="EndlessSpace2\EndlessModding.png" />
+    <Resource Include="EndlessSpace2\EndlessModdingLogo.ico" />
+    <Resource Include="EndlessSpace2\EndlessModdingLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

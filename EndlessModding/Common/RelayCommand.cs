@@ -11,11 +11,19 @@ namespace EndlessModding.Common
     {
         private readonly Predicate<object> _canExecute;
         private readonly Action<object> _execute;
+        private Func<object, bool> canLoadHero;
+        private ICommand loadHero;
 
         public RelayCommand(Predicate<object> canExecute, Action<object> execute)
         {
             _canExecute = canExecute;
             _execute = execute;
+        }
+
+        public RelayCommand(Func<object, bool> canLoadHero, ICommand loadHero)
+        {
+            this.canLoadHero = canLoadHero;
+            this.loadHero = loadHero;
         }
 
         public event EventHandler CanExecuteChanged

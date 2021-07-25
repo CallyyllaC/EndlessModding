@@ -27,8 +27,11 @@ namespace EndlessModding
         public MainWindow()
         {
             DataContext = ApplicationBootStrapper.MainWindowViewModel;
-            ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncAll;
-            ThemeManager.Current.SyncTheme();
+            ThemeManager.Current.ChangeTheme(this, "Dark.Blue");
+
+            //ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAppMode;
+            //ThemeManager.Current.SyncTheme();
+
             InitializeComponent();
         }
     }

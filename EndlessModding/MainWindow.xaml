@@ -5,7 +5,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Endless Modding" MinHeight="450" MinWidth="800">
+        Title="Endless Modding" Height="605" Width="550"
+        ResizeMode="NoResize"
+        GlowBrush="Black"
+        ShowIconOnTitleBar="True"
+        BorderThickness="0"
+        BorderBrush="Black"
+        TitleAlignment="Center"
+        TitleBarHeight="30">
 
     <Grid x:Name="Main" Margin="5">
         <Grid.RowDefinitions>
@@ -13,34 +20,37 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Margin="5" Grid.Row="0">
+        <Grid Margin="5" Grid.Row="0" Height="25">
             <TextBlock Text="Endless Modding is a tool for a variety of endless games. Made by Cali."/>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Width="540" Height="540">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <Image Source="/EndlessSpace2/EndlessModding.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" Grid.ColumnSpan="2" Width="540" Height="540"/>
+
             <StackPanel Margin="5" Grid.Column="0">
-                <Button x:Name="Endless_Legend" IsEnabled="False">
+                <Button x:Name="Endless_Legend" Opacity="0.3" IsEnabled="False">
                     Endless Legend
                 </Button>
-                <Button x:Name="Dungeon_of_the_Endless" IsEnabled="False">
+                <Button x:Name="Dungeon_of_the_Endless" Opacity="0.3"  IsEnabled="False">
                     Dungeon of the Endless
                 </Button>
-                <Button x:Name="Endless_Space_2" Command="{Binding EndlessSpace2Clicked}" IsEnabled="True">
+                <Button x:Name="Endless_Space_2" Opacity="0.3"  Command="{Binding EndlessSpace2Clicked}" IsEnabled="True">
                     Endless Space 2
                 </Button>
-                <Button x:Name="Humankind" IsEnabled="False">
+                <Button x:Name="Humankind" Opacity="0.3"  IsEnabled="False">
                     Humankind
                 </Button>
             </StackPanel>
 
             <StackPanel Margin="5" Grid.Column="1">
-                <Button>
+                <Button Opacity="0.3" >
                     Steam
                 </Button>
+
             </StackPanel>
         </Grid>
     </Grid>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.Government
 {
-    public class GovernmentViewModel
+    public class GovernmentViewModel : INotifyPropertyChanged
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
         #region INotifyPropertyChanged

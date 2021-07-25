@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.Skill
 {
-    public class SkillViewModel
+    public class SkillViewModel : INotifyPropertyChanged
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
         #region INotifyPropertyChanged

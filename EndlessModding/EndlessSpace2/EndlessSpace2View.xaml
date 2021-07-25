@@ -18,118 +18,259 @@
         xmlns:Tech="clr-namespace:EndlessModding.EndlessSpace2.Tech"
         xmlns:Trait="clr-namespace:EndlessModding.EndlessSpace2.Trait"
         xmlns:Workshop="clr-namespace:EndlessModding.EndlessSpace2.Workshop"
-        xmlns:li="http://github.com/zeluisping/loadingIndicators/xaml/controls"
+        xmlns:li="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
+        xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="Endless Space 2"
         Height="720" Width="1280"
         BorderThickness="0"
         GlowBrush="Black"
-        ResizeMode="CanResizeWithGrip"><!--
-    Icon="mahapps.metro.logo2.ico"
+        ResizeMode="CanResizeWithGrip"
+        mah:ScrollViewerHelper.IsHorizontalScrollWheelEnabled="True"
+        Icon="/EndlessSpace2/EndlessModdingLogo.ico"
+                 IconBitmapScalingMode="HighQuality"
+                 IconEdgeMode="Aliased"
         ShowIconOnTitleBar="True">
-    <mah:MetroWindow.IconTemplate>
-        <DataTemplate>
-    <Image Margin="4"
-                   RenderOptions.BitmapScalingMode="HighQuality"
-                   Source="{Binding}" />
-    </DataTemplate>
-    </mah:MetroWindow.IconTemplate>
 
-    -->
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <ToolBarTray Grid.Row="0">
-            <ToolBar Band="0">
-                <Button>Save</Button>
-                <Button>Export</Button>
-            </ToolBar>
-        </ToolBarTray>
-        <mah:MetroAnimatedTabControl Grid.Row="1" Margin="4 0 4 4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid IsEnabled="{Binding ShouldBeEnabled}">
+        <Grid ZIndex="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Viewbox Stretch="Uniform" Grid.Row="1" Grid.Column="1">
+                <li:LoadingIndicator x:Name="Loading" Style="{StaticResource LoadingIndicatorArcsStyleKey}" SpeedRatio="0.5" IsActive="{Binding IsBusy}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="SteelBlue" Opacity="0.75"/>
+            </Viewbox>
+        </Grid>
+        <mah:MetroAnimatedTabControl Margin="4 0 4 4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-            <mah:MetroTabItem x:Name="Tab_Main" Header="Main" TabIndex="0">
-                    <Grid>
-                        <Main:MainView  DataContext="{Binding MainViewModel}"/>
+            <mah:MetroTabItem x:Name="Tab_Main" TabIndex="0">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconForkAwesome Width="24" Height="24" Kind="Bars" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Main</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Main:MainView  DataContext="{Binding MainViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Workshop" Header="Workshop" IsEnabled="{Binding Tab_Workshop}" TabIndex="1">
-                    <Grid>
-                        <Workshop:WorkshopView  DataContext="{Binding WorkshopViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconBoxIcons Width="24" Height="24" Kind="SolidWrench" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Workshop</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Workshop:WorkshopView  DataContext="{Binding WorkshopViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Hero" Header="Hero" IsEnabled="{Binding Tab_Hero}" TabIndex="2">
-                    <Grid>
-                        <Hero:HeroView  DataContext="{Binding HeroViewModel}"/>
-                    </Grid>
-                </mah:MetroTabItem>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconMaterial Width="24" Height="24" Kind="HumanEdit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Hero</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Hero:HeroView  DataContext="{Binding HeroViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                </Grid>
+            </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Skill" Header="Skill" IsEnabled="{Binding Tab_Skill}" TabIndex="3">
-                    <Grid>
-                        <Skill:SkillView  DataContext="{Binding SkillViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconVaadinIcons Width="24" Height="24" Kind="OpenBook" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Skill</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Skill:SkillView  DataContext="{Binding SkillViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Skill_Tree" Header="Skill Tree" IsEnabled="{Binding Tab_Skill_Tree}" TabIndex="4">
-                    <Grid>
-                        <SkillTree:SkillTreeView  DataContext="{Binding SkillTreeViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconFontAwesome Width="24" Height="24" Kind="GraduationCapSolid" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Skill Tree</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <SkillTree:SkillTreeView  DataContext="{Binding SkillTreeViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Quest" Header="Quest" IsEnabled="{Binding Tab_Quest}" TabIndex="5">
-                    <Grid>
-                        <Quest:QuestView  DataContext="{Binding QuestViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconRPGAwesome Width="24" Height="24" Kind="SpeechBubble" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Quest</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Quest:QuestView  DataContext="{Binding QuestViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Planet" Header="Planet" IsEnabled="{Binding Tab_Planet}" TabIndex="6">
-                    <Grid>
-                        <Planet:PlanetView  DataContext="{Binding PlanetViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconBoxIcons Width="24" Height="24" Kind="SolidPlanet" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Planet</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Planet:PlanetView  DataContext="{Binding PlanetViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Tech" Header="Tech" IsEnabled="{Binding Tab_Tech}" TabIndex="7">
-                    <Grid>
-                        <Tech:TechView  DataContext="{Binding TechViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconFontAwesome Width="24" Height="24" Kind="CogSolid" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Tech</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Tech:TechView  DataContext="{Binding TechViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Trait" Header="Trait" IsEnabled="{Binding Tab_Trait}" TabIndex="8">
-                    <Grid>
-                        <Trait:TraitView  DataContext="{Binding TraitViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconModern Width="24" Height="24" Kind="ColumnThree" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Trait</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Trait:TraitView  DataContext="{Binding TraitViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
             <mah:MetroTabItem x:Name="Tab_Minor_Faction" Header="Minor Faction" IsEnabled="{Binding Tab_Minor_Faction}" TabIndex="9">
-                    <Grid>
-                        <MinorFaction:MinorFactionView  DataContext="{Binding MinorFactionViewModel}"/>
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconFontAwesome Width="24" Height="24" Kind="UserFriendsSolid" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Minor Faction</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <MinorFaction:MinorFactionView  DataContext="{Binding MinorFactionViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="9">
-                    <Grid>
-                        <MajorFaction:MajorFactionView  DataContext="{Binding MajorFactionViewModel}"/>
+            <mah:MetroTabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="10">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconFontAwesome Width="24" Height="24" Kind="UsersSolid" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Major Faction</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <MajorFaction:MajorFactionView  DataContext="{Binding MajorFactionViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="10">
-                    <Grid>
-                        <Government:GovernmentView  DataContext="{Binding GovernmentViewModel}"/>
+            <mah:MetroTabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="11">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconRemixIcon Width="24" Height="24" Kind="GovernmentFill" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Government</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Government:GovernmentView  DataContext="{Binding GovernmentViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="11">
-                    <Grid>
-                        <Law:LawView  DataContext="{Binding LawViewModel}"/>
+            <mah:MetroTabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="12">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconCodicons Width="24" Height="24" Kind="Law" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">Law</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <Law:LawView  DataContext="{Binding LawViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="12">
-                    <Grid>
-                        <SystemImprovement:SystemImprovementView  DataContext="{Binding SystemImprovementViewModel}"/>
+            <mah:MetroTabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="13">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconFontAwesome Width="24" Height="24" Kind="IndustrySolid" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">System Improvement</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <SystemImprovement:SystemImprovementView  DataContext="{Binding SystemImprovementViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                 </mah:MetroTabItem>
         </mah:MetroAnimatedTabControl>

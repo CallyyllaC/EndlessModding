@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EndlessModding.EndlessSpace2.Trait
 {
-    public class TraitViewModel
+    public class TraitViewModel : INotifyPropertyChanged
     {
         //Public View Models
         public EndlessSpace2ViewModel MainWindow { get; set; }

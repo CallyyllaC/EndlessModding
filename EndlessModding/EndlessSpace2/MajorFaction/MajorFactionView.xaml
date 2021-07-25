@@ -6,15 +6,15 @@
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.MajorFaction"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1000">
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <Grid MinHeight="200" MinWidth="400" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=ActualHeight}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=ActualWidth}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid>
-                <Grid.ColumnDefinitions>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0">
+            <Grid MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight, Mode=OneWay}">
                     <GroupBox Header="Modules">
                         <ListView  ScrollViewer.CanContentScroll="True">
                             <ListView.ItemTemplate>
@@ -31,7 +31,6 @@
                     </ScrollViewer>
                 </Grid>
 
-            </Grid>
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -5,115 +5,167 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:en="EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime"
+             xmlns:en="clr-namespace:EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime"
+             xmlns:exten="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
+             xmlns:com="clr-namespace:EndlessModding.Common"
+             xmlns:converters="clr-namespace:EndlessModding.EndlessSpace2.Common.Converters"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="1000">
+             d:DesignHeight="750" d:DesignWidth="1039">
 
-    <!---<UserControl.Resources>
-        <ResourceDictionary>
-            <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
-                                    ObjectType="{x:Type sys:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="en:RuntimeModuleType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-        </ResourceDictionary>
-    </UserControl.Resources>-->
+    <UserControl.Resources>
+        <converters:StringArrayToStringConverter x:Key="StringArrayToStringConverter"></converters:StringArrayToStringConverter>
+        <converters:PluginToStringConverter x:Key="PluginToStringConverter"></converters:PluginToStringConverter>
+    </UserControl.Resources>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <Grid MinHeight="200" MinWidth="400" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=ActualHeight}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=ActualWidth}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
-                <GroupBox Header="Modules">
-                    <ListView ItemsSource="{Binding Mods}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </GroupBox>
-            </Grid>
 
-            <Grid Grid.Column="1">
+            <Grid MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight, Mode=OneWay}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="15*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <GroupBox Header="Current Mods" Grid.Row="0">
+                    <DataGrid ItemsSource="{Binding Mods, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Title</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Type</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Version, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Version</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Author, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringArrayToStringConverter}}">
+                                <DataGridTextColumn.Header>Author</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Tags, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Tags</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
+                <Button Grid.Row="1" Command="{Binding NewMod}">New Mod</Button>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <GroupBox Header="Workshop Directory" Grid.Row="0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
+                <GroupBox Header="Mod Info" Grid.Column="0">
+                    <StackPanel Grid.Column="0">
+                        <Image Source="{Binding Image}" MinWidth="200" MinHeight="200" MaxWidth="400" MaxHeight="400" Stretch="Uniform"/>
+                        <Button Content="Browse Image" Command="{Binding GetImage}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Title"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Title}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Description"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Description}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Release Notes"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding ReleaseNotes}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Version"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Version}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Type"/>
+                        <ComboBox Text="{Binding Type}" ItemsSource="{com:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+                        <GroupBox Header="Authors" Margin="0,5,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" MinHeight="50"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedAuthor, Mode=TwoWay}" ItemsSource="{Binding Author, Mode=TwoWay}"/>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                                <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding NewAuthor, Mode=OneWayToSource}"/>
+                                <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddAuthor}">Add</Button>
+                                <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveAuthor}">Remove</Button>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Tags" Margin="0,5,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" MinHeight="50"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedTag, Mode=TwoWay}" ItemsSource="{Binding Tags, Mode=TwoWay}"/>
 
-                        <TextBlock Text="Workshop Directory: " Grid.Column="0" Grid.Row="0"/>
-
-                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding LocOutDir_Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-                        <Button Grid.Column="2" Grid.Row="0" Content="Browse" Command="{Binding ButtonOutDirClick}"/>
-
-                    </Grid>
+                                <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding TagsBox, Mode=OneWayToSource}" ItemsSource="{Binding TagsAvailible}"/>
+                                <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddTag}">Add</Button>
+                                <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveTag}">Remove</Button>
+                            </Grid>
+                        </GroupBox>
+                    </StackPanel>
                 </GroupBox>
 
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1">
+                    <GroupBox Header="Current Plugins">
+                        <DataGrid ItemsSource="{Binding Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Width="auto" Binding="{Binding Path=Enabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridCheckBoxColumn.Header>Enabled</DataGridCheckBoxColumn.Header>
+                                </DataGridCheckBoxColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path=Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Type</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path=ExtraTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>ExtraTypes</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path=Contents, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Contents</DataGridTextColumn.Header>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
 
-                    <GroupBox Header="Mod Info" Grid.Column="0">
-                        <StackPanel Grid.Column="0">
-                            <TextBlock TextWrapping="Wrap" Text="Type"/>
-                            <ComboBox /><!--ItemsSource="{Binding Source{StaticResource dataFromEnum}}" SelectedItem="{Binding Type}"-->
-                            <TextBlock TextWrapping="Wrap" Text="Title"/>
-                            <TextBox TextWrapping="Wrap" Text="{Binding Title}"/>
-                            <TextBlock TextWrapping="Wrap" Text="Description"/>
-                            <TextBox TextWrapping="Wrap" Text="{Binding Description}"/>
-                            <TextBlock TextWrapping="Wrap" Text="Author"/>
-                            <TextBox TextWrapping="Wrap" Text="{Binding Author}"/>
-                            <TextBlock TextWrapping="Wrap" Text="Release Notes"/>
-                            <TextBox TextWrapping="Wrap" Text="{Binding ReleaseNotes}"/>
-                            <TextBlock TextWrapping="Wrap" Text="Version"/>
-                            <TextBox TextWrapping="Wrap" Text="{Binding Version}"/>
-                        </StackPanel>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path=ExtraContents, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Extra Contents</DataGridTextColumn.Header>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <!--<ListView ItemsSource="{Binding Plugins, Mode=TwoWay, Converter={StaticResource PluginToStringConverter}}" ScrollViewer.CanContentScroll="True">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>-->
                     </GroupBox>
+                </Grid>
 
-                    <Grid Grid.Column="1">
-
-                        <GroupBox Header="Image Info">
-                            <StackPanel>
-                                <Canvas MinWidth="200" MinHeight="200" MaxWidth="430" MaxHeight="430">
-                                    <Image Source="{Binding Image}"/>
-                                </Canvas>
-
-                                <Button Content="Browse Image" Command="{Binding ButtonOutDirClick}"/>
-                            </StackPanel>
-                        </GroupBox>
-                    </Grid>
-
-                    <Grid Grid.Column="2">
-                        <GroupBox Header="Modules To Export">
-                            <ListView ItemsSource="{Binding Modules}" ScrollViewer.CanContentScroll="True">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Name}" />
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </GroupBox>
-                    </Grid>
+                <Grid Grid.Column="2">
+                    <GroupBox Header="Plugins To Export">
+                        <ListView ItemsSource="{Binding Modules}" ScrollViewer.CanContentScroll="True">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </GroupBox>
                 </Grid>
             </Grid>
         </Grid>
