@@ -23,7 +23,6 @@ namespace EndlessModding.EndlessSpace2
     {
         public EndlessSpace2View()
         {
-            DataContext = ApplicationBootStrapper.EndlessSpace2ViewModel;
             InitializeComponent();
         }
 

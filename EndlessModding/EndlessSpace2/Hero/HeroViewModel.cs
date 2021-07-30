@@ -7,6 +7,7 @@ using EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroPoliticsDefinitions;
 using EndlessModding.EndlessSpace2.Common.Classes.ShipDesignDefinitions;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using EndlessModding.EndlessSpace2.Common.Import;
 using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition.XmlNamedReference;
 
 namespace EndlessModding.EndlessSpace2.Hero
@@ -134,13 +136,13 @@ namespace EndlessModding.EndlessSpace2.Hero
         public ICommand LoadMediumImage { get; }
         //field
 
-        public BindingList<HeroDefinition> Heros { get; set; }
-        public BindingList<HeroAffinityDefinition> Affinities { get; set; }
-        public BindingList<HeroClassDefinition> Classes { get; set; }
-        public BindingList<HeroPoliticsDefinition> Politics { get; set; }
-        public BindingList<ShipDesignDefinition> Ships { get; set; }
-        public BindingList<Common.Classes.HeroSkillDefinition.HeroSkillDefinition> Skills { get; set; }
-        public BindingList<Common.Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition> SkillTrees { get; set; }
+        public ObservableConcurrentCollection<HeroDefinition> Heros { get; set; }
+        public ObservableConcurrentCollection<HeroAffinityDefinition> Affinities { get; set; }
+        public ObservableConcurrentCollection<HeroClassDefinition> Classes { get; set; }
+        public ObservableConcurrentCollection<HeroPoliticsDefinition> Politics { get; set; }
+        public ObservableConcurrentCollection<ShipDesignDefinition> Ships { get; set; }
+        public ObservableConcurrentCollection<Common.Classes.HeroSkillDefinition.HeroSkillDefinition> Skills { get; set; }
+        public ObservableConcurrentCollection<Common.Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition> SkillTrees { get; set; }
 
 
 
@@ -155,7 +157,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         public Common.Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition SelectedSkillTree { get; set; } = null;
 
         private readonly ILogger _logger;
-        private Import _import;
+        private Data _data;
         private string _name;
         private bool _hidden;
         private HeroAffinityDefinition _affinity;
@@ -167,18 +169,18 @@ namespace EndlessModding.EndlessSpace2.Hero
         private WriteableBitmap _largeImage = null;
         private WriteableBitmap _mediumImage = null;
 
-        public HeroViewModel(ILogger Logger, Import import)
+        public HeroViewModel(ILogger Logger, Data data)
         {
             _logger = Logger;
-            _import = import;
-            Heros = _import.HeroDefinitions;
+            _data = data;
+            Heros = _data.HeroDefinitions;
             CurrentHero = Heros.Count - 1;
-            Affinities = _import.HeroAffinityDefinitions;
-            Classes = _import.HeroClassDefinitions;
-            Politics = _import.HeroPoliticsDefinitions;
-            Ships = _import.ShipDesignDefinitions;
-            Skills = _import.HeroSkillDefinitions;
-            SkillTrees = _import.HeroSkillTreeDefinitions;
+            Affinities = _data.HeroAffinityDefinitions;
+            Classes = _data.HeroClassDefinitions;
+            Politics = _data.HeroPoliticsDefinitions;
+            Ships = _data.ShipDesignDefinitions;
+            Skills = _data.HeroSkillDefinitions;
+            SkillTrees = _data.HeroSkillTreeDefinitions;
             LoadHero = new RelayCommand(canLoadHero, loadHero);
             NewHero = new RelayCommand(canNewHero, newHero);
             AddSkill = new RelayCommand(canAddSkill, addSkill);
@@ -371,10 +373,10 @@ namespace EndlessModding.EndlessSpace2.Hero
                 return null;
             }
         }
-        private void GetObjectFromReference<T>(BindingList<T> output, BindingList<T> lookup, XmlNamedReference[] input)
+        private void GetObjectFromReference<T>(BindingList<T> output, ObservableConcurrentCollection<T> lookup, XmlNamedReference[] input)
         {
             output.Clear();
-            var lookfor = lookup[0].GetType().GetProperties().Where(x => x.Name == "Name").First();
+            var lookfor = lookup.ElementAt(0).GetType().GetProperties().Where(x => x.Name == "Name").First();
             if (input == null)
             {
                 return;
@@ -383,7 +385,7 @@ namespace EndlessModding.EndlessSpace2.Hero
             {
                 try
                 {
-                    output.Add(lookup.Where(x => lookfor.GetValue(x).Equals(item.Name)).First());
+                    output.Add(lookup.First(x => lookfor.GetValue(x).Equals(item.Name)));
                 }
                 catch (Exception e)
                 {
@@ -391,16 +393,16 @@ namespace EndlessModding.EndlessSpace2.Hero
                 }
             }
         }
-        private T GetObjectFromReference<T>(BindingList<T> lookup, XmlNamedReference input)
+        private T GetObjectFromReference<T>(ObservableConcurrentCollection<T> lookup, XmlNamedReference input)
         {
-            var lookfor = lookup[0].GetType().GetProperties().Where(x => x.Name == "Name").First();
+            var lookfor = lookup.ElementAt(0).GetType().GetProperties().First(x => x.Name == "Name");
             if (input == null)
             {
                 return default;
             }
             try
             {
-                return lookup.Where(x => lookfor.GetValue(x).Equals(input.Name)).First();
+                return lookup.First(x => lookfor.GetValue(x).Equals(input.Name));
             }
             catch (Exception e)
             {
@@ -413,17 +415,17 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             if (Heros.Count > 0)
             {
-                Name = Heros[CurrentHero].Name;
-                Hidden = Heros[CurrentHero].Hidden;
-                Affinity = GetObjectFromReference(Affinities, Heros[CurrentHero].Affinity);
-                Class = GetObjectFromReference(Classes, Heros[CurrentHero].Class);
-                Politic = GetObjectFromReference(Politics, Heros[CurrentHero].Politics);
-                Ship = GetObjectFromReference(Ships, Heros[CurrentHero].ShipDesign);
-                GetObjectFromReference(CurrentSkills, Skills, Heros[CurrentHero].Skill);
-                GetObjectFromReference(CurrentSkillTrees, SkillTrees, Heros[CurrentHero].SkillTree);
-                MoodImage = Heros[CurrentHero].MoodImage;
-                LargeImage = Heros[CurrentHero].LargeImage;
-                MediumImage = Heros[CurrentHero].MediumImage;
+                Name = Heros.ElementAt(CurrentHero).Name;
+                Hidden = Heros.ElementAt(CurrentHero).Hidden;
+                Affinity = GetObjectFromReference(Affinities, Heros.ElementAt(CurrentHero).Affinity);
+                Class = GetObjectFromReference(Classes, Heros.ElementAt(CurrentHero).Class);
+                Politic = GetObjectFromReference(Politics, Heros.ElementAt(CurrentHero).Politics);
+                Ship = GetObjectFromReference(Ships, Heros.ElementAt(CurrentHero).ShipDesign);
+                GetObjectFromReference(CurrentSkills, Skills, Heros.ElementAt(CurrentHero).Skill);
+                GetObjectFromReference(CurrentSkillTrees, SkillTrees, Heros.ElementAt(CurrentHero).SkillTree);
+                MoodImage = Heros.ElementAt(CurrentHero).MoodImage;
+                LargeImage = Heros.ElementAt(CurrentHero).LargeImage;
+                MediumImage = Heros.ElementAt(CurrentHero).MediumImage;
             }
         }
 
@@ -434,7 +436,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void newHero(object obj)
         {
-            Heros.Add(new HeroDefinition());
+            Heros.AddFromEnumerable(new HeroDefinition[] {new HeroDefinition()});
             CurrentHero = Heros.Count - 1;
         }
 
@@ -447,28 +449,28 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             if (Heros.Count > 0 && CurrentHero >= 0)
             {
-                Heros[CurrentHero].Name = Name;
-                RaisePropertyChanged(Heros[CurrentHero], "Name");
-                Heros[CurrentHero].Hidden = Hidden;
-                RaisePropertyChanged(Heros[CurrentHero], "Hidden");
-                Heros[CurrentHero].Affinity = GetReferenceFromObject(Affinity);
-                RaisePropertyChanged(Heros[CurrentHero], "Affinity");
-                Heros[CurrentHero].Class = GetReferenceFromObject(Class);
-                RaisePropertyChanged(Heros[CurrentHero], "Class");
-                Heros[CurrentHero].Politics = GetReferenceFromObject(Politic);
-                RaisePropertyChanged(Heros[CurrentHero], "Politics");
-                Heros[CurrentHero].ShipDesign = GetReferenceFromObject(Ship);
-                RaisePropertyChanged(Heros[CurrentHero], "ShipDesign");
-                Heros[CurrentHero].Skill = GetReferenceFromObject(CurrentSkills);
-                RaisePropertyChanged(Heros[CurrentHero], "Skill");
-                Heros[CurrentHero].SkillTree = GetReferenceFromObject(CurrentSkillTrees);
-                RaisePropertyChanged(Heros[CurrentHero], "SkillTree");
-                Heros[CurrentHero].MoodImage = MoodImage;
-                RaisePropertyChanged(Heros[CurrentHero], "MoodImage");
-                Heros[CurrentHero].LargeImage = LargeImage;
-                RaisePropertyChanged(Heros[CurrentHero], "LargeImage");
-                Heros[CurrentHero].MediumImage = MediumImage;
-                RaisePropertyChanged(Heros[CurrentHero], "MediumImage");
+                Heros.ElementAt(CurrentHero).Name = Name;
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Name");
+                Heros.ElementAt(CurrentHero).Hidden = Hidden;
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Hidden");
+                Heros.ElementAt(CurrentHero).Affinity = GetReferenceFromObject(Affinity);
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Affinity");
+                Heros.ElementAt(CurrentHero).Class = GetReferenceFromObject(Class);
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Class");
+                Heros.ElementAt(CurrentHero).Politics = GetReferenceFromObject(Politic);
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Politics");
+                Heros.ElementAt(CurrentHero).ShipDesign = GetReferenceFromObject(Ship);
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "ShipDesign");
+                Heros.ElementAt(CurrentHero).Skill = GetReferenceFromObject(CurrentSkills);
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Skill");
+                Heros.ElementAt(CurrentHero).SkillTree = GetReferenceFromObject(CurrentSkillTrees);
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "SkillTree");
+                Heros.ElementAt(CurrentHero).MoodImage = MoodImage;
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "MoodImage");
+                Heros.ElementAt(CurrentHero).LargeImage = LargeImage;
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "LargeImage");
+                Heros.ElementAt(CurrentHero).MediumImage = MediumImage;
+                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "MediumImage");
             }
         }
 

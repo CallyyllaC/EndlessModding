@@ -5,6 +5,7 @@ using EndlessModding.Common.IO;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime;
 using EndlessModding.EndlessSpace2.Common.Extensions;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using EndlessModding.EndlessSpace2.Common.Import;
 
 namespace EndlessModding.EndlessSpace2.Workshop
 {
@@ -156,7 +158,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 RaisePropertyChanged();
             }
         }
-        public BindingList<RuntimeModule> Mods { get; }
+        public ObservableConcurrentCollection<RuntimeModule> Mods { get; }
         public BindingList<object> Exportables
         {
             get => _exportables;
@@ -208,13 +210,13 @@ namespace EndlessModding.EndlessSpace2.Workshop
         private string _title;
         private RuntimeModuleType _type;
         private WriteableBitmap _image;
-        private Import _import;
+        private Data _data;
 
-        public WorkshopViewModel(ILogger Logger, Import import)
+        public WorkshopViewModel(ILogger Logger, Data data)
         {
             _logger = Logger;
-            _import = import;
-            Mods = _import.RuntimeModules;
+            _data = data;
+            Mods = _data.RuntimeModules;
             CurrentMod = Mods.Count - 1;
             GetImage = new RelayCommand(canGetImage, getImage);
             NewMod = new RelayCommand(canNewMod, newMod);
@@ -232,7 +234,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void newMod(object obj)
         {
-            Mods.Add(new RuntimeModule());
+            Mods.AddFromEnumerable(new RuntimeModule[] {new RuntimeModule()});
             CurrentMod = Mods.Count - 1;
         }
         private bool canNewMod(object obj)
@@ -257,15 +259,15 @@ namespace EndlessModding.EndlessSpace2.Workshop
         {
             if (Mods.Count > 0)
             {
-                Version = Mods[CurrentMod].Version;
-                ReleaseNotes = Mods[CurrentMod].ReleaseNotes;
-                Author = Mods[CurrentMod].Author;
-                Description = Mods[CurrentMod].Description;
-                Title = Mods[CurrentMod].Title;
-                Type = Mods[CurrentMod].Type;
-                Image = Mods[CurrentMod].Image;
+                Version = Mods.ElementAt(CurrentMod).Version;
+                ReleaseNotes = Mods.ElementAt(CurrentMod).ReleaseNotes;
+                Author = Mods.ElementAt(CurrentMod).Author;
+                Description = Mods.ElementAt(CurrentMod).Description;
+                Title = Mods.ElementAt(CurrentMod).Title;
+                Type = Mods.ElementAt(CurrentMod).Type;
+                Image = Mods.ElementAt(CurrentMod).Image;
 
-                var tmpTags = Mods[CurrentMod].Tags.Value;
+                var tmpTags = Mods.ElementAt(CurrentMod).Tags.Value;
                 if (!string.IsNullOrEmpty(tmpTags))
                 {
                     if (tmpTags.Split(',').Count() > 1)
@@ -273,7 +275,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                     else
                         Tags = tmpTags.Split(' ');
 
-                Tags = Tags.Select(innerItem => innerItem.Trim()).ToArray();
+                    Tags = Tags.Select(innerItem => innerItem.Trim()).ToArray();
                 }
                 else
                 {
@@ -281,7 +283,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 }
 
                 Plugins.Clear();
-                foreach (var item in Mods[CurrentMod].Plugins)
+                foreach (var item in Mods.ElementAt(CurrentMod).Plugins)
                 {
                     Plugins.Add(item);
                 }
@@ -291,24 +293,24 @@ namespace EndlessModding.EndlessSpace2.Workshop
         {
             if (Mods.Count > 0 && CurrentMod >= 0)
             {
-                Mods[CurrentMod].Version = Version;
-                RaisePropertyChanged(Mods[CurrentMod], "Version");
-                Mods[CurrentMod].ReleaseNotes = ReleaseNotes;
-                RaisePropertyChanged(Mods[CurrentMod], "ReleaseNotes");
-                Mods[CurrentMod].Author = Author;
-                RaisePropertyChanged(Mods[CurrentMod], "Author");
-                Mods[CurrentMod].Description = Description;
-                RaisePropertyChanged(Mods[CurrentMod], "Description");
-                Mods[CurrentMod].Title = Title;
-                RaisePropertyChanged(Mods[CurrentMod], "Title");
-                Mods[CurrentMod].Type = Type;
-                RaisePropertyChanged(Mods[CurrentMod], "Type");
-                Mods[CurrentMod].Image = Image;
-                RaisePropertyChanged(Mods[CurrentMod], "Image");
-                Mods[CurrentMod].Plugins = Plugins.ToArray();
-                RaisePropertyChanged(Mods[CurrentMod], "Plugins");
-                Mods[CurrentMod].Tags.Value = string.Join(", ", Tags);
-                RaisePropertyChanged(Mods[CurrentMod], "Tags");
+                Mods.ElementAt(CurrentMod).Version = Version;
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Version");
+                Mods.ElementAt(CurrentMod).ReleaseNotes = ReleaseNotes;
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "ReleaseNotes");
+                Mods.ElementAt(CurrentMod).Author = Author;
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Author");
+                Mods.ElementAt(CurrentMod).Description = Description;
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Description");
+                Mods.ElementAt(CurrentMod).Title = Title;
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Title");
+                Mods.ElementAt(CurrentMod).Type = Type;
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Type");
+                Mods.ElementAt(CurrentMod).Image = Image;
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Image");
+                Mods.ElementAt(CurrentMod).Plugins = Plugins.ToArray();
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Plugins");
+                Mods.ElementAt(CurrentMod).Tags.Value = string.Join(", ", Tags);
+                RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Tags");
             }
         }
         private void removeAuthor(object obj)

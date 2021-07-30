@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EndlessModding.EndlessSpace2.Common.Import;
 
 namespace EndlessModding.Common
 {
@@ -36,8 +37,8 @@ namespace EndlessModding.Common
 		/// <param name="container">The container.</param>
 		/// <param name="store">The configuration store.</param>
 		public void Install(IWindsorContainer container, IConfigurationStore store)
-		{
-			container.Register(Component.For<Import.Import>().ImplementedBy<Import.Import>());
+        {
+            container.Register(Component.For<Data>().ImplementedBy<Data>());
 			container.Register(Component.For<MainWindowViewModel>().ImplementedBy<MainWindowViewModel>());
 			container.Register(Component.For<EndlessSpace2ViewModel>().ImplementedBy<EndlessSpace2ViewModel>());
 			container.Register(Component.For<MainViewModel>().ImplementedBy<MainViewModel>());

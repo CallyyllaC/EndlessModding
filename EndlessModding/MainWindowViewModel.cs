@@ -39,7 +39,6 @@ namespace EndlessModding
             //setup injections
             _logger = castleLogger;
             EndlessSpace2 = es2vm;
-
             //setup commands
             EndlessSpace2Clicked = new RelayCommand(Can_Endless_Space_2_Click, Endless_Space_2_Click);
 
@@ -50,19 +49,8 @@ namespace EndlessModding
 
         private void Endless_Space_2_Click(object obj)
         {
-            if (EndlessSpace2Window == null)
-            {
-                EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View();
-            }
-            try
-            {
-                EndlessSpace2Window.Show();
-            }
-            catch
-            {
-                EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View();
-                EndlessSpace2Window.Show();
-            }
+            EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View() {DataContext = EndlessSpace2 };
+            EndlessSpace2Window.Show();
         }
         private bool Can_Endless_Space_2_Click(object obj)
         {
@@ -70,11 +58,8 @@ namespace EndlessModding
             {
                 return true;
             }
-            else if (EndlessSpace2Window.IsVisible)
-            {
-                return false;
-            }
-            return true;
+
+            return false;
         }
 
         #region INotifyPropertyChanged

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using EndlessModding.EndlessSpace2.Common.Import;
 
 namespace EndlessModding.EndlessSpace2
 {
@@ -180,10 +181,8 @@ namespace EndlessModding.EndlessSpace2
 
         //Fields
         private readonly ILogger _logger;
-        private Import _import;
 
         public EndlessSpace2ViewModel(
-            Import import,
             MainViewModel mainViewModel,
             WorkshopViewModel workshopViewModel,
             HeroViewModel heroViewModel,
@@ -199,7 +198,6 @@ namespace EndlessModding.EndlessSpace2
             LawViewModel lawViewModel,
             SystemImprovementViewModel systemImprovementViewModel)
         {
-            _import = import;
             MainViewModel = mainViewModel;
             WorkshopViewModel = workshopViewModel;
             HeroViewModel = heroViewModel;

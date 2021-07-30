@@ -10,6 +10,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.MicroKernel;
+
 namespace EndlessModding.Common
 {
 	public static class BootStrapper
@@ -56,27 +58,6 @@ namespace EndlessModding.Common
 				}
 			}
 
-			public static EndlessSpace2ViewModel EndlessSpace2ViewModel
-			{
-				get;
-			} = ResolveEndlessSpace2ViewModel();
-
-			private static EndlessSpace2ViewModel ResolveEndlessSpace2ViewModel()
-			{
-				Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-
-				try
-				{
-					EndlessSpace2ViewModel EndlessSpace2ViewModel = WindsorContainer.Resolve<EndlessSpace2ViewModel>();
-					return EndlessSpace2ViewModel;
-				}
-				catch (Exception e)
-				{
-					Logger.Error($"{MethodBase.GetCurrentMethod().Name}", e);
-					throw;
-				}
-			}
-
 			private static IWindsorContainer BuildWindsorContainer()
 			{
 				Logger.Info("");
@@ -96,4 +77,5 @@ namespace EndlessModding.Common
 			}
 		}
 	}
+
 }

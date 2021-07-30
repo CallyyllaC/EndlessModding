@@ -58,7 +58,7 @@
                     <TextBlock Text="Workshop Directory: " Grid.Column="0" Grid.Row="0"/>
                     <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding LocOutDir_Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Grid.Column="2" Grid.Row="0" Content="Browse" Command="{Binding ButtonOutDirClick}"/>
-                    <CheckBox Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding LoadOtherMods}" Content="Load other mods"/>
+                    <CheckBox Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding LoadOtherMods}" Command="{Binding CheckboxChecked}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Load other mods"/>
                 </Grid>
             </GroupBox>
             <Grid Grid.Row="2">
