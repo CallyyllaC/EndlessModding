@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EndlessModding.EndlessSpace2.Common.Import;
+using EndlessModding.EndlessSpace2.Common.Files;
 
 namespace EndlessModding.Common
 {

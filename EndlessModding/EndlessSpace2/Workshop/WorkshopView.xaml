@@ -17,7 +17,7 @@
         <converters:PluginToStringConverter x:Key="PluginToStringConverter"></converters:PluginToStringConverter>
     </UserControl.Resources>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,0,-286,-10">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -156,16 +156,27 @@
                     </GroupBox>
                 </Grid>
 
-                <Grid Grid.Column="2">
+                <Grid Grid.Column="2" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight, Mode=OneWay}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="15*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     <GroupBox Header="Plugins To Export">
-                        <ListView ItemsSource="{Binding Modules}" ScrollViewer.CanContentScroll="True">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        <DataGrid ItemsSource="{Binding Exportables, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Width="auto" Binding="{Binding Path=Enabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridCheckBoxColumn.Header>Enabled</DataGridCheckBoxColumn.Header>
+                                </DataGridCheckBoxColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path=Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path=Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Type</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </GroupBox>
+                    <Button Grid.Row="1" Command="{Binding Refresh}">Refresh</Button>
                 </Grid>
             </Grid>
         </Grid>

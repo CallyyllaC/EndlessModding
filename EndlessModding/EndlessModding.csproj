@@ -475,7 +475,10 @@
     <Compile Include="EndlessSpace2\Common\Extensions\Converters.cs" />
     <Compile Include="EndlessSpace2\Common\Extensions\Enums.cs" />
     <Compile Include="EndlessSpace2\Common\Extensions\Extensions.cs" />
-    <Compile Include="EndlessSpace2\Common\Import\Import.cs" />
+    <Compile Include="EndlessSpace2\Common\Files\Data.cs" />
+    <Compile Include="EndlessSpace2\Common\Files\Export.cs" />
+    <Compile Include="EndlessSpace2\Common\Files\ImportFiles.cs" />
+    <Compile Include="EndlessSpace2\Common\Files\ImportMods.cs" />
     <Compile Include="EndlessSpace2\EndlessSpace2ViewModel.cs" />
     <Compile Include="EndlessSpace2\EndlessSpace2View.xaml.cs">
       <DependentUpon>EndlessSpace2View.xaml</DependentUpon>

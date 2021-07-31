@@ -14,7 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using EndlessModding.EndlessSpace2.Common.Import;
+using EndlessModding.EndlessSpace2.Common.Files;
 
 namespace EndlessModding.EndlessSpace2.Main
 {

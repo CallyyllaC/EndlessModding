@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using EndlessModding.EndlessSpace2.Common.Import;
+using EndlessModding.EndlessSpace2.Common.Files;
 using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition.XmlNamedReference;
 
 namespace EndlessModding.EndlessSpace2.Hero
@@ -436,7 +436,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void newHero(object obj)
         {
-            Heros.AddFromEnumerable(new HeroDefinition[] {new HeroDefinition()});
+            Heros.AddFromEnumerable(new HeroDefinition[] { new HeroDefinition() { Custom = true } });
             CurrentHero = Heros.Count - 1;
         }
 
@@ -449,22 +449,55 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             if (Heros.Count > 0 && CurrentHero >= 0)
             {
-                Heros.ElementAt(CurrentHero).Name = Name;
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Name");
-                Heros.ElementAt(CurrentHero).Hidden = Hidden;
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Hidden");
-                Heros.ElementAt(CurrentHero).Affinity = GetReferenceFromObject(Affinity);
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Affinity");
-                Heros.ElementAt(CurrentHero).Class = GetReferenceFromObject(Class);
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Class");
-                Heros.ElementAt(CurrentHero).Politics = GetReferenceFromObject(Politic);
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Politics");
-                Heros.ElementAt(CurrentHero).ShipDesign = GetReferenceFromObject(Ship);
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "ShipDesign");
-                Heros.ElementAt(CurrentHero).Skill = GetReferenceFromObject(CurrentSkills);
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Skill");
-                Heros.ElementAt(CurrentHero).SkillTree = GetReferenceFromObject(CurrentSkillTrees);
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "SkillTree");
+                bool modified = false;
+                if (Heros.ElementAt(CurrentHero).Name != Name)
+                {
+                    Heros.ElementAt(CurrentHero).Name = Name;
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Name");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
+                if (Heros.ElementAt(CurrentHero).Hidden != Hidden)
+                {
+                    Heros.ElementAt(CurrentHero).Hidden = Hidden;
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Hidden");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
+                if (Heros.ElementAt(CurrentHero).Affinity != GetReferenceFromObject(Affinity))
+                {
+                    Heros.ElementAt(CurrentHero).Affinity = GetReferenceFromObject(Affinity);
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Affinity");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
+                if (Heros.ElementAt(CurrentHero).Class != GetReferenceFromObject(Class))
+                {
+                    Heros.ElementAt(CurrentHero).Class = GetReferenceFromObject(Class);
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Class");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
+                if (Heros.ElementAt(CurrentHero).Politics != GetReferenceFromObject(Politic))
+                {
+                    Heros.ElementAt(CurrentHero).Politics = GetReferenceFromObject(Politic);
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Politics");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
+                if (Heros.ElementAt(CurrentHero).ShipDesign != GetReferenceFromObject(Ship))
+                {
+                    Heros.ElementAt(CurrentHero).ShipDesign = GetReferenceFromObject(Ship);
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "ShipDesign");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
+                if (Heros.ElementAt(CurrentHero).Skill != GetReferenceFromObject(CurrentSkills))
+                {
+                    Heros.ElementAt(CurrentHero).Skill = GetReferenceFromObject(CurrentSkills);
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Skill");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
+                if (Heros.ElementAt(CurrentHero).SkillTree != GetReferenceFromObject(CurrentSkillTrees))
+                {
+                    Heros.ElementAt(CurrentHero).SkillTree = GetReferenceFromObject(CurrentSkillTrees);
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "SkillTree");
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
                 Heros.ElementAt(CurrentHero).MoodImage = MoodImage;
                 RaisePropertyChanged(Heros.ElementAt(CurrentHero), "MoodImage");
                 Heros.ElementAt(CurrentHero).LargeImage = LargeImage;

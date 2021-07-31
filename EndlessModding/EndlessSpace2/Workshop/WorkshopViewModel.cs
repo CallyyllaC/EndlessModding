@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using EndlessModding.EndlessSpace2.Common.Import;
+using EndlessModding.EndlessSpace2.Common.Files;
 
 namespace EndlessModding.EndlessSpace2.Workshop
 {
@@ -32,6 +32,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         public ICommand RemoveAuthor { get; }
         public ICommand AddTag { get; }
         public ICommand RemoveTag { get; }
+        public ICommand Refresh { get; }
 
         public string[] Tags
         {
@@ -42,7 +43,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 RaisePropertyChanged();
             }
         }
-        public BindingList<RuntimePlugin> Plugins
+        public ObservableConcurrentCollection<RuntimePlugin> Plugins
         {
             get => _plugins;
             set
@@ -158,10 +159,23 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 RaisePropertyChanged();
             }
         }
-        public ObservableConcurrentCollection<RuntimeModule> Mods { get; }
-        public BindingList<object> Exportables
+        public ObservableConcurrentCollection<RuntimeModule> Mods
+        {
+            get => _mods;
+            set
+            {
+                _mods = value;
+                RaisePropertyChanged();
+            }
+        }
+        public ObservableConcurrentCollection<object> Exportables
         {
             get => _exportables;
+            set
+            {
+                _exportables = value;
+                RaisePropertyChanged();
+            }
         }
         public string TagsBox
         {
@@ -195,14 +209,14 @@ namespace EndlessModding.EndlessSpace2.Workshop
         //Fields
         private string[] _tags;
         private string _tagsBox;
-        private BindingList<RuntimePlugin> _plugins = new BindingList<RuntimePlugin>();
+        private ObservableConcurrentCollection<RuntimePlugin> _plugins = new ObservableConcurrentCollection<RuntimePlugin>();
         private int _currentMod = 0;
         private int _selectedAuthor = 0;
         private int _selectedTag = 0;
         private string _newAuthor = "";
         private readonly ILogger _logger;
-        private BindingList<RuntimeModule> _mods;
-        private BindingList<object> _exportables = new BindingList<object>();
+        private ObservableConcurrentCollection<RuntimeModule> _mods;
+        private ObservableConcurrentCollection<object> _exportables;
         private string _version;
         private string _releaseNotes;
         private string[] _author;
@@ -217,6 +231,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
             _logger = Logger;
             _data = data;
             Mods = _data.RuntimeModules;
+            Exportables = _data.ExportableData;
             CurrentMod = Mods.Count - 1;
             GetImage = new RelayCommand(canGetImage, getImage);
             NewMod = new RelayCommand(canNewMod, newMod);
@@ -224,13 +239,19 @@ namespace EndlessModding.EndlessSpace2.Workshop
             RemoveAuthor = new RelayCommand(canRemoveAuthor, removeAuthor);
             AddTag = new RelayCommand(canAddTag, addTag);
             RemoveTag = new RelayCommand(canRemoveTag, removeTag);
+            Refresh = new RelayCommand(canRefresh, refresh);
 
             RaisePropertyChanged();
         }
-        private void isbusy(bool value)
+
+        private async void refresh(object obj)
         {
-            if (MainWindow != null)
-                MainWindow.IsBusy = true;
+            _data.GetExportableData();
+        }
+
+        private bool canRefresh(object obj)
+        {
+            return !MainWindow.IsBusy;
         }
         private void newMod(object obj)
         {
@@ -285,7 +306,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 Plugins.Clear();
                 foreach (var item in Mods.ElementAt(CurrentMod).Plugins)
                 {
-                    Plugins.Add(item);
+                    Plugins.AddFromEnumerable(new RuntimePlugin[]{item});
                 }
             }
         }
