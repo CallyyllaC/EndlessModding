@@ -76,11 +76,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             //Get Major Factions
             LoadNodes<EndlessSpace2.Common.Classes.MajorFactions.MajorFaction>(_data.MajorFactions, "Factions", "MajorFaction");
-
-            //Dont GUI Definitions, we dont need them?
-            //LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Gui_GuiElement.HeroGuiElement>(HeroGUIElements);
-            //LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Gui_GuiElement.ExtendedGuiElement>(ExtendedGUIElements);
-
         }
 
         private void LoadNodes<T>(ObservableConcurrentCollection<T> input, string Mask, string Node)

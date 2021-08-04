@@ -184,7 +184,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     _logger.Error($"Failed to load plugins: {mod}: {e.Message}");
                 }
             }
-            Application.Current.Dispatcher.BeginInvoke(new Action(() => LoadHeroImages(fileDirectory + "\\")));
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => LoadHeroGUIElements(fileDirectory + "\\")));
         }
         private bool MatchTypes(FieldInfo arg, Type tmp3)
         {
@@ -251,7 +251,8 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             foreach (var item in tmpcont)
             {
-                if (item is EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition)
+                //enable the custom attribute
+                if (item is EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition) //TODO make generic has custom attribute
                 {
                     var hero = (EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition)item;
                     hero.Custom = true;
@@ -320,13 +321,15 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             //get the largest file
             return output.FirstOrDefault();
         }
-        private void LoadHeroImages(string FilePath)
+        private void LoadHeroGUIElements(string FilePath)
         {
-            var CustomHerosWithoutImages = _data.HeroDefinitions.Where(x => x.Custom && x.LargeImage == null);
+            var CustomHeros = _data.HeroDefinitions.Where(x => x.Custom);
 
-            foreach (var item in CustomHerosWithoutImages)
+            foreach (var item in CustomHeros)
             {
                 var gui = _data.HeroGUIElements.Where(x => x.Name == item.Name).FirstOrDefault();
+                item.RealName = gui.Title;
+                item.Description = gui.Description;
                 if (gui != null)
                 {
                     LoadHeroImage(FilePath, item, gui);

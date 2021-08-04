@@ -9,11 +9,21 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Caching;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
+using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime;
+
 namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
 {
+    public interface IExportable
+    {
+        [XmlIgnore]
+        bool Enabled { get; set; }
+        [XmlIgnore]
+        string Type { get; set; }
+    }
     public partial class RuntimeModule : INotifyPropertyChanged
     {
         [NonSerialized(), XmlIgnore]
@@ -60,7 +70,7 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
 }
 namespace EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition
 {
-    public partial class HeroDefinition : INotifyPropertyChanged
+    public partial class HeroDefinition : INotifyPropertyChanged, IExportable
     {
         [NonSerialized(), XmlIgnore]
         public WriteableBitmap MoodImage = null;
@@ -70,6 +80,16 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition
         public WriteableBitmap MediumImage = null;
         [NonSerialized(), XmlIgnore]
         public bool Custom = false;
+        [NonSerialized(), XmlIgnore]
+        public string Description;
+        [NonSerialized(), XmlIgnore]
+        public string RealName;
+
+        [XmlIgnore]
+        public bool Enabled { get; set; } = false;
+
+        [XmlIgnore]
+        public string Type { get; set; } = "Hero";
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace EndlessModding
@@ -51,6 +52,7 @@ namespace EndlessModding
         {
             EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View() {DataContext = EndlessSpace2 };
             EndlessSpace2Window.Show();
+            Application.Current.MainWindow?.Hide();
         }
         private bool Can_Endless_Space_2_Click(object obj)
         {

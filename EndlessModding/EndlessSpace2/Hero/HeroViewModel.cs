@@ -1,6 +1,5 @@
 ﻿using Castle.Core.Logging;
 using EndlessModding.Common;
-using EndlessModding.Common.Import;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroAffinityDefinitions;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroClassDefinitions;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition;
@@ -17,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using EndlessModding.EndlessSpace2.Common.Classes.TraitorBonusThresholdDefinition;
 using EndlessModding.EndlessSpace2.Common.Files;
 using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition.XmlNamedReference;
 
@@ -32,8 +32,35 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _name;
             set
             {
-                _name = value;
-                RaisePropertyChanged();
+                if (_name != value)
+                {
+                    _name = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public string RealName
+        {
+            get => _realName;
+            set
+            {
+                if (_realName != value)
+                {
+                    _realName = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public bool Hidden
@@ -41,8 +68,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _hidden;
             set
             {
-                _hidden = value;
-                RaisePropertyChanged();
+                if (_hidden != value)
+                {
+                    _hidden = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public HeroAffinityDefinition Affinity
@@ -50,8 +80,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _affinity;
             set
             {
-                _affinity = value;
-                RaisePropertyChanged();
+                if (_affinity != value)
+                {
+                    _affinity = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public HeroClassDefinition Class
@@ -59,8 +92,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _class;
             set
             {
-                _class = value;
-                RaisePropertyChanged();
+                if (_class != value)
+                {
+                    _class = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public HeroPoliticsDefinition Politic
@@ -68,8 +104,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _politics;
             set
             {
-                _politics = value;
-                RaisePropertyChanged();
+                if (_politics != value)
+                {
+                    _politics = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public ShipDesignDefinition Ship
@@ -77,8 +116,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _ship;
             set
             {
-                _ship = value;
-                RaisePropertyChanged();
+                if (_ship != value)
+                {
+                    _ship = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public int CurrentHero
@@ -86,16 +128,19 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _currentHero;
             set
             {
-                if (MainWindow != null)
-                    MainWindow.IsBusy = true;
+                if (_currentHero != value)
+                {
+                    if (MainWindow != null)
+                        MainWindow.IsBusy = true;
 
-                saveHero();
-                _currentHero = value;
-                loadHero(null);
-                RaisePropertyChanged();
+                    saveHero();
+                    _currentHero = value;
+                    loadHero(null);
+                    RaisePropertyChanged();
 
-                if (MainWindow != null)
-                    MainWindow.IsBusy = false;
+                    if (MainWindow != null)
+                        MainWindow.IsBusy = false;
+                }
             }
         }
         public WriteableBitmap MoodImage
@@ -103,8 +148,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _moodImage;
             set
             {
-                _moodImage = value;
-                RaisePropertyChanged();
+                if (_moodImage != value)
+                {
+                    _moodImage = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public WriteableBitmap LargeImage
@@ -112,8 +160,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _largeImage;
             set
             {
-                _largeImage = value;
-                RaisePropertyChanged();
+                if (_largeImage != value)
+                {
+                    _largeImage = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public WriteableBitmap MediumImage
@@ -121,8 +172,11 @@ namespace EndlessModding.EndlessSpace2.Hero
             get => _mediumImage;
             set
             {
-                _mediumImage = value;
-                RaisePropertyChanged();
+                if (_mediumImage != value)
+                {
+                    _mediumImage = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public ICommand LoadHero { get; }
@@ -159,6 +213,8 @@ namespace EndlessModding.EndlessSpace2.Hero
         private readonly ILogger _logger;
         private Data _data;
         private string _name;
+        private string _realName;
+        private string _description;
         private bool _hidden;
         private HeroAffinityDefinition _affinity;
         private HeroClassDefinition _class;
@@ -203,7 +259,12 @@ namespace EndlessModding.EndlessSpace2.Hero
                 return;
             }
             BitmapSource img = new BitmapImage(new Uri(filename, UriKind.Absolute));
-            MediumImage = new WriteableBitmap(img);
+            double x = 180d / (double)img.PixelWidth;
+            double y = 240d / (double)img.PixelHeight;
+            var s = new ScaleTransform(x, y);
+            var res = new TransformedBitmap(img, s);
+            MediumImage = new WriteableBitmap(res);
+            MediumImage.Freeze();
             MainWindow.IsBusy = false;
         }
 
@@ -221,7 +282,12 @@ namespace EndlessModding.EndlessSpace2.Hero
                 return;
             }
             BitmapSource img = new BitmapImage(new Uri(filename, UriKind.Absolute));
-            LargeImage = new WriteableBitmap(img);
+            double x = 360d / (double)img.PixelWidth;
+            double y = 180d / (double)img.PixelHeight;
+            var s = new ScaleTransform(x, y);
+            var res = new TransformedBitmap(img, s);
+            LargeImage = new WriteableBitmap(res);
+            LargeImage.Freeze();
             MainWindow.IsBusy = false;
         }
 
@@ -239,7 +305,12 @@ namespace EndlessModding.EndlessSpace2.Hero
                 return;
             }
             BitmapSource img = new BitmapImage(new Uri(filename, UriKind.Absolute));
-            MoodImage = new WriteableBitmap(img);
+            double x = 1324d / (double)img.PixelWidth;
+            double y = 712d / (double)img.PixelHeight;
+            var s = new ScaleTransform(x, y);
+            var res = new TransformedBitmap(img, s);
+            MoodImage = new WriteableBitmap(res);
+            MoodImage.Freeze();
             MainWindow.IsBusy = false;
         }
 
@@ -416,6 +487,8 @@ namespace EndlessModding.EndlessSpace2.Hero
             if (Heros.Count > 0)
             {
                 Name = Heros.ElementAt(CurrentHero).Name;
+                RealName = Heros.ElementAt(CurrentHero).RealName;
+                Description = Heros.ElementAt(CurrentHero).Description;
                 Hidden = Heros.ElementAt(CurrentHero).Hidden;
                 Affinity = GetObjectFromReference(Affinities, Heros.ElementAt(CurrentHero).Affinity);
                 Class = GetObjectFromReference(Classes, Heros.ElementAt(CurrentHero).Class);
@@ -454,56 +527,103 @@ namespace EndlessModding.EndlessSpace2.Hero
                 {
                     Heros.ElementAt(CurrentHero).Name = Name;
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Name");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
+                }
+                if (Heros.ElementAt(CurrentHero).RealName != RealName)
+                {
+                    Heros.ElementAt(CurrentHero).RealName = RealName;
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "RealName");
+                    modified = true;
+                }
+                if (Heros.ElementAt(CurrentHero).Description != Description)
+                {
+                    Heros.ElementAt(CurrentHero).Description = Description;
+                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Description");
+                    modified = true;
                 }
                 if (Heros.ElementAt(CurrentHero).Hidden != Hidden)
                 {
                     Heros.ElementAt(CurrentHero).Hidden = Hidden;
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Hidden");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Affinity != GetReferenceFromObject(Affinity))
+                if (Heros.ElementAt(CurrentHero).Affinity != null && Heros.ElementAt(CurrentHero).Affinity.Name != GetReferenceFromObject(Affinity)?.Name)
                 {
                     Heros.ElementAt(CurrentHero).Affinity = GetReferenceFromObject(Affinity);
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Affinity");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Class != GetReferenceFromObject(Class))
+                if (Heros.ElementAt(CurrentHero).Class != null && Heros.ElementAt(CurrentHero).Class.Name != GetReferenceFromObject(Class)?.Name)
                 {
                     Heros.ElementAt(CurrentHero).Class = GetReferenceFromObject(Class);
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Class");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Politics != GetReferenceFromObject(Politic))
+                if (Heros.ElementAt(CurrentHero).Politics != null && Heros.ElementAt(CurrentHero).Politics.Name != GetReferenceFromObject(Politic)?.Name)
                 {
                     Heros.ElementAt(CurrentHero).Politics = GetReferenceFromObject(Politic);
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Politics");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).ShipDesign != GetReferenceFromObject(Ship))
+                if (Heros.ElementAt(CurrentHero).ShipDesign != null && Heros.ElementAt(CurrentHero).ShipDesign.Name != GetReferenceFromObject(Ship)?.Name)
                 {
                     Heros.ElementAt(CurrentHero).ShipDesign = GetReferenceFromObject(Ship);
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "ShipDesign");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Skill != GetReferenceFromObject(CurrentSkills))
+
+                if (CurrentSkills.Count != 0 && Heros.ElementAt(CurrentHero).Skill != null)
+                {
+                    if (!Heros.ElementAt(CurrentHero).Skill.Select(x => x.Name)
+                        .SequenceEqual(GetReferenceFromObject(CurrentSkills).Select(x => x.Name))) //compare and change if not the same
+                    {
+                        Heros.ElementAt(CurrentHero).Skill = GetReferenceFromObject(CurrentSkills);
+                        RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Skill");
+                        modified = true;
+                    }
+                }
+                else if (CurrentSkills.Count == 0 && Heros.ElementAt(CurrentHero).Skill == null)
+                {
+                    //both null, ignore
+                }
+                else
                 {
                     Heros.ElementAt(CurrentHero).Skill = GetReferenceFromObject(CurrentSkills);
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Skill");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).SkillTree != GetReferenceFromObject(CurrentSkillTrees))
+
+                if (CurrentSkillTrees.Count != 0 && Heros.ElementAt(CurrentHero).SkillTree != null)
+                {
+                    if (!Heros.ElementAt(CurrentHero).SkillTree.Select(x => x.Name)
+                        .SequenceEqual(GetReferenceFromObject(CurrentSkillTrees).Select(x => x.Name)))
+                    {
+                        Heros.ElementAt(CurrentHero).SkillTree = GetReferenceFromObject(CurrentSkillTrees);
+                        RaisePropertyChanged(Heros.ElementAt(CurrentHero), "SkillTree");
+                        modified = true;
+                    }
+                }
+                else if (CurrentSkillTrees.Count == 0 && Heros.ElementAt(CurrentHero).SkillTree == null)
+                {
+                    //both null, ignore
+                }
+                else
                 {
                     Heros.ElementAt(CurrentHero).SkillTree = GetReferenceFromObject(CurrentSkillTrees);
                     RaisePropertyChanged(Heros.ElementAt(CurrentHero), "SkillTree");
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    modified = true;
                 }
+
                 Heros.ElementAt(CurrentHero).MoodImage = MoodImage;
                 RaisePropertyChanged(Heros.ElementAt(CurrentHero), "MoodImage");
                 Heros.ElementAt(CurrentHero).LargeImage = LargeImage;
                 RaisePropertyChanged(Heros.ElementAt(CurrentHero), "LargeImage");
                 Heros.ElementAt(CurrentHero).MediumImage = MediumImage;
                 RaisePropertyChanged(Heros.ElementAt(CurrentHero), "MediumImage");
+                if (modified)
+                {
+                    Heros.ElementAt(CurrentHero).Custom = true;
+                }
             }
         }
 

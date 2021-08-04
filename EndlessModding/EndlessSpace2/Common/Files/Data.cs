@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime;
 
 namespace EndlessModding.EndlessSpace2.Common.Files
 {
@@ -20,7 +21,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         public ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.ExtendedGuiElement> ExtendedGUIElements = new ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.ExtendedGuiElement>();
         public ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> RuntimeModules = new ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule>();
 
-        public ObservableConcurrentCollection<object> ExportableData = new ObservableConcurrentCollection<object>();
+        public ObservableConcurrentCollection<IExportable> ExportableData = new ObservableConcurrentCollection<IExportable>();
 
         public async void GetExportableData()
         {
@@ -30,7 +31,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         public Classes.HeroDefinition.HeroDefinition[] GetExportableHeros()
         {
-            return HeroDefinitions.AsParallel().Where(x => x.Custom).ToArray();
+            return HeroDefinitions.AsParallel().Where(x => x.Custom).OrderBy(x => x.Name).ToArray();
         }
 
 

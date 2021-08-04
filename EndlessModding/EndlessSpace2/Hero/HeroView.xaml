@@ -62,8 +62,14 @@
                 <!--<li:LoadingIndicator Grid.Column="0" Grid.Row="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsArcsActive}" Mode="Arcs" />-->
                 <GroupBox Header="Hero Details:">
                     <StackPanel Grid.Column="0" Margin="5">
-                        <TextBlock>Name:</TextBlock>
+                        <TextBlock>Hero Module Name:</TextBlock>
                         <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+
+                        <TextBlock>In Game Name:</TextBlock>
+                        <TextBox Text="{Binding RealName, Mode=TwoWay}"/>
+
+                        <TextBlock>In Game Description:</TextBlock>
+                        <TextBox Text="{Binding Description, Mode=TwoWay}"/>
 
                         <TextBlock>Hidden:</TextBlock>
                         <CheckBox IsChecked="{Binding Hidden, Mode=TwoWay}"/>

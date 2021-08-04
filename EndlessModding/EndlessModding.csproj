@@ -269,7 +269,6 @@
     <Compile Include="Common\Import\Import.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\IO\IOHandler.cs" />
-    <Compile Include="Common\XML\XMLHandler.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\AcademyFaction.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\AcademyReparationScoresDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\AcademyRolePreference.cs" />

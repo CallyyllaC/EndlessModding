@@ -27,14 +27,16 @@ namespace EndlessModding.EndlessSpace2.Main
         public ICommand ButtonGameDirClick { get; }
         public ICommand ButtonOutDirClick { get; }
         public ICommand CheckboxChecked { get; }
-        public ICommand Update { get; }
         public string LocOutDir_Text
         {
             get => _locOutDir_Text;
             set
             {
-                _locOutDir_Text = value;
-                RaisePropertyChanged();
+                if (_locOutDir_Text != value)
+                {
+                    _locOutDir_Text = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string GameDirStatus_Text
@@ -42,8 +44,11 @@ namespace EndlessModding.EndlessSpace2.Main
             get => _gameDirStatus_Text;
             set
             {
-                _gameDirStatus_Text = value;
-                RaisePropertyChanged();
+                if (_gameDirStatus_Text != value)
+                {
+                    _gameDirStatus_Text = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public Brush GameDirStatus_Foreground
@@ -51,8 +56,11 @@ namespace EndlessModding.EndlessSpace2.Main
             get => _gameDirStatus_Foreground;
             set
             {
-                _gameDirStatus_Foreground = value;
-                RaisePropertyChanged();
+                if (_gameDirStatus_Foreground != value)
+                {
+                    _gameDirStatus_Foreground = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string LocGameDir_Text
@@ -60,8 +68,11 @@ namespace EndlessModding.EndlessSpace2.Main
             get => _locGameDir_Text;
             set
             {
-                _locGameDir_Text = value;
-                RaisePropertyChanged();
+                if (_locGameDir_Text != value)
+                {
+                    _locGameDir_Text = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public bool LoadOtherMods
@@ -69,8 +80,11 @@ namespace EndlessModding.EndlessSpace2.Main
             get => _loadOtherMods;
             set
             {
-                _loadOtherMods = value;
-                RaisePropertyChanged();
+                if (_loadOtherMods != value)
+                {
+                    _loadOtherMods = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string About
@@ -94,6 +108,15 @@ namespace EndlessModding.EndlessSpace2.Main
             get;
         } = "Closing the window and reopening will reimport some of the data but not add it to old lists\nProbably a whole lot more\n";
 
+        public bool CanImportMods
+        {
+            get => _canImportMods;
+            set
+            {
+                _canImportMods = value;
+                RaisePropertyChanged();
+            }
+        }
         //Fields
         private readonly ILogger _logger;
         private ImportFiles _importFiles;
@@ -104,7 +127,7 @@ namespace EndlessModding.EndlessSpace2.Main
         private string _gameDirStatus_Text = "Please locate the game install directory.";
         private Brush _gameDirStatus_Foreground = Brushes.White;
         private string _locGameDir_Text = "Please locate the game install directory.";
-
+        private bool _canImportMods = false;
         public MainViewModel(ILogger logger, Data data)
         {
             _data = data;
@@ -112,7 +135,6 @@ namespace EndlessModding.EndlessSpace2.Main
             _importFiles = new ImportFiles(logger, data);
             _importMods = new ImportMods(logger, data);
             LocOutDir_Text = Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Endless Space 2\\Community")).FullName;
-            Update = new RelayCommand((t => true), new Action<object>(async x => await UpdateGameDirText()));
             ButtonOutDirClick = new RelayCommand(Can_Button_OutDir_Click, Button_OutDir_Click);
             ButtonGameDirClick = new RelayCommand(Can_Button_GameDir_Click, Button_GameDir_Click);
             CheckboxChecked = new RelayCommand(Can_Checkbox_Click, CheckBox_Click);
@@ -123,6 +145,8 @@ namespace EndlessModding.EndlessSpace2.Main
         {
             return !MainWindow.IsBusy;
         }
+
+
 
         private async void CheckBox_Click(object obj)
         {
@@ -180,10 +204,12 @@ namespace EndlessModding.EndlessSpace2.Main
                 var tf = new TaskFactory();
                 await tf.StartNew(new Action(() => { _importFiles.ImportAll(LocGameDir_Text); }));
 
+                CanImportMods = true;
                 MainWindow.ToggleTabs(true);
             }
             else
             {
+                CanImportMods = false;
                 GameDirStatus_Text = "Error, cannot find EndlessSpace2.exe to verify folder location";
                 GameDirStatus_Foreground = Brushes.Red;
                 MainWindow.ToggleTabs(false);

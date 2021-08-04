@@ -33,14 +33,18 @@ namespace EndlessModding.EndlessSpace2.Workshop
         public ICommand AddTag { get; }
         public ICommand RemoveTag { get; }
         public ICommand Refresh { get; }
+        public ICommand Export { get; }
 
         public string[] Tags
         {
             get => _tags;
             set
             {
-                _tags = value;
-                RaisePropertyChanged();
+                if (_tags != value)
+                {
+                    _tags = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public ObservableConcurrentCollection<RuntimePlugin> Plugins
@@ -48,8 +52,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _plugins;
             set
             {
-                _plugins = value;
-                RaisePropertyChanged();
+                if (_plugins != value)
+                {
+                    _plugins = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public WriteableBitmap Image
@@ -57,8 +64,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _image;
             set
             {
-                _image = value;
-                RaisePropertyChanged();
+                if (_image != value)
+                {
+                    _image = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public RuntimeModuleType Type
@@ -66,8 +76,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _type;
             set
             {
-                _type = value;
-                RaisePropertyChanged();
+                if (_type != value)
+                {
+                    _type = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string Title
@@ -75,8 +88,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _title;
             set
             {
-                _title = value;
-                RaisePropertyChanged();
+                if (_title != value)
+                {
+                    _title = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string Description
@@ -84,8 +100,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _description;
             set
             {
-                _description = value;
-                RaisePropertyChanged();
+                if (_description != value)
+                {
+                    _description = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string[] Author
@@ -93,8 +112,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _author;
             set
             {
-                _author = value;
-                RaisePropertyChanged();
+                if (_author != value)
+                {
+                    _author = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string ReleaseNotes
@@ -102,8 +124,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _releaseNotes;
             set
             {
-                _releaseNotes = value;
-                RaisePropertyChanged();
+                if (_releaseNotes != value)
+                {
+                    _releaseNotes = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string Version
@@ -111,8 +136,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _version;
             set
             {
-                _version = value;
-                RaisePropertyChanged();
+                if (_version != value)
+                {
+                    _version = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public int CurrentMod
@@ -120,16 +148,19 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _currentMod;
             set
             {
-                if (MainWindow != null)
-                    MainWindow.IsBusy = true;
+                if (_currentMod != value)
+                {
+                    if (MainWindow != null)
+                        MainWindow.IsBusy = true;
 
-                saveMod();
-                _currentMod = value;
-                loadMod(null);
-                RaisePropertyChanged();
+                    saveMod();
+                    _currentMod = value;
+                    loadMod(null);
+                    RaisePropertyChanged();
 
-                if (MainWindow != null)
-                    MainWindow.IsBusy = false;
+                    if (MainWindow != null)
+                        MainWindow.IsBusy = false;
+                }
             }
         }
         public int SelectedAuthor
@@ -137,8 +168,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _selectedAuthor;
             set
             {
-                _selectedAuthor = value;
-                RaisePropertyChanged();
+                if (_selectedAuthor != value)
+                {
+                    _selectedAuthor = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public int SelectedTag
@@ -146,8 +180,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _selectedTag;
             set
             {
-                _selectedTag = value;
-                RaisePropertyChanged();
+                if (_selectedTag != value)
+                {
+                    _selectedTag = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string NewAuthor
@@ -155,8 +192,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _newAuthor;
             set
             {
-                _newAuthor = value;
-                RaisePropertyChanged();
+                if (_newAuthor != value)
+                {
+                    _newAuthor = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public ObservableConcurrentCollection<RuntimeModule> Mods
@@ -164,17 +204,23 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _mods;
             set
             {
-                _mods = value;
-                RaisePropertyChanged();
+                if (_mods != value)
+                {
+                    _mods = value;
+                    RaisePropertyChanged();
+                }
             }
         }
-        public ObservableConcurrentCollection<object> Exportables
+        public ObservableConcurrentCollection<IExportable> Exportables
         {
             get => _exportables;
             set
             {
-                _exportables = value;
-                RaisePropertyChanged();
+                if (_exportables != value)
+                {
+                    _exportables = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string TagsBox
@@ -182,8 +228,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             get => _tagsBox;
             set
             {
-                _tagsBox = value;
-                RaisePropertyChanged();
+                if (_tagsBox != value)
+                {
+                    _tagsBox = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public string[] TagsAvailible { get; } = new string[]
@@ -216,7 +265,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         private string _newAuthor = "";
         private readonly ILogger _logger;
         private ObservableConcurrentCollection<RuntimeModule> _mods;
-        private ObservableConcurrentCollection<object> _exportables;
+        private ObservableConcurrentCollection<IExportable> _exportables;
         private string _version;
         private string _releaseNotes;
         private string[] _author;
@@ -225,11 +274,13 @@ namespace EndlessModding.EndlessSpace2.Workshop
         private RuntimeModuleType _type;
         private WriteableBitmap _image;
         private Data _data;
+        private Export _export;
 
         public WorkshopViewModel(ILogger Logger, Data data)
         {
             _logger = Logger;
             _data = data;
+            _export = new Export(Logger);
             Mods = _data.RuntimeModules;
             Exportables = _data.ExportableData;
             CurrentMod = Mods.Count - 1;
@@ -240,10 +291,24 @@ namespace EndlessModding.EndlessSpace2.Workshop
             AddTag = new RelayCommand(canAddTag, addTag);
             RemoveTag = new RelayCommand(canRemoveTag, removeTag);
             Refresh = new RelayCommand(canRefresh, refresh);
+            Export = new RelayCommand(canExport, export);
 
             RaisePropertyChanged();
         }
 
+        private async void export(object obj)
+        {
+            IExportable[] export = Exportables.Where(x => x.Enabled).ToArray();
+            if (export.Length > 0)
+            {
+                _export.SaveMod(Mods.ElementAt(CurrentMod), export, MainWindow.MainViewModel.LocOutDir_Text);
+            }
+        }
+
+        private bool canExport(object obj)
+        {
+            return !MainWindow.IsBusy && CurrentMod != -1;
+        }
         private async void refresh(object obj)
         {
             _data.GetExportableData();
@@ -255,7 +320,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void newMod(object obj)
         {
-            Mods.AddFromEnumerable(new RuntimeModule[] {new RuntimeModule()});
+            Mods.AddFromEnumerable(new RuntimeModule[] { new RuntimeModule() });
             CurrentMod = Mods.Count - 1;
         }
         private bool canNewMod(object obj)
@@ -270,7 +335,12 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 return;
             }
             BitmapSource img = new BitmapImage(new Uri(filename, UriKind.Absolute));
-            Image = new WriteableBitmap(img);
+            double x = 430d / (double)img.PixelWidth;
+            double y = 430d / (double)img.PixelHeight;
+            var s = new ScaleTransform(x, y);
+            var res = new TransformedBitmap(img, s);
+            Image = new WriteableBitmap(res);
+            Image.Freeze();
         }
         private bool canGetImage(object obj)
         {
@@ -288,13 +358,13 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 Type = Mods.ElementAt(CurrentMod).Type;
                 Image = Mods.ElementAt(CurrentMod).Image;
 
-                var tmpTags = Mods.ElementAt(CurrentMod).Tags.Value;
-                if (!string.IsNullOrEmpty(tmpTags))
+                var tmpTags = Mods.ElementAt(CurrentMod).Tags;
+                if (tmpTags != null && !string.IsNullOrEmpty(tmpTags.Value))
                 {
-                    if (tmpTags.Split(',').Count() > 1)
-                        Tags = tmpTags.Split(',');
+                    if (tmpTags.Value.Split(',').Count() > 1)
+                        Tags = tmpTags.Value.Split(',');
                     else
-                        Tags = tmpTags.Split(' ');
+                        Tags = tmpTags.Value.Split(' ');
 
                     Tags = Tags.Select(innerItem => innerItem.Trim()).ToArray();
                 }
@@ -304,9 +374,12 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 }
 
                 Plugins.Clear();
-                foreach (var item in Mods.ElementAt(CurrentMod).Plugins)
+                if (Mods.ElementAt(CurrentMod).Plugins != null)
                 {
-                    Plugins.AddFromEnumerable(new RuntimePlugin[]{item});
+                    foreach (var item in Mods.ElementAt(CurrentMod).Plugins)
+                    {
+                        Plugins.AddFromEnumerable(new RuntimePlugin[] { item });
+                    }
                 }
             }
         }
@@ -330,7 +403,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Image");
                 Mods.ElementAt(CurrentMod).Plugins = Plugins.ToArray();
                 RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Plugins");
-                Mods.ElementAt(CurrentMod).Tags.Value = string.Join(", ", Tags);
+                Mods.ElementAt(CurrentMod).Tags = new Tags();
+                if (Tags.Length > 0)
+                {
+                    Mods.ElementAt(CurrentMod).Tags.Value = string.Join(", ", Tags);
+                }
                 RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Tags");
             }
         }
@@ -351,7 +428,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void addAuthor(object obj)
         {
-            var tmp = Author.ToList();
+            List<string> tmp = new List<string>();
+            if (Author != null)
+            {
+                tmp = Author.ToList();
+            }
             tmp.Add(NewAuthor);
             Author = tmp.ToArray();
         }

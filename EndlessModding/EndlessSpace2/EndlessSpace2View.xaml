@@ -30,7 +30,7 @@
         Icon="/EndlessSpace2/EndlessModdingLogo.ico"
                  IconBitmapScalingMode="HighQuality"
                  IconEdgeMode="Aliased"
-        ShowIconOnTitleBar="True">
+        ShowIconOnTitleBar="True" Closing="MetroWindow_Closing">
 
     <Grid IsEnabled="{Binding ShouldBeEnabled}">
         <Grid ZIndex="99" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
