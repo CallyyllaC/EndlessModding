@@ -154,11 +154,15 @@ namespace EndlessModding.EndlessSpace2
             {
                 _isBusy = value;
 
-                ToggleTabs(!value);
+                if (ShouldTabs)
+                {
+                    ToggleTabs(!value);
+                }
 
                 RaisePropertyChanged();
             }
         }
+        public bool ShouldTabs = false;
         public bool ShouldBeEnabled
         {
             get => !IsBusy;

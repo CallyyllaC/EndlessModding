@@ -19,6 +19,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         Data _data;
 
         HashSet<string> _modFiles;
+        ConcurrentBag<Classes.Amplitude_Localisation.LocalizationPair> LocalizationPairs = new ConcurrentBag<Classes.Amplitude_Localisation.LocalizationPair>();
 
         public ImportMods(ILogger logger, Data data)
         {
@@ -32,17 +33,17 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             //Get Mods and load in the mod configs
             LoadMods(_data.RuntimeModules, "RuntimeModule");
         }
-        private void LoadMods(ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule> input, string Node)
+        private void LoadMods(ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> input, string Node)
         {
-            var bag = new ConcurrentBag<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule>();
-            XmlSerializer serialist = new XmlSerializer(typeof(EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule));
+            var bag = new ConcurrentBag<Classes.Amplitude_Runtime.RuntimeModule>();
+            XmlSerializer serialist = new XmlSerializer(typeof(Classes.Amplitude_Runtime.RuntimeModule));
 
-            Func<XElement, EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule> SerialiseFunc = xml =>
+            Func<XElement, Classes.Amplitude_Runtime.RuntimeModule> SerialiseFunc = xml =>
             {
                 try
                 {
                     var reader = xml.CreateReader();
-                    EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule tmp = (EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule)serialist.Deserialize(reader);
+                    Classes.Amplitude_Runtime.RuntimeModule tmp = (Classes.Amplitude_Runtime.RuntimeModule)serialist.Deserialize(reader);
                     reader.Dispose();
                     _logger.Info($"Loaded item: {xml.Name}");
                     return tmp;
@@ -89,15 +90,15 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             input.AddFromEnumerable(tmpcont);
         }
-        private void LoadPlugins(EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimePlugin[] input, string fileDirectory)
+        private void LoadPlugins(Classes.Amplitude_Runtime.RuntimePlugin[] input, string fileDirectory)
         {
-            Action<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimePlugin> pluginSorterFunc = plugin =>
+            Action<Classes.Amplitude_Runtime.RuntimePlugin> pluginSorterFunc = plugin =>
             {
                 try
                 {
-                    if (plugin is EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RegistryPlugin)//RegistryPlugin
+                    if (plugin is Classes.Amplitude_Runtime.RegistryPlugin)//RegistryPlugin
                     {
-                        var tmp = (EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.RegistryPlugin)plugin;
+                        var tmp = (Classes.Amplitude_Runtime.RegistryPlugin)plugin;
                         string[] files = tmp.FilePath;
                         Type tmp2 = GetTypeOfFile(tmp.Type);
                         plugin.Type = tmp2 == null ? "" : tmp2.Name;
@@ -105,19 +106,15 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         plugin.Enabled = true;
                         plugin.ExtraTypes = tmp.ExtraTypes;
                     }
-                    else if (plugin is EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.LocalizationPlugin)//LocalizationPlugin
+                    else if (plugin is Classes.Amplitude_Runtime.LocalizationPlugin)//LocalizationPlugin
                     {
-                        var tmp = (EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.LocalizationPlugin)plugin;
-                        string[] files = tmp.Directory;
-                        Type tmp2 = GetTypeOfFile(tmp.Type);
-                        plugin.Type = tmp2 == null ? "" : tmp2.Name;
-                        plugin.Contents = string.Join(" ,", files);
-                        plugin.Enabled = true;
-                        plugin.ExtraTypes = tmp.ExtraTypes;
+                        var tmp = (Classes.Amplitude_Runtime.LocalizationPlugin)plugin;
+                        string[] directories = tmp.Directory;
+                        LoadNodes(fileDirectory, directories);
                     }
-                    else if (plugin is EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.AIPlugin)//AIPlugin
+                    else if (plugin is Classes.Amplitude_Runtime.AIPlugin)//AIPlugin
                     {
-                        var tmp = (EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.AIPlugin)plugin;
+                        var tmp = (Classes.Amplitude_Runtime.AIPlugin)plugin;
                         string[] files = tmp.AssemblyPath;
                         Type tmp2 = GetTypeOfFile(tmp.Type);
                         plugin.Type = tmp2 == null ? "" : tmp2.Name;
@@ -125,10 +122,10 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         plugin.Enabled = true;
                         plugin.ExtraTypes = tmp.ExtraTypes;
                     }
-                    else if (plugin is EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.DatabasePlugin)//DatabasePlugin
+                    else if (plugin is Classes.Amplitude_Runtime.DatabasePlugin)//DatabasePlugin
                     {
                         string Contents = "";
-                        var tmp = (EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime.DatabasePlugin)plugin;
+                        var tmp = (Classes.Amplitude_Runtime.DatabasePlugin)plugin;
                         string[] files = tmp.FilePath;
                         Type tmp2 = GetTypeOfFile(tmp.DataType);
                         plugin.Type = tmp2 == null ? "" : tmp2.Name;
@@ -266,11 +263,59 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
                     var type = input.GetType();
                     var method = type.GetMethod("TryAdd", BindingFlags.NonPublic | BindingFlags.Instance);
-                    _ = method.Invoke(input, new object[] {  item });
+                    _ = method.Invoke(input, new object[] { item });
                 }
 
 
             }
+        }
+        private void LoadNodes(string FilePath, string[] Files)
+        {
+            XmlSerializer serialist = new XmlSerializer(typeof(Classes.Amplitude_Localisation.LocalizationPair));
+
+            Func<XElement, object> SerialiseFunc = xml =>
+            {
+                try
+                {
+                    var reader = xml.CreateReader();
+                    object tmp = serialist.Deserialize(reader);
+                    reader.Dispose();
+                    _logger.Info($"Loaded item: {xml.Name}");
+                    return tmp;
+                }
+                catch (Exception e)
+                {
+                    _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
+                    return default;
+                }
+            };
+
+            foreach (var file in Files)
+            {
+                var subfiles = Directory.GetFiles(FilePath + "\\" + file + "\\english\\", "*.xml", SearchOption.AllDirectories);
+                foreach (var xmls in subfiles)
+                {
+                    try
+                    {
+                        XElement document = XElement.Load(xmls);
+
+                        var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
+                            .Select(SerialiseFunc)
+                            .ToArray();
+                        _logger.Info($"Load file: {file}");
+
+                        foreach (var item in definitions)
+                        {
+                            LocalizationPairs.Add((Classes.Amplitude_Localisation.LocalizationPair)item);
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error($"Failed to load file: {file}: {e.Message}");
+                    }
+                }
+            };
         }
         private void LoadModImage(string FilePath, EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule Mod)
         {
@@ -328,8 +373,15 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             foreach (var item in CustomHeros)
             {
                 var gui = _data.HeroGUIElements.Where(x => x.Name == item.Name).FirstOrDefault();
-                item.RealName = gui.Title;
-                item.Description = gui.Description;
+                item.RealName = gui?.Title;
+                item.Description = gui?.Description;
+
+                var tmp = LocalizationPairs.FirstOrDefault(x => x.Name == item.RealName);
+                if (tmp != null) item.RealName = tmp.Value;
+
+                tmp = LocalizationPairs.FirstOrDefault(x => x.Name == item.Description);
+                if (tmp != null) item.Description = tmp.Value;
+
                 if (gui != null)
                 {
                     LoadHeroImage(FilePath, item, gui);

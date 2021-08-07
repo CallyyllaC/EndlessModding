@@ -95,6 +95,10 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 }
             }
         }
+        public string Name
+        {
+            get => _title?.Replace(" ", "");
+        }
         public string Description
         {
             get => _description;
@@ -298,11 +302,16 @@ namespace EndlessModding.EndlessSpace2.Workshop
 
         private async void export(object obj)
         {
+            MainWindow.IsBusy = true;
             IExportable[] export = Exportables.Where(x => x.Enabled).ToArray();
             if (export.Length > 0)
             {
+                saveMod();
                 _export.SaveMod(Mods.ElementAt(CurrentMod), export, MainWindow.MainViewModel.LocOutDir_Text);
             }
+
+            await Task.CompletedTask;
+            MainWindow.IsBusy = false;
         }
 
         private bool canExport(object obj)
@@ -311,16 +320,19 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private async void refresh(object obj)
         {
+            MainWindow.IsBusy = true;
             _data.GetExportableData();
+            await Task.CompletedTask;
+            MainWindow.IsBusy = false;
         }
 
         private bool canRefresh(object obj)
         {
-            return !MainWindow.IsBusy;
+            return true;
         }
         private void newMod(object obj)
         {
-            Mods.AddFromEnumerable(new RuntimeModule[] { new RuntimeModule() });
+            Mods.AddFromEnumerable(new RuntimeModule[] { new RuntimeModule() { Type = RuntimeModuleType.Extension } });
             CurrentMod = Mods.Count - 1;
         }
         private bool canNewMod(object obj)
@@ -329,6 +341,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private async void getImage(object obj)
         {
+            MainWindow.IsBusy = true;
             string filename = await EndlessModding.Common.IO.IOHandler.OpenFileExplorer("Mod Icon", "png");
             if (filename == null)
             {
@@ -341,10 +354,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
             var res = new TransformedBitmap(img, s);
             Image = new WriteableBitmap(res);
             Image.Freeze();
+            MainWindow.IsBusy = false;
         }
         private bool canGetImage(object obj)
         {
-            return !MainWindow.IsBusy;
+            return !MainWindow.IsBusy && CurrentMod != -1;
         }
         private void loadMod(object obj)
         {
@@ -387,6 +401,8 @@ namespace EndlessModding.EndlessSpace2.Workshop
         {
             if (Mods.Count > 0 && CurrentMod >= 0)
             {
+                MainWindow.IsBusy = true;
+                Mods.ElementAt(CurrentMod).Name = Name;
                 Mods.ElementAt(CurrentMod).Version = Version;
                 RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Version");
                 Mods.ElementAt(CurrentMod).ReleaseNotes = ReleaseNotes;
@@ -409,6 +425,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                     Mods.ElementAt(CurrentMod).Tags.Value = string.Join(", ", Tags);
                 }
                 RaisePropertyChanged(Mods.ElementAt(CurrentMod), "Tags");
+                MainWindow.IsBusy = false;
             }
         }
         private void removeAuthor(object obj)
@@ -419,7 +436,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         {
             if (Author != null && Author.Count() > SelectedAuthor)
             {
-                return !MainWindow.IsBusy;
+                return !MainWindow.IsBusy && CurrentMod != -1;
             }
             else
             {
@@ -438,7 +455,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private bool canAddAuthor(object obj)
         {
-            return !string.IsNullOrEmpty(NewAuthor) && !MainWindow.IsBusy;
+            return !string.IsNullOrEmpty(NewAuthor) && !MainWindow.IsBusy && CurrentMod != -1;
         }
         private void removeTag(object obj)
         {
@@ -448,7 +465,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         {
             if (Tags != null && Tags.Count() > 0)
             {
-                return !MainWindow.IsBusy;
+                return !MainWindow.IsBusy && CurrentMod != -1;
             }
             else
             {
@@ -463,7 +480,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private bool canAddTag(object obj)
         {
-            return !MainWindow.IsBusy;
+            return !MainWindow.IsBusy && CurrentMod != -1;
         }
 
         #region INotifyPropertyChanged

@@ -31,7 +31,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="Modules" Grid.Row="0">
-                    <DataGrid ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                    <DataGrid ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -56,12 +56,12 @@
 
             <Grid Grid.Column="1" MinHeight="400" x:Name="prop">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="300"/>
+                    <ColumnDefinition Width="*" MinWidth="300" MaxWidth="510"/>
                     <ColumnDefinition Width="*" MinWidth="300"/>
                 </Grid.ColumnDefinitions>
                 <!--<li:LoadingIndicator Grid.Column="0" Grid.Row="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsArcsActive}" Mode="Arcs" />-->
                 <GroupBox Header="Hero Details:">
-                    <StackPanel Grid.Column="0" Margin="5">
+                    <StackPanel Grid.Column="0" Margin="5" MaxWidth="500">
                         <TextBlock>Hero Module Name:</TextBlock>
                         <TextBox Text="{Binding Name, Mode=TwoWay}"/>
 
@@ -69,7 +69,7 @@
                         <TextBox Text="{Binding RealName, Mode=TwoWay}"/>
 
                         <TextBlock>In Game Description:</TextBlock>
-                        <TextBox Text="{Binding Description, Mode=TwoWay}"/>
+                        <TextBox Text="{Binding Description, Mode=TwoWay}" MaxWidth="500" TextWrapping="Wrap"/>
 
                         <TextBlock>Hidden:</TextBlock>
                         <CheckBox IsChecked="{Binding Hidden, Mode=TwoWay}"/>

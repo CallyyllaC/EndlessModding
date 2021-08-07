@@ -33,25 +33,49 @@
 
             <StackPanel Margin="5" Grid.Column="0">
                 <Button x:Name="Endless_Legend" Opacity="0.3" IsEnabled="False">
-                    Endless Legend
+                    Placeholder Game
                 </Button>
                 <Button x:Name="Dungeon_of_the_Endless" Opacity="0.3"  IsEnabled="False">
-                    Dungeon of the Endless
+                    Placeholder Game
                 </Button>
                 <Button x:Name="Endless_Space_2" Opacity="0.3"  Command="{Binding EndlessSpace2Clicked}" IsEnabled="True">
                     Endless Space 2
                 </Button>
                 <Button x:Name="Humankind" Opacity="0.3"  IsEnabled="False">
-                    Humankind
+                    Placeholder Game
                 </Button>
             </StackPanel>
 
-            <StackPanel Margin="5" Grid.Column="1">
-                <Button Opacity="0.3" >
-                    Steam
-                </Button>
-
-            </StackPanel>
+            <GroupBox Header="News" Margin="5" Grid.Column="1" Opacity="0.5" Background="Transparent">
+                <DataGrid Opacity="0.8" Background="Transparent" SelectedIndex="{Binding SelectedNews}" ItemsSource="{Binding News, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single"  AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False" IsSynchronizedWithCurrentItem="True">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Opacity" Value="1" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="auto" Binding="{Binding Date, Mode=OneWay}">
+                            <DataGridTextColumn.Header>Date</DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.VerticalAlignment" Value="Top" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="160" Binding="{Binding Title, Mode=OneWay}">
+                            <DataGridTextColumn.Header>Title</DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                    <Setter Property="TextBlock.VerticalAlignment" Value="Top" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
         </Grid>
     </Grid>
 </mah:MetroWindow>

@@ -9,13 +9,21 @@
              xmlns:exten="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              xmlns:com="clr-namespace:EndlessModding.Common"
              xmlns:converters="clr-namespace:EndlessModding.EndlessSpace2.Common.Converters"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="776" d:DesignWidth="1304">
+
 
     <UserControl.Resources>
         <converters:StringArrayToStringConverter x:Key="StringArrayToStringConverter"></converters:StringArrayToStringConverter>
         <converters:PluginToStringConverter x:Key="PluginToStringConverter"></converters:PluginToStringConverter>
     </UserControl.Resources>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Refresh}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -23,7 +31,6 @@
                 <ColumnDefinition Width="*" MinWidth="200"/>
                 <ColumnDefinition Width="3*" MinWidth="600"/>
             </Grid.ColumnDefinitions>
-
 
             <Grid MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight, Mode=OneWay}">
                 <Grid.RowDefinitions>
@@ -117,9 +124,9 @@
                         </GroupBox>
                         </StackPanel>
                     </GroupBox>
-                        <GroupBox Grid.Row="1" Header="Export">
+                        <!--<GroupBox Grid.Row="1" Header="Export">
                         <Button Grid.Row="1" Command="{Binding Export}">Export Mod</Button>
-                        </GroupBox>
+                        </GroupBox>-->
                     </Grid>
 
                 <Grid Grid.Column="1">
@@ -190,7 +197,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
-                    <Button Grid.Row="1" Command="{Binding Refresh}">Refresh</Button>
+                    <Button Grid.Row="1" Command="{Binding Export}">Export</Button>
                 </Grid>
             </Grid>
         </Grid>

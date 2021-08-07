@@ -90,7 +90,7 @@ namespace EndlessModding.EndlessSpace2.Main
         public string About
         {
             get;
-        } = "This is the new version of my ES2 Hero Designer, as you can see it has been expanded upon greatly since the last version, and now includes a large variety of modding tools. There have also been a lot of under the hood improvements to this tool that many of you will not be able to notice. However the original tool was both rushed in about a week, and written by a uni student with very limited experience. Not to say that this is greatly done, I have made a lot of shortcuts that will make many developers cry, however compared to the last one, this should be a lot easier to expand upon in the future as and when needed. I would also like to thank the community for their support over the years and for making this tool worth it.";
+        } = "This is the new version of my ES2 Hero Designer, as you can see it has been expanded upon greatly since the last version, and now (not now now though) includes a large variety of modding tools. There have also been a lot of under the hood improvements to this tool that many of you will not be able to notice. However the original tool was both rushed in about a week, and written by a uni student with very limited experience. Not to say that this is greatly done, I have made a lot of shortcuts that will make many developers cry, however compared to the last one, this should be a lot easier to expand upon in the future as and when needed. I would also like to thank the community for their support over the years and for making developing these tools worth it.";
         public string Steam
         {
             get;
@@ -98,15 +98,23 @@ namespace EndlessModding.EndlessSpace2.Main
         public string Github
         {
             get;
-        } = "It's not on github yet either tee-hee";
+        } = "https://github.com/CallyyllaC/EndlessModding";
         public string HowTo
         {
             get;
-        } = "IDK the program doesn't even exist yet lol";
+        } = @"First thing you're gonna want to do is load the ES2 Game directory that you have installed, it might take a while to load but this is normal and only needs to be done on launch, most of this time is getting the language files for the game, as there are a lot of them
+
+Next, if you want to load in previously developed mods, ensure that you have the correct workshop directory selected and then tick the Load other mods box
+
+After this, you're ready to go and make your first hero, head over to the heros tab, click new hero at the bottom left, and get to it. You can also edit the original games heros too!
+
+Once this is done, head over to the Workshop tab and do the same, click new mod (or edit an old mod) and fill out the details
+
+Once that is done, go ahead and click export!";
         public string Bugs
         {
             get;
-        } = "Closing the window and reopening will reimport some of the data but not add it to old lists\nProbably a whole lot more\n";
+        } = "I've done my best, but there are a lot of things to test, and a lot of weird things that C# just does anyway from time to time, logging hasnt been added yet so... best of luck!";
 
         public bool CanImportMods
         {
@@ -205,14 +213,14 @@ namespace EndlessModding.EndlessSpace2.Main
                 await tf.StartNew(new Action(() => { _importFiles.ImportAll(LocGameDir_Text); }));
 
                 CanImportMods = true;
-                MainWindow.ToggleTabs(true);
+                MainWindow.ShouldTabs = true;
             }
             else
             {
                 CanImportMods = false;
                 GameDirStatus_Text = "Error, cannot find EndlessSpace2.exe to verify folder location";
                 GameDirStatus_Foreground = Brushes.Red;
-                MainWindow.ToggleTabs(false);
+                MainWindow.ShouldTabs = false;
                 return;
             }
         }

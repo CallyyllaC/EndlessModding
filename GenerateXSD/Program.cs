@@ -7,7 +7,7 @@ using System.IO;
 
 namespace GenerateXSD
 {
-    class Program
+    static class Program
     {
         private static string dir = @"D:\Steam Library\steamapps\common\Endless Space 2\Public\Schemas\";
         private static string xsd = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\xsd.exe";

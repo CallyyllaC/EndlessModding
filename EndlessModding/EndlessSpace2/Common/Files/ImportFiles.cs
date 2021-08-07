@@ -11,17 +11,22 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Castle.Core.Logging;
 using EndlessModding.Common.Import;
+using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Gui_GuiElement;
+using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Localisation;
 
 namespace EndlessModding.EndlessSpace2.Common.Files
 {
     class ImportFiles
     {
         HashSet<string> _files;
+        HashSet<string> _localfiles;
+        HashSet<string> _guifiles;
 
         ILogger _logger;
         Data _data;
 
         HashSet<string> _modFiles;
+        ConcurrentDictionary<string, string> Locales = new ConcurrentDictionary<string, string>();
 
         public ImportFiles(ILogger logger, Data data)
         {
@@ -43,7 +48,11 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             //get all the useful xml data
             _files = Directory.GetFiles($"{GameDir}Public\\Simulation\\", "*.xml", SearchOption.AllDirectories).ToHashSet<string>();
+            _localfiles = Directory.GetFiles($"{GameDir}Public\\Localization\\english\\", "*.xml", SearchOption.AllDirectories).ToHashSet<string>();
+            _guifiles = Directory.GetFiles($"{GameDir}Public\\Gui\\", "*.xml", SearchOption.AllDirectories).ToHashSet<string>();
 
+            //Get Locales
+            LoadLocales();
 
             //Get Hero Mastery Definitions
 
@@ -52,10 +61,27 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             //Get Hero Affinity Definitions
             LoadNodes<EndlessSpace2.Common.Classes.HeroAffinityDefinitions.HeroAffinityDefinition>(_data.HeroAffinityDefinitions, "HeroAffinityDefinitions", "HeroAffinityDefinition");
 
-            //Get Hero Class Definitions
-            LoadNodes<EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition>(_data.HeroDefinitions, "HeroDefinitions", "HeroDefinition");
 
             //Get Hero Definitions
+            HashSet<Classes.Amplitude_Gui_GuiElement.HeroGuiElement> _heroFiles = new HashSet<HeroGuiElement>();
+            LoadGuiElements<Classes.Amplitude_Gui_GuiElement.HeroGuiElement>(_heroFiles, "Heroes");
+            LoadNodes<EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition>(_data.HeroDefinitions, "HeroDefinitions", "HeroDefinition");
+            _data.HeroDefinitions.AsParallel().ForAll((item) =>
+            {
+                var gui = _heroFiles.Where(x => x.Name == item.Name).FirstOrDefault();
+                item.RealName = gui.Title;
+                item.Description = gui.Description;
+
+                if (Locales.TryGetValue(item.RealName, out string name))
+                {
+                    item.RealName = name;
+                }
+                if (Locales.TryGetValue(item.Description, out string description))
+                {
+                    item.Description = description;
+                }
+            });
+            //Get Hero Class Definitions
             LoadNodes<EndlessSpace2.Common.Classes.HeroClassDefinitions.HeroClassDefinition>(_data.HeroClassDefinitions, "HeroClassDefinitions", "HeroClassDefinition");
 
             //Get Hero Politic Definitions
@@ -76,29 +102,34 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             //Get Major Factions
             LoadNodes<EndlessSpace2.Common.Classes.MajorFactions.MajorFaction>(_data.MajorFactions, "Factions", "MajorFaction");
+
         }
 
-        private void LoadNodes<T>(ObservableConcurrentCollection<T> input, string Mask, string Node)
+        private void LoadLocales()
         {
-            ConcurrentBag<T> bag = new ConcurrentBag<T>();
-            XmlSerializer serialist = new XmlSerializer(typeof(T));
-
-            Func<XElement, T> SerialiseFunc = xml =>
+            foreach (var file in _localfiles)
             {
                 try
                 {
-                    var reader = xml.CreateReader();
-                    T tmp = (T)serialist.Deserialize(reader);
-                    reader.Dispose();
-                    _logger.Info($"Loaded item: {xml.Name}");
-                    return tmp;
+                    XElement document = XElement.Load(file);
+
+                    var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
+                        .Select(SerialiseFunc<Classes.Amplitude_Localisation.LocalizationPair>)
+                        .ToArray();
+                    _logger.Info($"Load file: {file}");
+
+                    Parallel.ForEach(definitions, item => Locales.TryAdd(item.Name, item.Value));
                 }
                 catch (Exception e)
                 {
-                    _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
-                    return default;
+                    _logger.Error($"Failed to load file: {file}: {e.Message}");
                 }
             };
+        }
+        private void LoadNodes<T>(ObservableConcurrentCollection<T> input, string Mask, string Node)
+        {
+            ConcurrentBag<T> bag = new ConcurrentBag<T>();
+
             foreach (var file in _files.Where(x => x.Contains(Mask)))
             {
                 try
@@ -106,7 +137,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     XElement document = XElement.Load(file);
 
                     var definitions = document.Elements(Node)
-                        .Select(SerialiseFunc)
+                        .Select(SerialiseFunc<T>)
                         .ToArray();
                     _logger.Info($"Load file: {file}");
 
@@ -121,6 +152,51 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             var tmpcont = bag.OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
 
             input.AddFromEnumerable(tmpcont);
+        }
+        private void LoadGuiElements<T>(HashSet<T> input, string Mask)
+        {
+            ConcurrentBag<T> bag = new ConcurrentBag<T>();
+
+            foreach (var file in _guifiles.Where(x => x.Contains(Mask)))
+            {
+                try
+                {
+                    XElement document = XElement.Load(file);
+
+                    var definitions = document.Elements(typeof(T).Name)
+                        .Select(SerialiseFunc<T>)
+                        .ToArray();
+                    _logger.Info($"Load file: {file}");
+
+                    Parallel.ForEach(definitions, item => bag.Add(item));
+                }
+                catch (Exception e)
+                {
+                    _logger.Error($"Failed to load file: {file}: {e.Message}");
+                }
+            };
+
+            foreach (var item in bag)
+            {
+                input.Add(item);
+            }
+        }
+        T SerialiseFunc<T>(XElement xml)
+        {
+            try
+            {
+                XmlSerializer serialist = new XmlSerializer(typeof(T));
+                var reader = xml.CreateReader();
+                T tmp = (T)serialist.Deserialize(reader);
+                reader.Dispose();
+                _logger.Info($"Loaded item: {xml.Name}");
+                return tmp;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
+                return default;
+            }
         }
     }
 }

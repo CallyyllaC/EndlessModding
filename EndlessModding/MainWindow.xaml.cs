@@ -32,5 +32,11 @@ namespace EndlessModding
             //ThemeManager.Current.SyncTheme();
             InitializeComponent();
         }
+        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = sender as DataGridRow;
+            var item = (MainWindowViewModel.NewsObject) row.Item;
+            System.Diagnostics.Process.Start($"steam://openurl/{item.Url}");
+        }
     }
 }

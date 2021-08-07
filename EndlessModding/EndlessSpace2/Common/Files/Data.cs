@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Localisation;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime;
 
 namespace EndlessModding.EndlessSpace2.Common.Files
@@ -15,15 +16,14 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         public ObservableConcurrentCollection<Classes.MajorFactions.MajorFaction> MajorFactions = new ObservableConcurrentCollection<Classes.MajorFactions.MajorFaction>();
         public ObservableConcurrentCollection<Classes.HeroSkillDefinition.HeroSkillDefinition> HeroSkillDefinitions = new ObservableConcurrentCollection<Classes.HeroSkillDefinition.HeroSkillDefinition>();
         public ObservableConcurrentCollection<Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition> HeroSkillTreeDefinitions = new ObservableConcurrentCollection<Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition>();
-        //Mods
+        //Mods //TODO make these local
         public ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.GuiElement> GUIElements = new ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.GuiElement>();
         public ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.HeroGuiElement> HeroGUIElements = new ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.HeroGuiElement>();
         public ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.ExtendedGuiElement> ExtendedGUIElements = new ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.ExtendedGuiElement>();
         public ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> RuntimeModules = new ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule>();
 
         public ObservableConcurrentCollection<IExportable> ExportableData = new ObservableConcurrentCollection<IExportable>();
-
-        public async void GetExportableData()
+        public void GetExportableData()
         {
             ExportableData.Clear();
             //Add Heros
@@ -33,8 +33,5 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         {
             return HeroDefinitions.AsParallel().Where(x => x.Custom).OrderBy(x => x.Name).ToArray();
         }
-
-
-
     }
 }

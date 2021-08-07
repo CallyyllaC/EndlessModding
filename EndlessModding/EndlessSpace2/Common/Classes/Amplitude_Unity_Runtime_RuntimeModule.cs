@@ -229,7 +229,7 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("ExtraType", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        public XmlExtraType[] ExtraTypes
+        public new XmlExtraType[] ExtraTypes
         {
             get
             {
