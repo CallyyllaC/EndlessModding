@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         public void SaveMod(RuntimeModule Mod, object[] modules, string BaseDir)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var Locales = new List<Classes.Amplitude_Localisation.LocalizationPair>();
             var AssetLocales = new List<Classes.Amplitude_Localisation.LocalizationPair>();
             var outputdir = BaseDir + "\\" + Mod.Name + "\\";
@@ -83,6 +85,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
         private void AddHeroToMod(RuntimeModule Mod, Classes.HeroDefinition.HeroDefinition Hero)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //Add Required Plugins To Mod
             var plugins = Mod.Plugins.ToList();
             //Add the Hero
@@ -108,6 +111,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void SaveHero(RuntimeModule Mod, Classes.HeroDefinition.HeroDefinition Hero, string FileDir, List<Classes.Amplitude_Localisation.LocalizationPair> Locales)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //Save Hero XML
             SaveXML(Hero, typeof(Classes.HeroDefinition.HeroDefinition), $"{FileDir}Simulation\\{Hero.Name}.xml");
             //Save Images
@@ -139,11 +143,13 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void SaveGUIElements(Classes.Amplitude_Gui_GuiElement.GuiElement GUI, string FileDir)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //Save GUI XML
             SaveXML(GUI, GUI.GetType(), FileDir);
         }
         private void SaveMod(RuntimeModule Mod, string FileDir)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //Save Mod XML
             SaveXML(Mod, typeof(RuntimeModule), $"{FileDir}{Mod.Name}.xml");
             //Save Image
@@ -152,21 +158,33 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
         private void SaveImage(WriteableBitmap Image, string FileName)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Image == null)
             {
                 return;
             }
-            new FileInfo(FileName).Directory?.Create();
-            using (FileStream stream = new FileStream(FileName, FileMode.Create))
+
+            try
             {
-                PngBitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(Image));
-                encoder.Save(stream);
+                new FileInfo(FileName).Directory?.Create();
+                using (FileStream stream = new FileStream(FileName, FileMode.Create))
+                {
+                    PngBitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(Image));
+                    encoder.Save(stream);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
             }
         }
 
         private void SaveXML(object obj, Type type, string FileName)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
             XmlSerializer serialist = new XmlSerializer(type);
             new FileInfo(FileName).Directory?.Create();
             using (StringWriterWithEncoding textWriter = new StringWriterWithEncoding(Encoding.UTF8))
@@ -176,6 +194,11 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 var stringy = textWriter.ToString().Replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "").Replace("xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"", "").Replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "").Replace("</ArrayOfLocalizationPair>", "").Replace("<ArrayOfLocalizationPair  >", "");
                 var output = $"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Datatable xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n{stringy}\n</Datatable>";
                 File.WriteAllText(FileName, output, Encoding.UTF8);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
             }
         }
 
@@ -185,6 +208,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void SaveLocalisation(Classes.Amplitude_Localisation.LocalizationPair[] input, string dir, bool asset = false)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (input.Length < 1)
             {
                 return;

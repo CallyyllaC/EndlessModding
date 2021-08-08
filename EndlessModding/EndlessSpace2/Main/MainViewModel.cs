@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,8 +115,8 @@ Once that is done, go ahead and click export!";
         public string Bugs
         {
             get;
-        } = "I've done my best, but there are a lot of things to test, and a lot of weird things that C# just does anyway from time to time, logging hasnt been added yet so... best of luck!";
-
+        } = @"I've done my best, but there are a lot of things to test, and a lot of weird things that C# just does anyway from time to time.
+Logging has now been added! Log files are located in %appdata%\Cali\EndlessModding\Logging";
         public bool CanImportMods
         {
             get => _canImportMods;
@@ -125,6 +126,7 @@ Once that is done, go ahead and click export!";
                 RaisePropertyChanged();
             }
         }
+
         //Fields
         private readonly ILogger _logger;
         private ImportFiles _importFiles;
@@ -136,8 +138,10 @@ Once that is done, go ahead and click export!";
         private Brush _gameDirStatus_Foreground = Brushes.White;
         private string _locGameDir_Text = "Please locate the game install directory.";
         private bool _canImportMods = false;
+
         public MainViewModel(ILogger logger, Data data)
         {
+            logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _data = data;
             _logger = logger;
             _importFiles = new ImportFiles(logger, data);
@@ -153,11 +157,9 @@ Once that is done, go ahead and click export!";
         {
             return !MainWindow.IsBusy;
         }
-
-
-
         private async void CheckBox_Click(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             var tmp = (CheckBox)obj;
             if (tmp.IsChecked == true)
@@ -168,9 +170,9 @@ Once that is done, go ahead and click export!";
 
             MainWindow.IsBusy = false;
         }
-
         private async void Button_OutDir_Click(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             string dir = await IOHandler.OpenFolderExplorer("Open Workshop Directory");
 
@@ -180,18 +182,17 @@ Once that is done, go ahead and click export!";
             }
             MainWindow.IsBusy = false;
         }
-
         private bool Can_Button_OutDir_Click(object obj)
         {
             return !MainWindow.IsBusy;
         }
-
         private bool Can_Button_GameDir_Click(object obj)
         {
             return !MainWindow.IsBusy;
         }
         private async void Button_GameDir_Click(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             string dir = await IOHandler.OpenFolderExplorer("Open Game Directory");
 
@@ -204,6 +205,7 @@ Once that is done, go ahead and click export!";
         }
         private async Task UpdateGameDirText()
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (File.Exists($"{LocGameDir_Text}EndlessSpace2.exe"))
             {
                 GameDirStatus_Text = "Game Directory Found";

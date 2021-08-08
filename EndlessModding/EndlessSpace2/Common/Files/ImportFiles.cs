@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -30,12 +31,14 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
         public ImportFiles(ILogger logger, Data data)
         {
+            logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _logger = logger;
             _data = data;
         }
 
         public void ImportAll(string GameDir)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //clear all of the current editables
             _data.HeroDefinitions.Clear();
             _data.HeroClassDefinitions.Clear();
@@ -107,6 +110,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
         private void LoadLocales()
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             foreach (var file in _localfiles)
             {
                 try
@@ -116,7 +120,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
                         .Select(SerialiseFunc<Classes.Amplitude_Localisation.LocalizationPair>)
                         .ToArray();
-                    _logger.Info($"Load file: {file}");
 
                     Parallel.ForEach(definitions, item => Locales.TryAdd(item.Name, item.Value));
                 }
@@ -128,6 +131,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadNodes<T>(ObservableConcurrentCollection<T> input, string Mask, string Node)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             ConcurrentBag<T> bag = new ConcurrentBag<T>();
 
             foreach (var file in _files.Where(x => x.Contains(Mask)))
@@ -139,7 +143,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     var definitions = document.Elements(Node)
                         .Select(SerialiseFunc<T>)
                         .ToArray();
-                    _logger.Info($"Load file: {file}");
 
                     Parallel.ForEach(definitions, item => bag.Add(item));
                 }
@@ -155,6 +158,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadGuiElements<T>(HashSet<T> input, string Mask)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             ConcurrentBag<T> bag = new ConcurrentBag<T>();
 
             foreach (var file in _guifiles.Where(x => x.Contains(Mask)))
@@ -166,7 +170,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     var definitions = document.Elements(typeof(T).Name)
                         .Select(SerialiseFunc<T>)
                         .ToArray();
-                    _logger.Info($"Load file: {file}");
 
                     Parallel.ForEach(definitions, item => bag.Add(item));
                 }
@@ -189,7 +192,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 var reader = xml.CreateReader();
                 T tmp = (T)serialist.Deserialize(reader);
                 reader.Dispose();
-                _logger.Info($"Loaded item: {xml.Name}");
                 return tmp;
             }
             catch (Exception e)

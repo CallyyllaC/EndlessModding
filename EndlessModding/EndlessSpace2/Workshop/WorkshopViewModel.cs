@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -282,6 +283,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
 
         public WorkshopViewModel(ILogger Logger, Data data)
         {
+            Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _logger = Logger;
             _data = data;
             _export = new Export(Logger);
@@ -302,13 +304,11 @@ namespace EndlessModding.EndlessSpace2.Workshop
 
         private async void export(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             IExportable[] export = Exportables.Where(x => x.Enabled).ToArray();
-            if (export.Length > 0)
-            {
-                saveMod();
-                _export.SaveMod(Mods.ElementAt(CurrentMod), export, MainWindow.MainViewModel.LocOutDir_Text);
-            }
+            saveMod();
+            _export.SaveMod(Mods.ElementAt(CurrentMod), export, MainWindow.MainViewModel.LocOutDir_Text);
 
             await Task.CompletedTask;
             MainWindow.IsBusy = false;
@@ -320,6 +320,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private async void refresh(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             _data.GetExportableData();
             await Task.CompletedTask;
@@ -332,6 +333,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void newMod(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             Mods.AddFromEnumerable(new RuntimeModule[] { new RuntimeModule() { Type = RuntimeModuleType.Extension } });
             CurrentMod = Mods.Count - 1;
         }
@@ -341,6 +343,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private async void getImage(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             string filename = await EndlessModding.Common.IO.IOHandler.OpenFileExplorer("Mod Icon", "png");
             if (filename == null)
@@ -362,6 +365,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void loadMod(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Mods.Count > 0)
             {
                 Version = Mods.ElementAt(CurrentMod).Version;
@@ -399,6 +403,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void saveMod()
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Mods.Count > 0 && CurrentMod >= 0)
             {
                 MainWindow.IsBusy = true;
@@ -430,6 +435,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void removeAuthor(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             Author = Author.Where(val => val != Author[SelectedAuthor]).ToArray();
         }
         private bool canRemoveAuthor(object obj)
@@ -445,6 +451,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void addAuthor(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             List<string> tmp = new List<string>();
             if (Author != null)
             {
@@ -459,6 +466,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void removeTag(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             Tags = Tags.Where(val => val != Tags[SelectedTag]).ToArray();
         }
         private bool canRemoveTag(object obj)
@@ -474,6 +482,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         }
         private void addTag(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var tmp = Tags.ToList();
             tmp.Add(TagsBox);
             Tags = tmp.ToArray();

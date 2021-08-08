@@ -23,11 +23,13 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
         public ImportMods(ILogger logger, Data data)
         {
+            logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _logger = logger;
             _data = data;
         }
         public void LoadMods(string dir)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _data.RuntimeModules.Clear();
             _modFiles = Directory.GetFiles(dir, "*.xml", SearchOption.AllDirectories).ToHashSet<string>();
             //Get Mods and load in the mod configs
@@ -35,25 +37,8 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadMods(ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> input, string Node)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var bag = new ConcurrentBag<Classes.Amplitude_Runtime.RuntimeModule>();
-            XmlSerializer serialist = new XmlSerializer(typeof(Classes.Amplitude_Runtime.RuntimeModule));
-
-            Func<XElement, Classes.Amplitude_Runtime.RuntimeModule> SerialiseFunc = xml =>
-            {
-                try
-                {
-                    var reader = xml.CreateReader();
-                    Classes.Amplitude_Runtime.RuntimeModule tmp = (Classes.Amplitude_Runtime.RuntimeModule)serialist.Deserialize(reader);
-                    reader.Dispose();
-                    _logger.Info($"Loaded item: {xml.Name}");
-                    return tmp;
-                }
-                catch (Exception e)
-                {
-                    _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
-                    return null;
-                }
-            };
 
             Parallel.ForEach(_modFiles, file =>
             {
@@ -62,7 +47,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     XElement document = XElement.Load(file);
 
                     var definitions = document.Elements(Node)
-                        .Select(SerialiseFunc)
+                        .Select(SerialiseFunc<Classes.Amplitude_Runtime.RuntimeModule>)
                         .ToArray();
                     _logger.Info($"Load file: {file}");
 
@@ -92,6 +77,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadPlugins(Classes.Amplitude_Runtime.RuntimePlugin[] input, string fileDirectory)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             Action<Classes.Amplitude_Runtime.RuntimePlugin> pluginSorterFunc = plugin =>
             {
                 try
@@ -104,12 +90,16 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         plugin.Type = tmp2 == null ? "" : tmp2.Name;
                         plugin.Contents = string.Join(" ,", files);
                         plugin.Enabled = true;
-                        plugin.ExtraTypes = tmp.ExtraTypes;
+                        plugin.ExtraTypesString = tmp.ExtraTypesString;
                     }
                     else if (plugin is Classes.Amplitude_Runtime.LocalizationPlugin)//LocalizationPlugin
                     {
                         var tmp = (Classes.Amplitude_Runtime.LocalizationPlugin)plugin;
                         string[] directories = tmp.Directory;
+                        Type tmp2 = GetTypeOfFile(tmp.Type);
+                        plugin.Type = tmp2 == null ? "" : tmp2.Name;
+                        plugin.Contents = string.Join(" ,", tmp.Directory);
+                        plugin.Enabled = true;
                         LoadNodes(fileDirectory, directories);
                     }
                     else if (plugin is Classes.Amplitude_Runtime.AIPlugin)//AIPlugin
@@ -120,7 +110,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         plugin.Type = tmp2 == null ? "" : tmp2.Name;
                         plugin.Contents = string.Join(" ,", files);
                         plugin.Enabled = true;
-                        plugin.ExtraTypes = tmp.ExtraTypes;
+                        plugin.ExtraTypesString = tmp.ExtraTypesString;
                     }
                     else if (plugin is Classes.Amplitude_Runtime.DatabasePlugin)//DatabasePlugin
                     {
@@ -132,10 +122,10 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         Debug.Write(tmp2);
                         if (tmp.ExtraTypes != null && tmp.ExtraTypes.Length > 0)
                         {
+                            plugin.ExtraTypesString = string.Join(",", tmp.ExtraTypes.Select(x => x.DataType.Replace(", Assembly-CSharp", "")).ToArray());
                             foreach (var item in tmp.ExtraTypes)
                             {
                                 var alttmp2 = GetTypeOfFile(item.DataType);
-                                plugin.ExtraTypes += alttmp2.Name;
                                 var altproperties = _data.GetType().GetFields().ToList();
                                 var altfield = altproperties.FirstOrDefault(x => MatchTypes(x, alttmp2));
                                 if (altfield != null)
@@ -160,8 +150,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         }
                         plugin.Enabled = true;
                     }
-
-                    _logger.Info($"Loaded item: {plugin}");
                 }
                 catch (Exception e)
                 {
@@ -174,7 +162,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 try
                 {
                     pluginSorterFunc(mod);
-                    _logger.Info($"Loaded plugins: {mod}");
                 }
                 catch (Exception e)
                 {
@@ -185,6 +172,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private bool MatchTypes(FieldInfo arg, Type tmp3)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var argtype = arg.FieldType.GetGenericTypeDefinition();
             if (argtype == typeof(ObservableConcurrentCollection<object>).GetGenericTypeDefinition())
             {
@@ -198,25 +186,8 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadNodes(object input, string FilePath, string[] Files, Type Node, Type FieldType, out string Name)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             ConcurrentBag<object> bag = new ConcurrentBag<object>();
-            XmlSerializer serialist = new XmlSerializer(Node);
-
-            Func<XElement, object> SerialiseFunc = xml =>
-            {
-                try
-                {
-                    var reader = xml.CreateReader();
-                    object tmp = serialist.Deserialize(reader);
-                    reader.Dispose();
-                    _logger.Info($"Loaded item: {xml.Name}");
-                    return tmp;
-                }
-                catch (Exception e)
-                {
-                    _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
-                    return default;
-                }
-            };
 
             foreach (var file in Files)
             {
@@ -225,7 +196,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     XElement document = XElement.Load(FilePath + "\\" + file);
 
                     var definitions = document.Elements(Node.Name)
-                        .Select(SerialiseFunc)
+                        .Select(x => SerialiseModule(x, Node))
                         .ToArray();
                     _logger.Info($"Load file: {file}");
 
@@ -271,24 +242,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadNodes(string FilePath, string[] Files)
         {
-            XmlSerializer serialist = new XmlSerializer(typeof(Classes.Amplitude_Localisation.LocalizationPair));
-
-            Func<XElement, object> SerialiseFunc = xml =>
-            {
-                try
-                {
-                    var reader = xml.CreateReader();
-                    object tmp = serialist.Deserialize(reader);
-                    reader.Dispose();
-                    _logger.Info($"Loaded item: {xml.Name}");
-                    return tmp;
-                }
-                catch (Exception e)
-                {
-                    _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
-                    return default;
-                }
-            };
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
 
             foreach (var file in Files)
             {
@@ -300,7 +254,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         XElement document = XElement.Load(xmls);
 
                         var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
-                            .Select(SerialiseFunc)
+                            .Select(SerialiseFunc<Classes.Amplitude_Localisation.LocalizationPair>)
                             .ToArray();
                         _logger.Info($"Load file: {file}");
 
@@ -319,6 +273,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadModImage(string FilePath, EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule Mod)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var images = Directory.GetFiles($"{FilePath}", "*.png", SearchOption.TopDirectoryOnly).ToHashSet<string>();
             foreach (var item in images)
             {
@@ -336,6 +291,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
         Type GetTypeOfFile(string Type)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (string.IsNullOrEmpty(Type))
             {
                 return null;
@@ -353,10 +309,17 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             if (output.Count != 1)
             {
                 var splits = Type.Split('.');
-                var lookfor = $"{splits[splits.Count() - 2]}_{splits[splits.Count() - 1]}";
-                if (output.Where(x => x.FullName.IndexOf(lookfor) >= 0).Count() == 1)
+                if (splits.Length > 1)
                 {
-                    return output.First(x => x.FullName.IndexOf(lookfor) >= 0);
+                    var lookfor = $"{splits[splits.Count() - 2]}_{splits[splits.Count() - 1]}";
+                    if (output.Where(x => x.FullName.IndexOf(lookfor) >= 0).Count() == 1)
+                    {
+                        return output.First(x => x.FullName.IndexOf(lookfor) >= 0);
+                    }
+                }
+                else if (output.Where(x => x.FullName.IndexOf($"{NewType}.{NewType}")>= 0).Count() == 1)
+                {
+                    return output.First(x => x.FullName.IndexOf($"{NewType}.{NewType}") >= 0);
                 }
                 else
                 {
@@ -368,6 +331,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadHeroGUIElements(string FilePath)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var CustomHeros = _data.HeroDefinitions.Where(x => x.Custom);
 
             foreach (var item in CustomHeros)
@@ -390,6 +354,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadHeroImage(string FilePath, EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition hero, EndlessSpace2.Common.Classes.Amplitude_Gui_GuiElement.HeroGuiElement guielements)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var images = Directory.GetFiles(FilePath, "*.png", SearchOption.AllDirectories).ToHashSet<string>();
             foreach (var item in images)
             {
@@ -418,5 +383,38 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             }
         }
 
+
+        T SerialiseFunc<T>(XElement xml)
+        {
+            try
+            {
+                XmlSerializer serialist = new XmlSerializer(typeof(T));
+                var reader = xml.CreateReader();
+                T tmp = (T)serialist.Deserialize(reader);
+                reader.Dispose();
+                return tmp;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
+                return default;
+            }
+        }
+        object SerialiseModule(XElement xml, Type Node)
+        {
+            try
+            {
+                XmlSerializer serialist = new XmlSerializer(Node);
+                var reader = xml.CreateReader();
+                object tmp = serialist.Deserialize(reader);
+                reader.Dispose();
+                return tmp;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
+                return null;
+            }
+        }
     }
 }

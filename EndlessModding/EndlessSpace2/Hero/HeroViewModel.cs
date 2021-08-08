@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using EndlessModding.EndlessSpace2.Common.Classes.TraitorBonusThresholdDefinition;
 using EndlessModding.EndlessSpace2.Common.Files;
+using log4net.Repository.Hierarchy;
 using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition.XmlNamedReference;
 
 namespace EndlessModding.EndlessSpace2.Hero
@@ -227,6 +229,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         public HeroViewModel(ILogger Logger, Data data)
         {
+            Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _logger = Logger;
             _data = data;
             Heros = _data.HeroDefinitions;
@@ -252,6 +255,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private async void loadMediumImage(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             string filename = await EndlessModding.Common.IO.IOHandler.OpenFileExplorer("Medium Image", "png");
             if (filename == null)
@@ -275,6 +279,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private async void loadLargeImage(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             string filename = await EndlessModding.Common.IO.IOHandler.OpenFileExplorer("Large Image", "png");
             if (filename == null)
@@ -298,6 +303,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private async void loadMoodImage(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
             string filename = await EndlessModding.Common.IO.IOHandler.OpenFileExplorer("Mood Image", "png");
             if (filename == null)
@@ -321,6 +327,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void removeSkillTree(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (SelectedSkillTree != null)
             {
                 CurrentSkillTrees.Remove(SelectedSkillTree);
@@ -349,6 +356,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void addSkillTree(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (SelectedCurrentSkillTree != null)
             {
                 if (!CurrentSkillTrees.Contains(SelectedCurrentSkillTree))
@@ -372,6 +380,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void removeSkill(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (SelectedSkill != null)
             {
                 CurrentSkills.Remove(SelectedSkill);
@@ -400,6 +409,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void addSkill(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (SelectedCurrentSkill != null)
             {
                 if (!CurrentSkills.Contains(SelectedCurrentSkill))
@@ -423,6 +433,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private XmlNamedReference[] GetReferenceFromObject<T>(BindingList<T> input)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             List<XmlNamedReference> output = new List<XmlNamedReference>();
             if (input == null)
             {
@@ -444,6 +455,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         }
         private XmlNamedReference GetReferenceFromObject<T>(T input)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (input == null)
             {
                 return null;
@@ -460,6 +472,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         }
         private void GetObjectFromReference<T>(BindingList<T> output, ObservableConcurrentCollection<T> lookup, XmlNamedReference[] input)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             output.Clear();
             var lookfor = lookup.ElementAt(0).GetType().GetProperties().Where(x => x.Name == "Name").First();
             if (input == null)
@@ -480,6 +493,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         }
         private T GetObjectFromReference<T>(ObservableConcurrentCollection<T> lookup, XmlNamedReference input)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var lookfor = lookup.ElementAt(0).GetType().GetProperties().First(x => x.Name == "Name");
             if (input == null)
             {
@@ -498,6 +512,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void loadHero(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Heros.Count > 0)
             {
                 Name = Heros.ElementAt(CurrentHero).Name;
@@ -523,6 +538,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void newHero(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             Heros.AddFromEnumerable(new HeroDefinition[] { new HeroDefinition() { Custom = true } });
             CurrentHero = Heros.Count - 1;
         }
@@ -534,6 +550,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private void saveHero()
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Heros.Count > 0 && CurrentHero >= 0)
             {
                 bool modified = false;

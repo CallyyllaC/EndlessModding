@@ -16,7 +16,6 @@
 
     <UserControl.Resources>
         <converters:StringArrayToStringConverter x:Key="StringArrayToStringConverter"></converters:StringArrayToStringConverter>
-        <converters:PluginToStringConverter x:Key="PluginToStringConverter"></converters:PluginToStringConverter>
     </UserControl.Resources>
 
     <i:Interaction.Triggers>
@@ -131,16 +130,31 @@
 
                 <Grid Grid.Column="1">
                     <GroupBox Header="Current Plugins">
-                        <DataGrid ItemsSource="{Binding Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" MaxColumnWidth="250">
+                        <DataGrid ItemsSource="{Binding Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True" MaxColumnWidth="250">
                             <DataGrid.Columns>
-                                <DataGridCheckBoxColumn Width="auto" Binding="{Binding Path=Enabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridCheckBoxColumn Width="auto" Binding="{Binding Path=Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridCheckBoxColumn.Header>Enabled</DataGridCheckBoxColumn.Header>
+                                    <DataGridCheckBoxColumn.ElementStyle>
+                                        <Style TargetType="CheckBox">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.ElementStyle>
                                 </DataGridCheckBoxColumn>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Path=Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Type</DataGridTextColumn.Header>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="auto" Binding="{Binding Path=ExtraTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path=ExtraTypesString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>ExtraTypes</DataGridTextColumn.Header>
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Path=Contents, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Contents</DataGridTextColumn.Header>
@@ -178,7 +192,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <GroupBox Header="Modules To Export">
-                        <DataGrid ItemsSource="{Binding Exportables, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False"  MaxColumnWidth="250">
+                        <DataGrid ItemsSource="{Binding Exportables, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True"  MaxColumnWidth="250">
                             <DataGrid.Columns>
                                 <DataGridCheckBoxColumn IsReadOnly="True" Width="auto" Binding="{Binding Path=Enabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridCheckBoxColumn.Header>Enabled</DataGridCheckBoxColumn.Header>

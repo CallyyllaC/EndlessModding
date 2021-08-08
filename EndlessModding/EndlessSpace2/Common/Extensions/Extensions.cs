@@ -45,7 +45,7 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
         [XmlIgnore]
         public string Type { get; set; }
         [XmlIgnore]
-        public string ExtraTypes { get; set; }
+        public string ExtraTypesString { get; set; }
         [XmlIgnore]
         public string Contents { get; set; }
         [XmlIgnore]

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,6 +42,7 @@ namespace EndlessModding
         /// <param name="es2vm">The endless space 2 view model.</param>
         public MainWindowViewModel(ILogger castleLogger, EndlessSpace2ViewModel es2vm)
         {
+            castleLogger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //setup injections
             _logger = castleLogger;
             EndlessSpace2 = es2vm;
@@ -55,6 +57,7 @@ namespace EndlessModding
 
         private void Endless_Space_2_Click(object obj)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View() { DataContext = EndlessSpace2 };
             EndlessSpace2Window.Show();
             Application.Current.MainWindow?.Hide();
@@ -72,6 +75,7 @@ namespace EndlessModding
         //Steam News
         private BindingList<NewsObject> GetNews(int gameID)
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var output = new BindingList<NewsObject>();
             using (dynamic steamNews = WebAPI.GetInterface("ISteamNews"))
             {
@@ -93,7 +97,7 @@ namespace EndlessModding
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Unable to make GetNewsForApp API request: {0}", ex.Message);
+                    _logger.Error(ex.Message);
                 }
             }
 

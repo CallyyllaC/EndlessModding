@@ -10,51 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace EndlessModding.EndlessSpace2.Common.Converters
-{//RuntimePlugin
-    public class PluginToStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null)
-            {
-                return string.Empty;
-            }
-            string output = value.ToString();
-
-            if (value is RuntimePlugin)
-            {
-                if (value is AIPlugin)
-                {
-                    var tmp = (AIPlugin)value;
-                    output = "Unsuported AI Plugin";
-                }
-                if (value is DatabasePlugin)
-                {
-                    var tmp = (DatabasePlugin)value;
-                    output = tmp.DataType + " " + tmp.FilePath;
-                }
-                if (value is LocalizationPlugin)
-                {
-                    var tmp = (LocalizationPlugin)value;
-                    output = "Unsuported Localization Plugin";
-                }
-                if (value is RegistryPlugin)
-                {
-                    var tmp = (RegistryPlugin)value;
-                    output = "Unsuported Registry Plugin";
-                }
-                else
-                    output = "Generic Runtime Plugin";
-            }
-
-            return output;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new Exception();
-        }
-    }
+{
     public class StringArrayToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -79,6 +35,7 @@ namespace EndlessModding.EndlessSpace2.Common.Converters
             throw new Exception();
         }
     }
+
     public class HeroAffinityDefinitionToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
