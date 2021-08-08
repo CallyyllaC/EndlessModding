@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:EndlessModding.EndlessSpace2.Common.Converters"
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.Hero"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="650" d:DesignWidth="1000">
 
@@ -31,7 +32,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="Modules" Grid.Row="0">
-                    <DataGrid ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False">
+                    <DataGrid ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -48,6 +49,9 @@
                             <DataGridTextColumn Width="auto" Binding="{Binding Affinity, Converter={StaticResource HeroAffinityDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.Header>Affinity</DataGridTextColumn.Header>
                             </DataGridTextColumn>
+                            <DataGridCheckBoxColumn Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
+                            </DataGridCheckBoxColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>

@@ -125,7 +125,7 @@ namespace EndlessModding.EndlessSpace2.Hero
                 }
             }
         }
-        public int CurrentHero
+        public HeroDefinition CurrentHero
         {
             get => _currentHero;
             set
@@ -222,7 +222,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         private HeroClassDefinition _class;
         private HeroPoliticsDefinition _politics;
         private ShipDesignDefinition _ship;
-        private int _currentHero = 0;
+        private HeroDefinition _currentHero = null;
         private WriteableBitmap _moodImage = null;
         private WriteableBitmap _largeImage = null;
         private WriteableBitmap _mediumImage = null;
@@ -233,7 +233,7 @@ namespace EndlessModding.EndlessSpace2.Hero
             _logger = Logger;
             _data = data;
             Heros = _data.HeroDefinitions;
-            CurrentHero = Heros.Count - 1;
+            CurrentHero = null;
             Affinities = _data.HeroAffinityDefinitions;
             Classes = _data.HeroClassDefinitions;
             Politics = _data.HeroPoliticsDefinitions;
@@ -252,7 +252,6 @@ namespace EndlessModding.EndlessSpace2.Hero
 
             RaisePropertyChanged();
         }
-
         private async void loadMediumImage(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
@@ -274,7 +273,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private bool canLoadMediumImage(object obj)
         {
-            return CurrentHero >= 0 && !MainWindow.IsBusy;
+            return CurrentHero != null && !MainWindow.IsBusy;
         }
 
         private async void loadLargeImage(object obj)
@@ -298,7 +297,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private bool canLoadLargeImage(object obj)
         {
-            return CurrentHero >= 0 && !MainWindow.IsBusy;
+            return CurrentHero != null && !MainWindow.IsBusy;
         }
 
         private async void loadMoodImage(object obj)
@@ -322,7 +321,7 @@ namespace EndlessModding.EndlessSpace2.Hero
 
         private bool canLoadMoodImage(object obj)
         {
-            return CurrentHero >= 0 && !MainWindow.IsBusy;
+            return CurrentHero != null && !MainWindow.IsBusy;
         }
 
         private void removeSkillTree(object obj)
@@ -346,7 +345,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             if (SkillTrees != null)
             {
-                return CurrentHero >= 0 && !MainWindow.IsBusy;
+                return CurrentHero != null && !MainWindow.IsBusy;
             }
             else
             {
@@ -370,7 +369,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             if (SkillTrees != null)
             {
-                return CurrentHero >= 0 && !MainWindow.IsBusy;
+                return CurrentHero != null && !MainWindow.IsBusy;
             }
             else
             {
@@ -399,7 +398,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             if (Skills != null)
             {
-                return CurrentHero >= 0 && !MainWindow.IsBusy;
+                return CurrentHero != null && !MainWindow.IsBusy;
             }
             else
             {
@@ -423,7 +422,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             if (Skills != null)
             {
-                return CurrentHero >= 0 && !MainWindow.IsBusy;
+                return CurrentHero != null && !MainWindow.IsBusy;
             }
             else
             {
@@ -513,21 +512,21 @@ namespace EndlessModding.EndlessSpace2.Hero
         private void loadHero(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            if (Heros.Count > 0)
+            if (Heros.Count > 0 && CurrentHero != null)
             {
-                Name = Heros.ElementAt(CurrentHero).Name;
-                RealName = Heros.ElementAt(CurrentHero).RealName;
-                Description = Heros.ElementAt(CurrentHero).Description;
-                Hidden = Heros.ElementAt(CurrentHero).Hidden;
-                Affinity = GetObjectFromReference(Affinities, Heros.ElementAt(CurrentHero).Affinity);
-                Class = GetObjectFromReference(Classes, Heros.ElementAt(CurrentHero).Class);
-                Politic = GetObjectFromReference(Politics, Heros.ElementAt(CurrentHero).Politics);
-                Ship = GetObjectFromReference(Ships, Heros.ElementAt(CurrentHero).ShipDesign);
-                GetObjectFromReference(CurrentSkills, Skills, Heros.ElementAt(CurrentHero).Skill);
-                GetObjectFromReference(CurrentSkillTrees, SkillTrees, Heros.ElementAt(CurrentHero).SkillTree);
-                MoodImage = Heros.ElementAt(CurrentHero).MoodImage;
-                LargeImage = Heros.ElementAt(CurrentHero).LargeImage;
-                MediumImage = Heros.ElementAt(CurrentHero).MediumImage;
+                Name = CurrentHero.Name;
+                RealName = CurrentHero.RealName;
+                Description = CurrentHero.Description;
+                Hidden = CurrentHero.Hidden;
+                Affinity = GetObjectFromReference(Affinities, CurrentHero.Affinity);
+                Class = GetObjectFromReference(Classes, CurrentHero.Class);
+                Politic = GetObjectFromReference(Politics, CurrentHero.Politics);
+                Ship = GetObjectFromReference(Ships, CurrentHero.ShipDesign);
+                GetObjectFromReference(CurrentSkills, Skills, CurrentHero.Skill);
+                GetObjectFromReference(CurrentSkillTrees, SkillTrees, CurrentHero.SkillTree);
+                MoodImage = CurrentHero.MoodImage;
+                LargeImage = CurrentHero.LargeImage;
+                MediumImage = CurrentHero.MediumImage;
             }
         }
 
@@ -540,7 +539,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             Heros.AddFromEnumerable(new HeroDefinition[] { new HeroDefinition() { Custom = true } });
-            CurrentHero = Heros.Count - 1;
+            CurrentHero = Heros.Last();
         }
 
         private bool canNewHero(object obj)
@@ -551,109 +550,110 @@ namespace EndlessModding.EndlessSpace2.Hero
         private void saveHero()
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            if (Heros.Count > 0 && CurrentHero >= 0)
+            if (Heros.Count > 0 && CurrentHero != null && CurrentHero != null)
             {
                 bool modified = false;
-                if (Heros.ElementAt(CurrentHero).Name != Name)
+                if (CurrentHero.Name != Name)
                 {
-                    Heros.ElementAt(CurrentHero).Name = Name;
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Name");
+                    CurrentHero.Name = Name;
+                    RaisePropertyChanged(CurrentHero, "Name");
                     modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).RealName != RealName)
+                if (CurrentHero.RealName != RealName)
                 {
-                    Heros.ElementAt(CurrentHero).RealName = RealName;
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "RealName");
+                    CurrentHero.RealName = RealName;
+                    RaisePropertyChanged(CurrentHero, "RealName");
                     modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Description != Description)
+                if (CurrentHero.Description != Description)
                 {
-                    Heros.ElementAt(CurrentHero).Description = Description;
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Description");
+                    CurrentHero.Description = Description;
+                    RaisePropertyChanged(CurrentHero, "Description");
                     modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Hidden != Hidden)
+                if (CurrentHero.Hidden != Hidden)
                 {
-                    Heros.ElementAt(CurrentHero).Hidden = Hidden;
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Hidden");
+                    CurrentHero.Hidden = Hidden;
+                    RaisePropertyChanged(CurrentHero, "Hidden");
                     modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Affinity == null || Heros.ElementAt(CurrentHero).Affinity.Name != GetReferenceFromObject(Affinity)?.Name)
+                if (CurrentHero.Affinity == null || CurrentHero.Affinity.Name != GetReferenceFromObject(Affinity)?.Name)
                 {
-                    Heros.ElementAt(CurrentHero).Affinity = GetReferenceFromObject(Affinity);
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Affinity");
+                    CurrentHero.Affinity = GetReferenceFromObject(Affinity);
+                    RaisePropertyChanged(CurrentHero, "Affinity");
                     modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Class == null || Heros.ElementAt(CurrentHero).Class.Name != GetReferenceFromObject(Class)?.Name)
+                if (CurrentHero.Class == null || CurrentHero.Class.Name != GetReferenceFromObject(Class)?.Name)
                 {
-                    Heros.ElementAt(CurrentHero).Class = GetReferenceFromObject(Class);
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Class");
+                    CurrentHero.Class = GetReferenceFromObject(Class);
+                    RaisePropertyChanged(CurrentHero, "Class");
                     modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).Politics == null || Heros.ElementAt(CurrentHero).Politics.Name != GetReferenceFromObject(Politic)?.Name)
+                if (CurrentHero.Politics == null || CurrentHero.Politics.Name != GetReferenceFromObject(Politic)?.Name)
                 {
-                    Heros.ElementAt(CurrentHero).Politics = GetReferenceFromObject(Politic);
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Politics");
+                    CurrentHero.Politics = GetReferenceFromObject(Politic);
+                    RaisePropertyChanged(CurrentHero, "Politics");
                     modified = true;
                 }
-                if (Heros.ElementAt(CurrentHero).ShipDesign == null || Heros.ElementAt(CurrentHero).ShipDesign.Name != GetReferenceFromObject(Ship)?.Name)
+                if (CurrentHero.ShipDesign == null || CurrentHero.ShipDesign.Name != GetReferenceFromObject(Ship)?.Name)
                 {
-                    Heros.ElementAt(CurrentHero).ShipDesign = GetReferenceFromObject(Ship);
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "ShipDesign");
+                    CurrentHero.ShipDesign = GetReferenceFromObject(Ship);
+                    RaisePropertyChanged(CurrentHero, "ShipDesign");
                     modified = true;
                 }
 
-                if (CurrentSkills.Count != 0 && Heros.ElementAt(CurrentHero).Skill != null)
+                if (CurrentSkills.Count != 0 && CurrentHero.Skill != null)
                 {
-                    if (!Heros.ElementAt(CurrentHero).Skill.Select(x => x.Name)
+                    if (!CurrentHero.Skill.Select(x => x.Name)
                         .SequenceEqual(GetReferenceFromObject(CurrentSkills).Select(x => x.Name))) //compare and change if not the same
                     {
-                        Heros.ElementAt(CurrentHero).Skill = GetReferenceFromObject(CurrentSkills);
-                        RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Skill");
+                        CurrentHero.Skill = GetReferenceFromObject(CurrentSkills);
+                        RaisePropertyChanged(CurrentHero, "Skill");
                         modified = true;
                     }
                 }
-                else if (CurrentSkills.Count == 0 && Heros.ElementAt(CurrentHero).Skill == null)
+                else if (CurrentSkills.Count == 0 && CurrentHero.Skill == null)
                 {
                     //both null, ignore
                 }
                 else
                 {
-                    Heros.ElementAt(CurrentHero).Skill = GetReferenceFromObject(CurrentSkills);
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "Skill");
+                    CurrentHero.Skill = GetReferenceFromObject(CurrentSkills);
+                    RaisePropertyChanged(CurrentHero, "Skill");
                     modified = true;
                 }
 
-                if (CurrentSkillTrees.Count != 0 && Heros.ElementAt(CurrentHero).SkillTree != null)
+                if (CurrentSkillTrees.Count != 0 && CurrentHero.SkillTree != null)
                 {
-                    if (!Heros.ElementAt(CurrentHero).SkillTree.Select(x => x.Name)
+                    if (!CurrentHero.SkillTree.Select(x => x.Name)
                         .SequenceEqual(GetReferenceFromObject(CurrentSkillTrees).Select(x => x.Name)))
                     {
-                        Heros.ElementAt(CurrentHero).SkillTree = GetReferenceFromObject(CurrentSkillTrees);
-                        RaisePropertyChanged(Heros.ElementAt(CurrentHero), "SkillTree");
+                        CurrentHero.SkillTree = GetReferenceFromObject(CurrentSkillTrees);
+                        RaisePropertyChanged(CurrentHero, "SkillTree");
                         modified = true;
                     }
                 }
-                else if (CurrentSkillTrees.Count == 0 && Heros.ElementAt(CurrentHero).SkillTree == null)
+                else if (CurrentSkillTrees.Count == 0 && CurrentHero.SkillTree == null)
                 {
                     //both null, ignore
                 }
                 else
                 {
-                    Heros.ElementAt(CurrentHero).SkillTree = GetReferenceFromObject(CurrentSkillTrees);
-                    RaisePropertyChanged(Heros.ElementAt(CurrentHero), "SkillTree");
+                    CurrentHero.SkillTree = GetReferenceFromObject(CurrentSkillTrees);
+                    RaisePropertyChanged(CurrentHero, "SkillTree");
                     modified = true;
                 }
 
-                Heros.ElementAt(CurrentHero).MoodImage = MoodImage;
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "MoodImage");
-                Heros.ElementAt(CurrentHero).LargeImage = LargeImage;
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "LargeImage");
-                Heros.ElementAt(CurrentHero).MediumImage = MediumImage;
-                RaisePropertyChanged(Heros.ElementAt(CurrentHero), "MediumImage");
+                CurrentHero.MoodImage = MoodImage;
+                RaisePropertyChanged(CurrentHero, "MoodImage");
+                CurrentHero.LargeImage = LargeImage;
+                RaisePropertyChanged(CurrentHero, "LargeImage");
+                CurrentHero.MediumImage = MediumImage;
+                RaisePropertyChanged(CurrentHero, "MediumImage");
                 if (modified)
                 {
-                    Heros.ElementAt(CurrentHero).Custom = true;
+                    CurrentHero.Custom = true;
+                    RaisePropertyChanged(CurrentHero, "Custom");
                 }
             }
         }

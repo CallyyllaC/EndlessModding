@@ -37,7 +37,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="Current Mods" Grid.Row="0">
-                    <DataGrid ItemsSource="{Binding Mods, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False">
+                    <DataGrid ItemsSource="{Binding Mods, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="auto" Binding="{Binding Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.Header>Title</DataGridTextColumn.Header>
@@ -48,10 +48,10 @@
                             <DataGridTextColumn Width="auto" Binding="{Binding Version, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.Header>Version</DataGridTextColumn.Header>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="auto" Binding="{Binding Author, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringArrayToStringConverter}}">
+                            <DataGridTextColumn Width="auto" Binding="{Binding Author, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringArrayToStringConverter}}" CanUserSort="False">
                                 <DataGridTextColumn.Header>Author</DataGridTextColumn.Header>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="auto" Binding="{Binding Tags, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Width="auto" Binding="{Binding Tags, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CanUserSort="False">
                                 <DataGridTextColumn.Header>Tags</DataGridTextColumn.Header>
                             </DataGridTextColumn>
                         </DataGrid.Columns>

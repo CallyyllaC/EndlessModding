@@ -79,12 +79,12 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition
         [NonSerialized(), XmlIgnore]
         public WriteableBitmap MediumImage = null;
         [NonSerialized(), XmlIgnore]
-        public bool Custom = false;
-        [NonSerialized(), XmlIgnore]
         public string Description;
         [NonSerialized(), XmlIgnore]
         public string RealName;
 
+        [XmlIgnore]
+        public bool Custom { get; set; } = false;
         [XmlIgnore]
         public bool Enabled { get; set; } = false;
 
@@ -101,18 +101,23 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition
         }
         #endregion
     }
-}
-
-namespace EndlessModding.EndlessSpace2.Common.Classes.HeroAffinityDefinitions
-{
-    public partial class HeroAffinityDefinition
+    public partial class XmlNamedReference : IComparable
     {
         public override string ToString()
         {
             return Name.Replace("HeroAffinity", "");
         }
+
+        public int CompareTo(object obj)
+        {
+            return String.Compare(this.ToString(), obj.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
     }
-    public partial class XmlNamedReference
+}
+
+namespace EndlessModding.EndlessSpace2.Common.Classes.HeroAffinityDefinitions
+{
+    public partial class HeroAffinityDefinition
     {
         public override string ToString()
         {
