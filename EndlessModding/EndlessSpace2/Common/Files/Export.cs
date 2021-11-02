@@ -128,17 +128,26 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             {
                 Name = Hero.Name,
                 Title = $"%{Hero.Name}Title",
-                Description = $"%{Hero.Name}Description",
-                Icons = new GuiElementIconCollection()
+                Description = $"%{Hero.Name}Description"
+            };
+
+            if (Hero.MoodImage == null && Hero.LargeImage == null && Hero.MediumImage == null)
+            {
+                guiElement.ModelPath = Hero.ModelPath;
+            }
+            else
+            {
+                guiElement.Icons = new GuiElementIconCollection()
                 {
                     Icon = new IconDefinition[]
                     {
-                        new IconDefinition(){Size = "Mood", Path = $"Gui\\{Hero.Name}Mood.png"},
-                        new IconDefinition(){Size = "Medium", Path = $"Gui\\{Hero.Name}Medium.png"},
-                        new IconDefinition(){Size = "Large", Path = $"Gui\\{Hero.Name}Large.png"}
+                        new IconDefinition() {Size = "Mood", Path = $"Gui\\{Hero.Name}Mood.png"},
+                        new IconDefinition() {Size = "Medium", Path = $"Gui\\{Hero.Name}Medium.png"},
+                        new IconDefinition() {Size = "Large", Path = $"Gui\\{Hero.Name}Large.png"}
                     }
-                }
-            };
+                };
+            }
+
             SaveGUIElements(guiElement, $"{FileDir}Gui\\{Hero.Name}GuiElements.xml");
         }
         private void SaveGUIElements(Classes.Amplitude_Gui_GuiElement.GuiElement GUI, string FileDir)

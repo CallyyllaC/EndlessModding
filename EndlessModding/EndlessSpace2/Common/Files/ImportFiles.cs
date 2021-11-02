@@ -74,6 +74,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 var gui = _heroFiles.Where(x => x.Name == item.Name).FirstOrDefault();
                 item.RealName = gui.Title;
                 item.Description = gui.Description;
+                item.ModelPath = gui.ModelPath;
 
                 if (Locales.TryGetValue(item.RealName, out string name))
                 {

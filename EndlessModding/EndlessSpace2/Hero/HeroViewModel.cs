@@ -65,6 +65,22 @@ namespace EndlessModding.EndlessSpace2.Hero
                 }
             }
         }
+        public string ModelPath
+        {
+            get => _modelPath;
+            set
+            {
+                if (_modelPath != value)
+                {
+                    _modelPath = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public bool ModelPathEnabled
+        {
+            get => LargeImage == null && MediumImage == null && MoodImage == null;
+        }
         public bool Hidden
         {
             get => _hidden;
@@ -73,6 +89,18 @@ namespace EndlessModding.EndlessSpace2.Hero
                 if (_hidden != value)
                 {
                     _hidden = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public bool IgnoreInstanceNumber
+        {
+            get => _ignoreInstanceNumber;
+            set
+            {
+                if (_ignoreInstanceNumber != value)
+                {
+                    _ignoreInstanceNumber = value;
                     RaisePropertyChanged();
                 }
             }
@@ -226,6 +254,8 @@ namespace EndlessModding.EndlessSpace2.Hero
         private WriteableBitmap _moodImage = null;
         private WriteableBitmap _largeImage = null;
         private WriteableBitmap _mediumImage = null;
+        private bool _ignoreInstanceNumber;
+        private string _modelPath;
 
         public HeroViewModel(ILogger Logger, Data data)
         {
@@ -514,10 +544,13 @@ namespace EndlessModding.EndlessSpace2.Hero
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Heros.Count > 0 && CurrentHero != null)
             {
+                MainWindow.IsBusy = true;
                 Name = CurrentHero.Name;
                 RealName = CurrentHero.RealName;
                 Description = CurrentHero.Description;
                 Hidden = CurrentHero.Hidden;
+                IgnoreInstanceNumber = CurrentHero.IgnoreInstanceNumber;
+                ModelPath = CurrentHero.ModelPath;
                 Affinity = GetObjectFromReference(Affinities, CurrentHero.Affinity);
                 Class = GetObjectFromReference(Classes, CurrentHero.Class);
                 Politic = GetObjectFromReference(Politics, CurrentHero.Politics);
@@ -527,6 +560,7 @@ namespace EndlessModding.EndlessSpace2.Hero
                 MoodImage = CurrentHero.MoodImage;
                 LargeImage = CurrentHero.LargeImage;
                 MediumImage = CurrentHero.MediumImage;
+                MainWindow.IsBusy = false;
             }
         }
 
@@ -552,6 +586,7 @@ namespace EndlessModding.EndlessSpace2.Hero
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Heros.Count > 0 && CurrentHero != null && CurrentHero != null)
             {
+                MainWindow.IsBusy = true;
                 bool modified = false;
                 if (CurrentHero.Name != Name)
                 {
@@ -575,6 +610,18 @@ namespace EndlessModding.EndlessSpace2.Hero
                 {
                     CurrentHero.Hidden = Hidden;
                     RaisePropertyChanged(CurrentHero, "Hidden");
+                    modified = true;
+                }
+                if (CurrentHero.IgnoreInstanceNumber != IgnoreInstanceNumber)
+                {
+                    CurrentHero.IgnoreInstanceNumber = IgnoreInstanceNumber;
+                    RaisePropertyChanged(CurrentHero, "IgnoreInstanceNumber");
+                    modified = true;
+                }
+                if (CurrentHero.ModelPath != ModelPath)
+                {
+                    CurrentHero.ModelPath = ModelPath;
+                    RaisePropertyChanged(CurrentHero, "ModelPath");
                     modified = true;
                 }
                 if (CurrentHero.Affinity == null || CurrentHero.Affinity.Name != GetReferenceFromObject(Affinity)?.Name)
@@ -655,6 +702,7 @@ namespace EndlessModding.EndlessSpace2.Hero
                     CurrentHero.Custom = true;
                     RaisePropertyChanged(CurrentHero, "Custom");
                 }
+                MainWindow.IsBusy = false;
             }
         }
 

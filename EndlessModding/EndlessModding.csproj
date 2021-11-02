@@ -489,6 +489,7 @@
     <Compile Include="EndlessSpace2\Common\Classes\WarPointsRewardDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Classes\ZoneEffectDefinition.cs" />
     <Compile Include="EndlessSpace2\Common\Extensions\Converters.cs" />
+    <Compile Include="EndlessSpace2\Common\Extensions\DataGridExtensions.cs" />
     <Compile Include="EndlessSpace2\Common\Extensions\Enums.cs" />
     <Compile Include="EndlessSpace2\Common\Extensions\Extensions.cs" />
     <Compile Include="EndlessSpace2\Common\Files\Data.cs" />

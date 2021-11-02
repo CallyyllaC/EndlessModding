@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.Skill"
+             xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1000">
 
@@ -12,24 +13,119 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="200"/>
                 <ColumnDefinition Width="3*" MinWidth="600"/>
-                </Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>
 
             <Grid MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight, Mode=OneWay}">
-                    <GroupBox Header="Modules">
-                        <ListView ScrollViewer.CanContentScroll="True">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Skills" Grid.Row="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
+                            <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
+                        </Grid>
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Mods, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridCheckBoxColumn Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
+                            </DataGridCheckBoxColumn>
+                            </DataGrid.Columns>
+                            <DataGrid.Resources>
+                                <extensions:SearchValueConverter x:Key="SearchValueConverter"/>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="extensions:DataGridTextSearch.IsTextMatch">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource SearchValueConverter}">
+                                                <Binding RelativeSource="{RelativeSource Self}" Path="Content.Text" />
+                                                <Binding RelativeSource="{RelativeSource Self}" Path="(extensions:DataGridTextSearch.SearchValue)" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="extensions:DataGridTextSearch.IsTextMatch" Value="True">
+                                            <Setter Property="Background" Value="Orange" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+                <Button Grid.Row="1" Command="{Binding NewSkillDefinition}">New Mod</Button>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Skill Definition" Grid.Column="0">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Text="Name"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding Name}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Cost"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding Cost}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Skill Tree Ref"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding SkillTreeRef}"/>
+                            <GroupBox Header="Tags" Margin="0,5,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" MinHeight="50"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentTag, Mode=TwoWay}" ItemsSource="{Binding Tags, Mode=TwoWay}"/>
+                                    <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding NewTag, Mode=OneWayToSource}"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddTag}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveTag}">Remove</Button>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Header="Levels" Margin="0,5,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" MinHeight="50"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SkillLevel, Mode=TwoWay}" ItemsSource="{Binding SkillLevels, Mode=TwoWay}"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
+                                </Grid>
+                            </GroupBox>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Skill Level" Grid.Column="1">
+                        <StackPanel>
+
+                        </StackPanel>
                     </GroupBox>
                 </Grid>
-
-                <Grid Grid.Column="1">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    </ScrollViewer>
-                </Grid>
+            </Grid>
 
         </Grid>
     </ScrollViewer>

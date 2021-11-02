@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime;
+using SteamKit2.Internal;
 
 namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
 {
@@ -43,13 +44,95 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
         [XmlIgnore]
         public bool Enabled { get; set; } = true;
         [XmlIgnore]
+        public bool Details
+        {
+            get => _details;
+            set
+            {
+                _details = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("ExtraContents");
+                RaisePropertyChanged("Contents");
+                RaisePropertyChanged("ExtraTypesString");
+            }
+        }
+        [XmlIgnore]
         public string Type { get; set; }
         [XmlIgnore]
-        public string ExtraTypesString { get; set; }
+        public string ExtraTypesString
+        {
+            get
+            {
+                if (!Details)
+                {
+                    return _extraTypesString.Substring(0, 7) + "...";
+                }
+                else
+                {
+                    return _extraTypesString;
+                }
+            }
+            set
+            {
+                _extraContents = value;
+                RaisePropertyChanged();
+            }
+
+        }
         [XmlIgnore]
-        public string Contents { get; set; }
+        public string Contents
+        {
+            get
+            {
+                if (!Details)
+                {
+                    return _contents.Substring(0, 7) + "...";
+                }
+                else
+                {
+                    return _contents;
+                }
+            }
+            set
+            {
+                _contents = value;
+                RaisePropertyChanged();
+            }
+
+        }
         [XmlIgnore]
-        public string ExtraContents { get; set; }
+        public string ExtraContents
+        {
+            get
+            {
+                if (!Details)
+                {
+                    return _extraContents.Substring(0, 7) + "...";
+                }
+                else
+                {
+                    return _extraContents;
+                }
+            }
+            set
+            {
+                _extraContents = value;
+                RaisePropertyChanged();
+            }
+
+        }
+
+
+        [NonSerialized(), XmlIgnore]
+        private string _extraContents = "";
+        [NonSerialized(), XmlIgnore]
+        private string _contents = "";
+        [NonSerialized(), XmlIgnore]
+        private string _extraTypesString = "";
+        [NonSerialized(), XmlIgnore]
+        private bool _details;
+
+
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -82,7 +165,8 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition
         public string Description;
         [NonSerialized(), XmlIgnore]
         public string RealName;
-
+        [NonSerialized(), XmlIgnore]
+        public string ModelPath;
         [XmlIgnore]
         public bool Custom { get; set; } = false;
         [XmlIgnore]

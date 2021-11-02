@@ -47,7 +47,7 @@
             </StackPanel>
 
             <GroupBox Header="News" Margin="5" Grid.Column="1" Opacity="0.5" Background="Transparent">
-                <DataGrid Opacity="0.8" Background="Transparent" SelectedIndex="{Binding SelectedNews}" ItemsSource="{Binding News, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single"  AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False" IsSynchronizedWithCurrentItem="True">
+                <DataGrid Opacity="0.8" Background="Transparent" SelectedIndex="{Binding SelectedNews}" ItemsSource="{Binding News, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" SelectionMode="Single"  AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False" IsSynchronizedWithCurrentItem="True">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
                             <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>

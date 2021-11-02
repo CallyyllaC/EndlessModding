@@ -9,6 +9,7 @@
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.Hero"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              mc:Ignorable="d"
              d:DesignHeight="650" d:DesignWidth="1000">
 
@@ -31,34 +32,69 @@
                     <RowDefinition Height="15*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <GroupBox Header="Modules" Grid.Row="0">
-                    <DataGrid ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Width="auto" Binding="{Binding Class, Converter={StaticResource HeroClassDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.Header>Class</DataGridTextColumn.Header>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Width="auto" Binding="{Binding Politics, Converter={StaticResource HeroPoliticsDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.Header>Politics</DataGridTextColumn.Header>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Width="auto" Binding="{Binding ShipDesign, Converter={StaticResource ShipDesignDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.Header>Ship</DataGridTextColumn.Header>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Width="auto" Binding="{Binding Affinity, Converter={StaticResource HeroAffinityDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridTextColumn.Header>Affinity</DataGridTextColumn.Header>
-                            </DataGridTextColumn>
-                            <DataGridCheckBoxColumn Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
-                            </DataGridCheckBoxColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <GroupBox Header="Heroes" Grid.Row="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
+                            <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
+                        </Grid>
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Class, Converter={StaticResource HeroClassDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Class</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Politics, Converter={StaticResource HeroPoliticsDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Politics</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding ShipDesign, Converter={StaticResource ShipDesignDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Ship</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Affinity, Converter={StaticResource HeroAffinityDefinitionConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Affinity</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridCheckBoxColumn IsReadOnly="True" Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
+                                </DataGridCheckBoxColumn>
+                            </DataGrid.Columns>
+                            <DataGrid.Resources>
+                                <extensions:SearchValueConverter x:Key="SearchValueConverter"/>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="extensions:DataGridTextSearch.IsTextMatch">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource SearchValueConverter}">
+                                                <Binding RelativeSource="{RelativeSource Self}" Path="Content.Text" />
+                                                <Binding RelativeSource="{RelativeSource Self}" Path="(extensions:DataGridTextSearch.SearchValue)" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="extensions:DataGridTextSearch.IsTextMatch" Value="True">
+                                            <Setter Property="Background" Value="Orange" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                    </Grid>
                 </GroupBox>
                 <Button Grid.Row="1" Command="{Binding NewHero}">New Hero</Button>
             </Grid>
 
-            <Grid Grid.Column="1" MinHeight="400" x:Name="prop">
+            <Grid Grid.Column="1" MinHeight="400" x:Name="prop" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" MinWidth="300" MaxWidth="510"/>
                     <ColumnDefinition Width="*" MinWidth="300"/>
@@ -75,8 +111,14 @@
                         <TextBlock>In Game Description:</TextBlock>
                         <TextBox Text="{Binding Description, Mode=TwoWay}" MaxWidth="500" TextWrapping="Wrap"/>
 
-                        <TextBlock>Hidden:</TextBlock>
-                        <CheckBox IsChecked="{Binding Hidden, Mode=TwoWay}"/>
+                        <Grid Margin="0, 5, 0 , 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="0" IsChecked="{Binding Hidden, Mode=TwoWay}">Hidden</CheckBox>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding IgnoreInstanceNumber, Mode=TwoWay}">Disallow Duplication</CheckBox>
+                        </Grid>
 
                         <TextBlock>Affinity:</TextBlock>
                         <ComboBox SelectedItem="{Binding Affinity, Mode=TwoWay}" ItemsSource="{Binding Affinities, Mode=OneWay}"/>
@@ -89,6 +131,9 @@
 
                         <TextBlock>Ship:</TextBlock>
                         <ComboBox SelectedItem="{Binding Ship, Mode=TwoWay}" ItemsSource="{Binding Ships, Mode=OneWay}"/>
+
+                        <TextBlock>Model Path:</TextBlock>
+                        <TextBox Text="{Binding ModelPath, Mode=TwoWay}"  IsEnabled="{Binding ModelPathEnabled}" MaxWidth="500" TextWrapping="Wrap"/>
 
                         <Grid MaxWidth="400">
                             <Grid.RowDefinitions>
@@ -126,7 +171,7 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <GroupBox Grid.Row="0" Grid.ColumnSpan="2" Header="Skills:">
+                        <GroupBox Grid.Row="0" Grid.ColumnSpan="2" Header="Innate Skills:">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -137,7 +182,7 @@
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedSkill, Mode=TwoWay}" ItemsSource="{Binding CurrentSkills, Mode=OneWay}">
+                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedSkill, Mode=TwoWay}" ItemsSource="{Binding CurrentSkills, Mode=OneWay}">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Name, Mode=OneWay}">
@@ -192,7 +237,7 @@
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedSkillTree, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillTrees, Mode=OneWay}">
+                                <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedSkillTree, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillTrees, Mode=OneWay}">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Name, Mode=OneWay}">

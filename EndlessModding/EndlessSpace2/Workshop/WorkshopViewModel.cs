@@ -308,7 +308,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
             MainWindow.IsBusy = true;
             IExportable[] export = Exportables.Where(x => x.Enabled).ToArray();
             saveMod();
-            _export.SaveMod(CurrentMod, export, MainWindow.MainViewModel.LocOutDir_Text);
+            _export.SaveMod(CurrentMod, export, MainWindow.MainViewModel.LocalModDirectory);
 
             await Task.CompletedTask;
             MainWindow.IsBusy = false;
@@ -368,6 +368,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Mods.Count > 0)
             {
+                MainWindow.IsBusy = true;
                 Version = CurrentMod.Version;
                 ReleaseNotes = CurrentMod.ReleaseNotes;
                 Author = CurrentMod.Author;
@@ -399,6 +400,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                         Plugins.AddFromEnumerable(new RuntimePlugin[] { item });
                     }
                 }
+                MainWindow.IsBusy = false;
             }
         }
         private void saveMod()

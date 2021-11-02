@@ -28,14 +28,26 @@ namespace EndlessModding.EndlessSpace2.Main
         public ICommand ButtonGameDirClick { get; }
         public ICommand ButtonOutDirClick { get; }
         public ICommand CheckboxChecked { get; }
-        public string LocOutDir_Text
+        public string LocalModDirectory
         {
-            get => _locOutDir_Text;
+            get => _localModDirector;
             set
             {
-                if (_locOutDir_Text != value)
+                if (_localModDirector != value)
                 {
-                    _locOutDir_Text = value;
+                    _localModDirector = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public string SteamModDirectory
+        {
+            get => _steamModDirectory;
+            set
+            {
+                if (_steamModDirectory != value)
+                {
+                    _steamModDirectory = value;
                     RaisePropertyChanged();
                 }
             }
@@ -76,14 +88,26 @@ namespace EndlessModding.EndlessSpace2.Main
                 }
             }
         }
-        public bool LoadOtherMods
+        public bool LoadLocalMods
         {
-            get => _loadOtherMods;
+            get => _loadLocalMods;
             set
             {
-                if (_loadOtherMods != value)
+                if (_loadLocalMods != value)
                 {
-                    _loadOtherMods = value;
+                    _loadLocalMods = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public bool LoadSteamMods
+        {
+            get => _loadSteamlMods;
+            set
+            {
+                if (_loadSteamlMods != value)
+                {
+                    _loadSteamlMods = value;
                     RaisePropertyChanged();
                 }
             }
@@ -132,8 +156,10 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
         private ImportFiles _importFiles;
         private ImportMods _importMods;
         private Data _data;
-        private bool _loadOtherMods = false;
-        private string _locOutDir_Text;
+        private bool _loadLocalMods = false;
+        private bool _loadSteamlMods = false;
+        private string _localModDirector;
+        private string _steamModDirectory;
         private string _gameDirStatus_Text = "Please locate the game install directory.";
         private Brush _gameDirStatus_Foreground = Brushes.White;
         private string _locGameDir_Text = "Please locate the game install directory.";
@@ -146,7 +172,7 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
             _logger = logger;
             _importFiles = new ImportFiles(logger, data);
             _importMods = new ImportMods(logger, data);
-            LocOutDir_Text = Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Endless Space 2\\Community")).FullName;
+            LocalModDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Endless Space 2\\Community")).FullName;
             ButtonOutDirClick = new RelayCommand(Can_Button_OutDir_Click, Button_OutDir_Click);
             ButtonGameDirClick = new RelayCommand(Can_Button_GameDir_Click, Button_GameDir_Click);
             CheckboxChecked = new RelayCommand(Can_Checkbox_Click, CheckBox_Click);
@@ -161,13 +187,7 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             MainWindow.IsBusy = true;
-            var tmp = (CheckBox)obj;
-            if (tmp.IsChecked == true)
-            {
-                var tf = new TaskFactory();
-                await tf.StartNew(new Action(() => { _importMods.LoadMods(_locOutDir_Text); }));
-            }
-
+            await GetMods(obj);
             MainWindow.IsBusy = false;
         }
         private async void Button_OutDir_Click(object obj)
@@ -178,7 +198,7 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
 
             if (!string.IsNullOrEmpty(dir))
             {
-                LocOutDir_Text = dir;
+                LocalModDirectory = dir;
             }
             MainWindow.IsBusy = false;
         }
@@ -211,6 +231,8 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
                 GameDirStatus_Text = "Game Directory Found";
                 GameDirStatus_Foreground = Brushes.Green;
 
+                SteamModDirectory = LocGameDir_Text.Replace("\\common\\Endless Space 2", "\\workshop\\content\\392110");
+
                 var tf = new TaskFactory();
                 await tf.StartNew(new Action(() => { _importFiles.ImportAll(LocGameDir_Text); }));
 
@@ -224,6 +246,26 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
                 GameDirStatus_Foreground = Brushes.Red;
                 MainWindow.ShouldTabs = false;
                 return;
+            }
+        }
+        private async Task GetMods(object obj)
+        {
+            var tmp = (CheckBox)obj;
+            if (tmp.IsChecked == true)
+            {
+                var tf = new TaskFactory();
+                if (LoadSteamMods && LoadLocalMods)
+                {
+                    await tf.StartNew(new Action(() => { _importMods.LoadMods(LocalModDirectory, SteamModDirectory); }));
+                }
+                else if (LoadLocalMods)
+                {
+                    await tf.StartNew(new Action(() => { _importMods.LoadMods(LocalModDirectory); }));
+                }
+                else if (LoadSteamMods)
+                {
+                    await tf.StartNew(new Action(() => { _importMods.LoadMods(SteamModDirectory); }));
+                }
             }
         }
 

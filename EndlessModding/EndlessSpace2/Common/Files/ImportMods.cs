@@ -27,12 +27,16 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             _logger = logger;
             _data = data;
         }
-        public void LoadMods(string dir)
+        public void LoadMods(string dir, string dir2 = null)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _data.RuntimeModules.Clear();
-            _modFiles = Directory.GetFiles(dir, "*.xml", SearchOption.AllDirectories).ToHashSet<string>();
-            //Get Mods and load in the mod configs
+            var tmplist = Directory.GetFiles(dir, "*.xml", SearchOption.AllDirectories).ToList();
+            if (dir2 != null)
+            {
+                tmplist.AddRange(Directory.GetFiles(dir2, "*.xml", SearchOption.AllDirectories));
+            }
+            _modFiles = tmplist.ToHashSet();
             LoadMods(_data.RuntimeModules, "RuntimeModule");
         }
         private void LoadMods(ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> input, string Node)
@@ -87,8 +91,8 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         var tmp = (Classes.Amplitude_Runtime.RegistryPlugin)plugin;
                         string[] files = tmp.FilePath;
                         Type tmp2 = GetTypeOfFile(tmp.Type);
-                        plugin.Type = tmp2 == null ? "" : tmp2.Name;
-                        plugin.Contents = string.Join(" ,", files);
+                        plugin.Type = tmp2 == null ? "RegistryPlugin" : tmp2.Name;
+                        plugin.Contents = string.Join(" \n", files);
                         plugin.Enabled = true;
                         plugin.ExtraTypesString = tmp.ExtraTypesString;
                     }
@@ -97,8 +101,8 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         var tmp = (Classes.Amplitude_Runtime.LocalizationPlugin)plugin;
                         string[] directories = tmp.Directory;
                         Type tmp2 = GetTypeOfFile(tmp.Type);
-                        plugin.Type = tmp2 == null ? "" : tmp2.Name;
-                        plugin.Contents = string.Join(" ,", tmp.Directory);
+                        plugin.Type = tmp2 == null ? "LocalizationPlugin" : tmp2.Name;
+                        plugin.Contents = string.Join(" \n", tmp.Directory);
                         plugin.Enabled = true;
                         LoadNodes(fileDirectory, directories);
                     }
@@ -107,8 +111,8 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         var tmp = (Classes.Amplitude_Runtime.AIPlugin)plugin;
                         string[] files = tmp.AssemblyPath;
                         Type tmp2 = GetTypeOfFile(tmp.Type);
-                        plugin.Type = tmp2 == null ? "" : tmp2.Name;
-                        plugin.Contents = string.Join(" ,", files);
+                        plugin.Type = tmp2 == null ? "AIPlugin" : tmp2.Name;
+                        plugin.Contents = string.Join(" \n", files);
                         plugin.Enabled = true;
                         plugin.ExtraTypesString = tmp.ExtraTypesString;
                     }
@@ -118,11 +122,11 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         var tmp = (Classes.Amplitude_Runtime.DatabasePlugin)plugin;
                         string[] files = tmp.FilePath;
                         Type tmp2 = GetTypeOfFile(tmp.DataType);
-                        plugin.Type = tmp2 == null ? "" : tmp2.Name;
+                        plugin.Type = tmp2 == null ? "DatabasePlugin" : tmp2.Name;
                         Debug.Write(tmp2);
                         if (tmp.ExtraTypes != null && tmp.ExtraTypes.Length > 0)
                         {
-                            plugin.ExtraTypesString = string.Join(",", tmp.ExtraTypes.Select(x => x.DataType.Replace(", Assembly-CSharp", "")).ToArray());
+                            plugin.ExtraTypesString = string.Join(" \n", tmp.ExtraTypes.Select(x => x.DataType.Replace(", Assembly-CSharp", "")).ToArray());
                             foreach (var item in tmp.ExtraTypes)
                             {
                                 var alttmp2 = GetTypeOfFile(item.DataType);
@@ -133,7 +137,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                                     //now that i've found the type of the mod, I need to find out which list they go into and add them
                                     var tmp3 = altfield.GetValue(_data);
                                     LoadNodes(tmp3, fileDirectory, files, alttmp2, altfield.FieldType, out string tmpName);
-                                    Contents += tmpName;
+                                    Contents += tmpName + " \n";
                                 }
                             }
                             plugin.ExtraContents = Contents;
@@ -172,7 +176,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private bool MatchTypes(FieldInfo arg, Type tmp3)
         {
-            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var argtype = arg.FieldType.GetGenericTypeDefinition();
             if (argtype == typeof(ObservableConcurrentCollection<object>).GetGenericTypeDefinition())
             {
@@ -186,7 +189,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadNodes(object input, string FilePath, string[] Files, Type Node, Type FieldType, out string Name)
         {
-            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             ConcurrentBag<object> bag = new ConcurrentBag<object>();
 
             foreach (var file in Files)
@@ -242,8 +244,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadNodes(string FilePath, string[] Files)
         {
-            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-
             foreach (var file in Files)
             {
                 var subfiles = Directory.GetFiles(FilePath + "\\" + file + "\\english\\", "*.xml", SearchOption.AllDirectories);
@@ -273,7 +273,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadModImage(string FilePath, EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule Mod)
         {
-            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var images = Directory.GetFiles($"{FilePath}", "*.png", SearchOption.TopDirectoryOnly).ToHashSet<string>();
             foreach (var item in images)
             {
@@ -317,13 +316,18 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         return output.First(x => x.FullName.IndexOf(lookfor) >= 0);
                     }
                 }
-                else if (output.Where(x => x.FullName.IndexOf($"{NewType}.{NewType}")>= 0).Count() == 1)
+                else if (output.Where(x => x.FullName.IndexOf($"{NewType}.{NewType}") >= 0).Count() == 1)
                 {
                     return output.First(x => x.FullName.IndexOf($"{NewType}.{NewType}") >= 0);
                 }
+                else if (output.Where(x => x.FullName.IndexOf($"{NewType}s.{NewType}") >= 0).Count() == 1)
+                {
+                    return output.First(x => x.FullName.IndexOf($"{NewType}s.{NewType}") >= 0);
+                }
                 else
                 {
-                    throw new NotSupportedException($"Fix me - tried to find {Type} in the assembly, but I couldn't find it, did Cali name it wrong?");
+                    _logger.Error($"Fix me - tried to find {Type} in the assembly, but I couldn't find it, did Cali name it wrong?");
+                    return null;
                 }
             }
             //get the largest file
@@ -354,7 +358,6 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadHeroImage(string FilePath, EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition hero, EndlessSpace2.Common.Classes.Amplitude_Gui_GuiElement.HeroGuiElement guielements)
         {
-            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var images = Directory.GetFiles(FilePath, "*.png", SearchOption.AllDirectories).ToHashSet<string>();
             foreach (var item in images)
             {
