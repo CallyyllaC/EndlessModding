@@ -248,6 +248,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EndlessSpace2\SimulationDescriptor\SimulationDescriptorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EndlessSpace2\SkillTree\SkillTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -532,6 +536,10 @@
       <DependentUpon>QuestView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Quest\QuestViewModel.cs" />
+    <Compile Include="EndlessSpace2\SimulationDescriptor\SimulationDescriptorView.xaml.cs">
+      <DependentUpon>SimulationDescriptorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EndlessSpace2\SimulationDescriptor\SimulationDescriptorViewModel.cs" />
     <Compile Include="EndlessSpace2\SkillTree\SkillTreeView.xaml.cs">
       <DependentUpon>SkillTreeView.xaml</DependentUpon>
     </Compile>

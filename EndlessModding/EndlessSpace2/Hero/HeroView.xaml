@@ -24,6 +24,7 @@
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="200" />
+                <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="3*" MinWidth="600"/>
             </Grid.ColumnDefinitions>
 
@@ -94,19 +95,22 @@
                 <Button Grid.Row="1" Command="{Binding NewHero}">New Hero</Button>
             </Grid>
 
-            <Grid Grid.Column="1" MinHeight="400" x:Name="prop" Grid.RowSpan="2">
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+
+            <Grid Grid.Column="2" MinHeight="400" x:Name="prop" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="300" MaxWidth="510"/>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="*" MinWidth="300"/>
                 </Grid.ColumnDefinitions>
                 <!--<li:LoadingIndicator Grid.Column="0" Grid.Row="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsArcsActive}" Mode="Arcs" />-->
                 <GroupBox Header="Hero Details:">
-                    <StackPanel Grid.Column="0" Margin="5" MaxWidth="500">
+                    <StackPanel Grid.Column="0" Margin="5">
                         <TextBlock>Hero Module Name:</TextBlock>
-                        <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+                        <TextBox Text="{Binding Name, Mode=TwoWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}" />
 
                         <TextBlock>In Game Name:</TextBlock>
-                        <TextBox Text="{Binding RealName, Mode=TwoWay}"/>
+                        <TextBox Text="{Binding RealName, Mode=TwoWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>In Game Description:</TextBlock>
                         <TextBox Text="{Binding Description, Mode=TwoWay}" MaxWidth="500" TextWrapping="Wrap"/>
@@ -121,34 +125,33 @@
                         </Grid>
 
                         <TextBlock>Affinity:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Affinity, Mode=TwoWay}" ItemsSource="{Binding Affinities, Mode=OneWay}"/>
+                        <ComboBox SelectedItem="{Binding Affinity, Mode=TwoWay}" ItemsSource="{Binding Affinities, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Class:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Class, Mode=TwoWay}" ItemsSource="{Binding Classes, Mode=OneWay}"/>
+                        <ComboBox SelectedItem="{Binding Class, Mode=TwoWay}" ItemsSource="{Binding Classes, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Politics:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Politic, Mode=TwoWay}" ItemsSource="{Binding Politics, Mode=OneWay}"/>
+                        <ComboBox SelectedItem="{Binding Politic, Mode=TwoWay}" ItemsSource="{Binding Politics, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Ship:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Ship, Mode=TwoWay}" ItemsSource="{Binding Ships, Mode=OneWay}"/>
+                        <ComboBox SelectedItem="{Binding Ship, Mode=TwoWay}" ItemsSource="{Binding Ships, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Model Path:</TextBlock>
-                        <TextBox Text="{Binding ModelPath, Mode=TwoWay}"  IsEnabled="{Binding ModelPathEnabled}" MaxWidth="500" TextWrapping="Wrap"/>
-
-                        <Grid MaxWidth="400">
+                        <TextBox Text="{Binding ModelPath, Mode=TwoWay}"  IsEnabled="{Binding ModelPathEnabled}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}" TextWrapping="Wrap"/>
+                        <Grid  MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="5*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Image Grid.Row="0" MinWidth="100" MinHeight="100"   MaxWidth="400" MaxHeight="400" Source="{Binding MoodImage}" Stretch="Uniform"/>
+                            <Image Grid.Row="0" MinWidth="100" MinHeight="100" Source="{Binding MoodImage}" Stretch="Uniform"/>
                             <!--<Canvas Grid.Row="0" MinWidth="100" MinHeight="100" MaxHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}">
 
                             </Canvas>-->
                             <Button Grid.Row="1" Command="{Binding LoadMoodImage}">Load Mood Image</Button>
                         </Grid>
-                        <Grid>
+                        <Grid MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -156,16 +159,18 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <Image Grid.Column="0" Grid.Row="0" MinWidth="100" MinHeight="100"  MaxWidth="200" MaxHeight="200" Source="{Binding LargeImage}" Stretch="Uniform"/>
+                            <Image Grid.Column="0" Grid.Row="0" MinWidth="100" MinHeight="100"  Source="{Binding LargeImage}" Stretch="Uniform"/>
                             <Button Grid.Column="0" Grid.Row="1" Command="{Binding LoadLargeImage}">Load Large Image</Button>
 
-                            <Image Source="{Binding MediumImage}" Grid.Column="1" Grid.Row="0" MinWidth="100" MinHeight="100"  MaxWidth="200" MaxHeight="200" Stretch="Uniform"/>
+                            <Image Source="{Binding MediumImage}" Grid.Column="1" Grid.Row="0" MinWidth="100" MinHeight="100" Stretch="Uniform"/>
                             <Button Grid.Column="1" Grid.Row="1" Command="{Binding LoadMediumImage}">Load Medium Image</Button>
                         </Grid>
 
                     </StackPanel>
                 </GroupBox>
-                <StackPanel Grid.Column="1">
+
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                <StackPanel Grid.Column="2">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>

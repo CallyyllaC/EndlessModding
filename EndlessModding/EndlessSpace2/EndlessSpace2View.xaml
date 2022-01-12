@@ -12,6 +12,7 @@
         xmlns:MinorFaction="clr-namespace:EndlessModding.EndlessSpace2.MinorFaction"
         xmlns:Planet="clr-namespace:EndlessModding.EndlessSpace2.Planet"
         xmlns:Quest="clr-namespace:EndlessModding.EndlessSpace2.Quest"
+        xmlns:SimulationDescriptor="clr-namespace:EndlessModding.EndlessSpace2.SimulationDescriptor"
         xmlns:Skill="clr-namespace:EndlessModding.EndlessSpace2.Skill"
         xmlns:SkillTree="clr-namespace:EndlessModding.EndlessSpace2.SkillTree"
         xmlns:SystemImprovement="clr-namespace:EndlessModding.EndlessSpace2.SystemImprovment"
@@ -146,7 +147,23 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Planet" Header="Planet" IsEnabled="{Binding Tab_Planet}" TabIndex="6">
+            <mah:MetroTabItem x:Name="Tab_SimulationDescriptor" Header="SimulationDescriptor" IsEnabled="{Binding Tab_SimulationDescriptor}" TabIndex="6">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconRPGAwesome Width="24" Height="24" Kind="SpeechBubble" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">SimulationDescriptor</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <SimulationDescriptor:SimulationDescriptorView  DataContext="{Binding SimulationDescriptorViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </mah:MetroTabItem>
+
+            <mah:MetroTabItem x:Name="Tab_Planet" Header="Planet" IsEnabled="{Binding Tab_Planet}" TabIndex="7">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -162,7 +179,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Tech" Header="Tech" IsEnabled="{Binding Tab_Tech}" TabIndex="7">
+            <mah:MetroTabItem x:Name="Tab_Tech" Header="Tech" IsEnabled="{Binding Tab_Tech}" TabIndex="8">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -178,7 +195,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Trait" Header="Trait" IsEnabled="{Binding Tab_Trait}" TabIndex="8">
+            <mah:MetroTabItem x:Name="Tab_Trait" Header="Trait" IsEnabled="{Binding Tab_Trait}" TabIndex="9">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -194,7 +211,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Minor_Faction" Header="Minor Faction" IsEnabled="{Binding Tab_Minor_Faction}" TabIndex="9">
+            <mah:MetroTabItem x:Name="Tab_Minor_Faction" Header="Minor Faction" IsEnabled="{Binding Tab_Minor_Faction}" TabIndex="10">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -210,7 +227,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="10">
+            <mah:MetroTabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="11">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -226,7 +243,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="11">
+            <mah:MetroTabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="12">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -242,7 +259,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="12">
+            <mah:MetroTabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="13">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -258,7 +275,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="13">
+            <mah:MetroTabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="14">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>

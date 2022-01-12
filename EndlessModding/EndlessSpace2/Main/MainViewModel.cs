@@ -115,7 +115,20 @@ namespace EndlessModding.EndlessSpace2.Main
         public string About
         {
             get;
-        } = "This is the new version of my ES2 Hero Designer, as you can see it has been expanded upon greatly since the last version, and now (not now now though) includes a large variety of modding tools. There have also been a lot of under the hood improvements to this tool that many of you will not be able to notice. However the original tool was both rushed in about a week, and written by a uni student with very limited experience. Not to say that this is greatly done, I have made a lot of shortcuts that will make many developers cry, however compared to the last one, this should be a lot easier to expand upon in the future as and when needed. I would also like to thank the community for their support over the years and for making developing these tools worth it.";
+        } = @"This is the new version of my ES2 Hero Designer, as you can see it has been expanded upon greatly since the last version, and now (not now now though) includes a large variety of modding tools. There have also been a lot of under the hood improvements to this tool that many of you will not be able to notice. However the original tool was both rushed in about a week, and written by a uni student with very limited experience. Not to say that this is greatly done, I have made a lot of shortcuts that will make many developers cry, however compared to the last one, this should be a lot easier to expand upon in the future as and when needed. I would also like to thank the community for their support over the years and for making developing these tools worth it.
+
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding
+I hate UI coding";
         public string Steam
         {
             get;
@@ -140,6 +153,9 @@ Once that is done, go ahead and click export!";
         {
             get;
         } = @"I've done my best, but there are a lot of things to test, and a lot of weird things that C# just does anyway from time to time.
+
+The UI has a thing about not wanting to shrink, so resize things at your own risk, they will get bigger but not always go back.
+
 Logging has now been added! Log files are located in %appdata%\Cali\EndlessModding\Logging";
         public bool CanImportMods
         {

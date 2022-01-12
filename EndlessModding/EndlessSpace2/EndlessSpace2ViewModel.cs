@@ -34,6 +34,7 @@ namespace EndlessModding.EndlessSpace2
         public SkillViewModel SkillViewModel { get; set; }
         public SkillTreeViewModel SkillTreeViewModel { get; set; }
         public QuestViewModel QuestViewModel { get; set; }
+        public QuestViewModel SimulationDescriptorViewModel { get; set; }
         public PlanetViewModel PlanetViewModel { get; set; }
         public TechViewModel TechViewModel { get; set; }
         public TraitViewModel TraitViewModel { get; set; }
@@ -95,6 +96,14 @@ namespace EndlessModding.EndlessSpace2
             get => tab_Quest; set
             {
                 tab_Quest = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool Tab_SimulationDescriptor
+        {
+            get => tab_SimulationDescriptor; set
+            {
+                tab_SimulationDescriptor = value;
                 RaisePropertyChanged();
             }
         }
@@ -176,6 +185,7 @@ namespace EndlessModding.EndlessSpace2
         private bool tab_Major_Faction = false;
         private bool tab_Planet = false;
         private bool tab_Quest = false;
+        private bool tab_SimulationDescriptor = false;
         private bool tab_Skill = false;
         private bool tab_Skill_Tree = false;
         private bool tab_System_Improvement = false;
@@ -193,6 +203,7 @@ namespace EndlessModding.EndlessSpace2
             SkillViewModel skillViewModel,
             SkillTreeViewModel skillTreeViewModel,
             QuestViewModel questViewModel,
+            QuestViewModel simulationDescriptorViewModel,
             PlanetViewModel planetViewModel,
             TechViewModel techViewModel,
             TraitViewModel traitViewModel,
@@ -208,6 +219,7 @@ namespace EndlessModding.EndlessSpace2
             SkillViewModel = skillViewModel;
             SkillTreeViewModel = skillTreeViewModel;
             QuestViewModel = questViewModel;
+            SimulationDescriptorViewModel = simulationDescriptorViewModel;
             PlanetViewModel = planetViewModel;
             TechViewModel = techViewModel;
             TraitViewModel = traitViewModel;
@@ -223,6 +235,7 @@ namespace EndlessModding.EndlessSpace2
             SkillViewModel.MainWindow = this;
             SkillTreeViewModel.MainWindow = this;
             QuestViewModel.MainWindow = this;
+            SimulationDescriptorViewModel.MainWindow = this;
             PlanetViewModel.MainWindow = this;
             TechViewModel.MainWindow = this;
             TraitViewModel.MainWindow = this;
@@ -243,6 +256,7 @@ namespace EndlessModding.EndlessSpace2
             Tab_Major_Faction = enable;
             Tab_Planet = enable;
             Tab_Quest = enable;
+            Tab_SimulationDescriptor = enable;
             Tab_Skill = enable;
             Tab_Skill_Tree = enable;
             Tab_System_Improvement = enable;

@@ -151,6 +151,39 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
         }
     }
 }
+
+namespace EndlessModding.EndlessSpace2.Common.Classes.HeroSkillDefinition
+{
+    public partial class HeroSkillDefinition : INotifyPropertyChanged, IExportable
+    {
+        [XmlIgnore]
+        public bool Custom { get; set; } = false;
+        [XmlIgnore]
+        public bool Enabled { get; set; } = false;
+
+        [XmlIgnore]
+        public int LevelCount {
+            get
+            {
+                return SkillLevel.Length;
+            }
+        }
+
+        [XmlIgnore]
+        public string Type { get; set; } = "HeroSkill";
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
+}
+
 namespace EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition
 {
     public partial class HeroDefinition : INotifyPropertyChanged, IExportable
