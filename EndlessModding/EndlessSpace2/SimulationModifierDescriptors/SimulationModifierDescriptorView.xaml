@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="EndlessModding.EndlessSpace2.SimulationDescriptor.SimulationDescriptorView"
+﻿<UserControl x:Class="EndlessModding.EndlessSpace2.SimulationModifierDescriptors.SimulationModifierDescriptorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.SimulationDescriptor"
+             xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.SimulationModifierDescriptors"
              xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              xmlns:common="clr-namespace:EndlessModding.Common"
              xmlns:en="clr-namespace:EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime"
@@ -22,7 +22,7 @@
                     <RowDefinition Height="15*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <GroupBox Header="Simulation Descriptors" Grid.Row="0">
+                <GroupBox Header="Simulation Modifier Descriptors" Grid.Row="0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -69,7 +69,7 @@
                         </DataGrid>
                     </Grid>
                 </GroupBox>
-                <Button Grid.Row="1" Command="{Binding NewSkillDefinition}">New Simulation Descriptor</Button>
+                <Button Grid.Row="1" Command="{Binding NewSkillDefinition}" Content="New Simulation Modifier Descriptor"/>
             </Grid>
 
             <Grid Grid.Column="1">
@@ -79,68 +79,82 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Header="Simulation Descriptor" Grid.Column="0">
+                <GroupBox Header="Simulation Modifier Descriptor" Grid.Column="0">
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Text="Name"/>
                         <TextBox TextWrapping="Wrap" Text="{Binding SimName}"/>
 
-                        <TextBlock TextWrapping="Wrap" Text="Type"/>
-                        <TextBox TextWrapping="Wrap" Text="{Binding SimType}"/>
+                        <TextBlock TextWrapping="Wrap" Text="SimType"/>
+                        <ComboBox Text="{Binding SimType}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
 
                         <Grid Margin="0, 5, 0 , 0">
-                            <CheckBox Grid.Column="0" IsChecked="{Binding Serialisable, Mode=TwoWay}">Serialisable</CheckBox>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding SearchValueFromPath, Mode=TwoWay}">Search Value From Path</CheckBox>
+                            <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding EnforceContext, Mode=TwoWay}">Enforce Context</CheckBox>
+                            <CheckBox Grid.Column="0" Grid.Row="2" Margin="0, 5, 0 , 0" IsChecked="{Binding ValueMustBePositive, Mode=TwoWay}">Value Must Be Positive</CheckBox>
+                            <CheckBox Grid.Column="1" Grid.Row="2" Margin="0, 5, 0 , 0" IsChecked="{Binding UseIfInsteadOfWhere, Mode=TwoWay}">Use If Instead Of Where</CheckBox>
+                            <CheckBox Grid.Column="0" Grid.Row="3" Margin="0, 5, 0 , 0" IsChecked="{Binding ForceFrom, Mode=TwoWay}">Force From</CheckBox>
+                            <CheckBox Grid.Column="0" Grid.Row="0" Margin="0, 5, 0 , 0" IsChecked="{Binding TooltipHidden, Mode=TwoWay}">Tooltip Hidden</CheckBox>
+                            <CheckBox Grid.Column="1" Grid.Row="0" Margin="0, 5, 0 , 0" IsChecked="{Binding TooltipHiddenIfPathInvalid, Mode=TwoWay}">Tooltip Hidden If Path Invalid</CheckBox>
                         </Grid>
+
+                        <TextBlock TextWrapping="Wrap" Text="Operation"/>
+                        <ComboBox Text="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+
+                        <TextBlock TextWrapping="Wrap" Text="Priority"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Priority}"/>
+
+                        <TextBlock TextWrapping="Wrap" Text="Tooltip Override"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding TooltipOverride}"/>
+
+                        <TextBlock TextWrapping="Wrap" Text="Path"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Path}"/>
+
+                        <TextBlock TextWrapping="Wrap" Text="Target Property"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding TargetProperty}"/>
 
                     </StackPanel>
                 </GroupBox>
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                <GroupBox Header="Items" Grid.Column="2">
+                <GroupBox Header="Type Specific" Grid.Column="2">
                     <StackPanel>
-                        <GroupBox Header="Simulation Property Descriptors" Grid.Column="2">
+                        <GroupBox Header="Single Simulation" IsEnabled="False">
                             <StackPanel>
-                                <!--Property
-                        ProportionalProperty-->
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" MinHeight="50"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedProperty, Mode=TwoWay}" ItemsSource="{Binding Properties, Mode=TwoWay}"/>
-
-                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding PropertyBox, Mode=OneWayToSource}" ItemsSource="{Binding PropertyAvailible}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddProperty}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveProperty}">Remove</Button>
+                                <TextBlock TextWrapping="Wrap" Text="Value"/>
+                                <TextBox TextWrapping="Wrap" Text="{Binding Value}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Single Simulation" IsEnabled="False">
+                            <StackPanel>
+                                <TextBlock TextWrapping="Wrap" Text="Operation"/>
+                                <ComboBox Text="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+                                <TextBlock TextWrapping="Wrap" Text="Left"/>
+                                <TextBox TextWrapping="Wrap" Text="{Binding Left}"/>
+                                <TextBlock TextWrapping="Wrap" Text="Right"/>
+                                <TextBox TextWrapping="Wrap" Text="{Binding Right}"/>
+                                <Grid Margin="0, 5, 0 , 0">
+                                    <CheckBox IsChecked="{Binding EnforceRightAsPer, Mode=TwoWay}">Enforce Right As Per</CheckBox>
                                 </Grid>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Simulation Modifier Descriptors" Grid.Column="2">
+                        <GroupBox Header="Count Simulation" IsEnabled="False">
                             <StackPanel>
-                                <!--BinaryModifier
-                        CountModifier
-                        Modifier-->
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" MinHeight="50"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedModifier, Mode=TwoWay}" ItemsSource="{Binding Modifiers, Mode=TwoWay}"/>
-
-                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding ModifierBox, Mode=OneWayToSource}" ItemsSource="{Binding ModifierAvailible}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddModifier}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveModifier}">Remove</Button>
-                                </Grid>
+                                <TextBlock TextWrapping="Wrap" Text="Multiplier"/>
+                                <TextBox TextWrapping="Wrap" Text="{Binding Multiplier}"/>
+                                <TextBlock TextWrapping="Wrap" Text="Count Path"/>
+                                <TextBox TextWrapping="Wrap" Text="{Binding CountPath}"/>
                             </StackPanel>
                         </GroupBox>
+
                     </StackPanel>
                 </GroupBox>
             </Grid>

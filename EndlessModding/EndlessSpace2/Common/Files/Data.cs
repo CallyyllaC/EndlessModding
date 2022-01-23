@@ -16,6 +16,11 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         public ObservableConcurrentCollection<Classes.MajorFactions.MajorFaction> MajorFactions = new ObservableConcurrentCollection<Classes.MajorFactions.MajorFaction>();
         public ObservableConcurrentCollection<Classes.HeroSkillDefinition.HeroSkillDefinition> HeroSkillDefinitions = new ObservableConcurrentCollection<Classes.HeroSkillDefinition.HeroSkillDefinition>();
         public ObservableConcurrentCollection<Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition> HeroSkillTreeDefinitions = new ObservableConcurrentCollection<Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition>();
+        public ObservableConcurrentCollection<Classes.Amplitude_Simulator.SimulationDescriptor> SimulationDescriptorDefinitions = new ObservableConcurrentCollection<Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public ObservableConcurrentCollection<Classes.Amplitude_Simulator.SimulationPropertyDescriptor> SimulationPropertyDescriptorDefinitions = new ObservableConcurrentCollection<Classes.Amplitude_Simulator.SimulationPropertyDescriptor>();
+        public ObservableConcurrentCollection<Classes.Amplitude_Simulator.SimulationModifierDescriptor> SimulationModifierDescriptorDefinitions = new ObservableConcurrentCollection<Classes.Amplitude_Simulator.SimulationModifierDescriptor>();
+        public ObservableConcurrentCollection<Classes.EncounterPlayDefinition.EncounterPlayDefinition> EncounterPlayDefinitions = new ObservableConcurrentCollection<Classes.EncounterPlayDefinition.EncounterPlayDefinition>();
+        public ObservableConcurrentCollection<Classes.HeroMasteryDefinitions.HeroMasteryDefinition> MasteryLevelDefinitions = new ObservableConcurrentCollection<Classes.HeroMasteryDefinitions.HeroMasteryDefinition>();
         //Mods //TODO make these local
         public ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.GuiElement> GUIElements = new ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.GuiElement>();
         public ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.HeroGuiElement> HeroGUIElements = new ObservableConcurrentCollection<Classes.Amplitude_Gui_GuiElement.HeroGuiElement>();

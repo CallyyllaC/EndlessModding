@@ -21,6 +21,8 @@
         xmlns:Workshop="clr-namespace:EndlessModding.EndlessSpace2.Workshop"
         xmlns:li="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
         xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:simulationPropertyDescriptors="clr-namespace:EndlessModding.EndlessSpace2.SimulationPropertyDescriptors"
+        xmlns:simulationModifierDescriptors="clr-namespace:EndlessModding.EndlessSpace2.SimulationModifierDescriptors"
         mc:Ignorable="d"
         Title="Endless Space 2"
         Height="720" Width="1280"
@@ -163,7 +165,39 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Planet" Header="Planet" IsEnabled="{Binding Tab_Planet}" TabIndex="7">
+            <mah:MetroTabItem x:Name="Tab_SimulationPropertyDescriptor" Header="SimulationPropertyDescriptor" IsEnabled="{Binding Tab_SimulationPropertyDescriptor}" TabIndex="7">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconRPGAwesome Width="24" Height="24" Kind="SpeechBubble" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">SimulationPropertyDescriptor</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <simulationPropertyDescriptors:SimulationPropertyDescriptorView  DataContext="{Binding SimulationPropertyDescriptorViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </mah:MetroTabItem>
+
+            <mah:MetroTabItem x:Name="Tab_SimulationModifierDescriptor" Header="SimulationModifierDescriptor" IsEnabled="{Binding Tab_SimulationModifierDescriptor}" TabIndex="8">
+
+                <TabItem.HeaderTemplate>
+                    <ItemContainerTemplate>
+                        <StackPanel Orientation="Horizontal"  Margin="2, 0, 2, 0">
+                            <icons:PackIconRPGAwesome Width="24" Height="24" Kind="SpeechBubble" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 4, 0"/>
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">SimulationModifierDescriptor</TextBlock>
+                        </StackPanel>
+                    </ItemContainerTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <simulationModifierDescriptors:SimulationModifierDescriptorView  DataContext="{Binding SimulationModifierDescriptorViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </mah:MetroTabItem>
+
+            <mah:MetroTabItem x:Name="Tab_Planet" Header="Planet" IsEnabled="{Binding Tab_Planet}" TabIndex="9">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -179,7 +213,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Tech" Header="Tech" IsEnabled="{Binding Tab_Tech}" TabIndex="8">
+            <mah:MetroTabItem x:Name="Tab_Tech" Header="Tech" IsEnabled="{Binding Tab_Tech}" TabIndex="10">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -195,7 +229,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Trait" Header="Trait" IsEnabled="{Binding Tab_Trait}" TabIndex="9">
+            <mah:MetroTabItem x:Name="Tab_Trait" Header="Trait" IsEnabled="{Binding Tab_Trait}" TabIndex="11">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -211,7 +245,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Minor_Faction" Header="Minor Faction" IsEnabled="{Binding Tab_Minor_Faction}" TabIndex="10">
+            <mah:MetroTabItem x:Name="Tab_Minor_Faction" Header="Minor Faction" IsEnabled="{Binding Tab_Minor_Faction}" TabIndex="12">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -227,7 +261,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="11">
+            <mah:MetroTabItem x:Name="Tab_Major_Faction" Header="Major Faction" IsEnabled="{Binding Tab_Major_Faction}" TabIndex="13">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -243,7 +277,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="12">
+            <mah:MetroTabItem x:Name="Tab_Government" Header="Government" IsEnabled="{Binding Tab_Government}" TabIndex="14">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -259,7 +293,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="13">
+            <mah:MetroTabItem x:Name="Tab_Law" Header="Law" IsEnabled="{Binding Tab_Law}" TabIndex="15">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>
@@ -275,7 +309,7 @@
                     </Grid>
                 </mah:MetroTabItem>
 
-            <mah:MetroTabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="14">
+            <mah:MetroTabItem x:Name="Tab_System_Improvement" Header="System Improvement" IsEnabled="{Binding Tab_System_Improvement}" TabIndex="16">
 
                 <TabItem.HeaderTemplate>
                     <ItemContainerTemplate>

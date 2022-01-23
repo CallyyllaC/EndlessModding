@@ -252,6 +252,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EndlessSpace2\SimulationModifierDescriptors\SimulationModifierDescriptorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EndlessSpace2\SimulationPropertyDescriptors\SimulationPropertyDescriptorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EndlessSpace2\SkillTree\SkillTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -540,6 +548,14 @@
       <DependentUpon>SimulationDescriptorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\SimulationDescriptor\SimulationDescriptorViewModel.cs" />
+    <Compile Include="EndlessSpace2\SimulationModifierDescriptors\SimulationModifierDescriptorView.xaml.cs">
+      <DependentUpon>SimulationModifierDescriptorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EndlessSpace2\SimulationModifierDescriptors\SimulationModifierDescriptorViewModel.cs" />
+    <Compile Include="EndlessSpace2\SimulationPropertyDescriptors\SimulationPropertyDescriptorView.xaml.cs">
+      <DependentUpon>SimulationPropertyDescriptorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EndlessSpace2\SimulationPropertyDescriptors\SimulationPropertyDescriptorViewModel.cs" />
     <Compile Include="EndlessSpace2\SkillTree\SkillTreeView.xaml.cs">
       <DependentUpon>SkillTreeView.xaml</DependentUpon>
     </Compile>

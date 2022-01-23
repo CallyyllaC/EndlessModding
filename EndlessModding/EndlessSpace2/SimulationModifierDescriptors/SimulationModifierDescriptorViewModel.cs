@@ -11,15 +11,14 @@ using Castle.Core.Logging;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator;
 using EndlessModding.EndlessSpace2.Common.Files;
 
-namespace EndlessModding.EndlessSpace2.SimulationDescriptor
+namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
 {
-    class SimulationDescriptorViewModel : INotifyPropertyChanged
+    class SimulationModifierDescriptorViewModel : INotifyPropertyChanged
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
 
-        public ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor> Sims { get; set; }
-
-        public Common.Classes.Amplitude_Simulator.SimulationDescriptor CurrentSim
+        public ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor> Sims { get; set; }
+        public SimulationModifierDescriptor CurrentSim
         {
             get => _currentSim;
             set
@@ -42,15 +41,15 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
 
         private readonly ILogger _logger;
         private Data _data;
-        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _currentSim;
+        private SimulationModifierDescriptor _currentSim;
 
-        public SimulationDescriptorViewModel(ILogger Logger, Data data)
+        public SimulationModifierDescriptorViewModel(ILogger Logger, Data data)
         {
             Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
 
             _logger = Logger;
             _data = data;
-            Sims = _data.SimulationDescriptorDefinitions;
+            Sims = _data.SimulationModifierDescriptorDefinitions;
 
             RaisePropertyChanged();
         }

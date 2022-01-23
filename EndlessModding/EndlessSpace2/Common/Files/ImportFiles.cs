@@ -48,6 +48,9 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             _data.MajorFactions.Clear();
             _data.HeroSkillDefinitions.Clear();
             _data.HeroSkillTreeDefinitions.Clear();
+            _data.SimulationDescriptorDefinitions.Clear();
+            _data.EncounterPlayDefinitions.Clear();
+            _data.MasteryLevelDefinitions.Clear();
 
             //get all the useful xml data
             _files = Directory.GetFiles($"{GameDir}Public\\Simulation\\", "*.xml", SearchOption.AllDirectories).ToHashSet<string>();
@@ -57,9 +60,17 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             //Get Locales
             LoadLocales();
 
-            //Get Hero Mastery Definitions
+            //Get Simulation Descriptors
+            LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor>(_data.SimulationDescriptorDefinitions, "SimulationDescriptors", "SimulationDescriptor");
+
+            LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor>(_data.SimulationDescriptorDefinitions, "SimulationDescriptors", "SimulationDescriptor");
+            LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor>(_data.SimulationDescriptorDefinitions, "SimulationDescriptors", "SimulationDescriptor");
 
             //Get Encounter Play Definitions
+            LoadNodes<EndlessSpace2.Common.Classes.EncounterPlayDefinition.EncounterPlayDefinition>(_data.EncounterPlayDefinitions, "EncounterPlayDefinitions", "EncounterPlayDefinition");
+
+            //Get Hero Mastery Definitions
+            LoadNodes<EndlessSpace2.Common.Classes.HeroMasteryDefinitions.HeroMasteryDefinition>(_data.MasteryLevelDefinitions, "HeroMasteryDefinitions", "HeroMasteryDefinition");
 
             //Get Hero Affinity Definitions
             LoadNodes<EndlessSpace2.Common.Classes.HeroAffinityDefinitions.HeroAffinityDefinition>(_data.HeroAffinityDefinitions, "HeroAffinityDefinitions", "HeroAffinityDefinition");
@@ -91,15 +102,12 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             //Get Hero Politic Definitions
             LoadNodes<EndlessSpace2.Common.Classes.HeroPoliticsDefinitions.HeroPoliticsDefinition>(_data.HeroPoliticsDefinitions, "HeroPoliticsDefinitions", "HeroPoliticsDefinition");
 
-            //Get Hero Simulation Descriptors
 
             //Get Hero Skill Definitions
             LoadNodes<EndlessSpace2.Common.Classes.HeroSkillDefinition.HeroSkillDefinition>(_data.HeroSkillDefinitions, "HeroSkillDefinitions", "HeroSkillDefinition");
 
             //Get Hero Skill Tree Definitions
             LoadNodes<EndlessSpace2.Common.Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition>(_data.HeroSkillTreeDefinitions, "HeroSkillTreeDefinitions", "HeroSkillTreeDefinition");
-
-            //Get Mastery Level Definitions
 
             //Get Ship Definitions
             LoadNodes<EndlessSpace2.Common.Classes.ShipDesignDefinitions.ShipDesignDefinition>(_data.ShipDesignDefinitions, "ShipDesignDefinitions", "ShipDesignDefinition");
@@ -184,6 +192,14 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             {
                 input.Add(item);
             }
+        }
+        private void LoadFromObject<T>(ObservableConcurrentCollection<T> output, ObservableConcurrentCollection<T> input)
+        {
+            Parallel.ForEach(input, item =>
+            {
+                System.Reflection.PropertyInfo[] properties = item.GetType().GetProperties(BindingFlags.Public);
+                var tmp = properties.Where(x => x.PropertyType == T[]).ToList();
+            });
         }
         T SerialiseFunc<T>(XElement xml)
         {

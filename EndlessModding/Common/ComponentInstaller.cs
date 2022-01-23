@@ -23,6 +23,8 @@ using System.Text;
 using System.Threading.Tasks;
 using EndlessModding.EndlessSpace2.Common.Files;
 using EndlessModding.EndlessSpace2.SimulationDescriptor;
+using EndlessModding.EndlessSpace2.SimulationModifierDescriptors;
+using EndlessModding.EndlessSpace2.SimulationPropertyDescriptors;
 
 namespace EndlessModding.Common
 {
@@ -49,6 +51,8 @@ namespace EndlessModding.Common
 			container.Register(Component.For<SkillTreeViewModel>().ImplementedBy<SkillTreeViewModel>());
 			container.Register(Component.For<QuestViewModel>().ImplementedBy<QuestViewModel>());
 			container.Register(Component.For<SimulationDescriptorViewModel>().ImplementedBy<SimulationDescriptorViewModel>());
+			container.Register(Component.For<SimulationPropertyDescriptorViewModel>().ImplementedBy<SimulationPropertyDescriptorViewModel>());
+			container.Register(Component.For<SimulationModifierDescriptorViewModel>().ImplementedBy<SimulationModifierDescriptorViewModel>());
 			container.Register(Component.For<PlanetViewModel>().ImplementedBy<PlanetViewModel>());
 			container.Register(Component.For<TechViewModel>().ImplementedBy<TechViewModel>());
 			container.Register(Component.For<TraitViewModel>().ImplementedBy<TraitViewModel>());
