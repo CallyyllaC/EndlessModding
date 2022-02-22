@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.SimulationModifierDescriptors"
              xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              xmlns:common="clr-namespace:EndlessModding.Common"
-             xmlns:en="clr-namespace:EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime"
+             xmlns:en="clr-namespace:EndlessModding.EndlessSpace2.SimulationModifierDescriptors"
+             xmlns:amplitudeSimulator="clr-namespace:EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1000">
 
@@ -39,7 +40,7 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Sims, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Modifiers, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -81,11 +82,8 @@
 
                 <GroupBox Header="Simulation Modifier Descriptor" Grid.Column="0">
                     <StackPanel>
-                        <TextBlock TextWrapping="Wrap" Text="Name"/>
-                        <TextBox TextWrapping="Wrap" Text="{Binding SimName}"/>
-
-                        <TextBlock TextWrapping="Wrap" Text="SimType"/>
-                        <ComboBox Text="{Binding SimType}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+                        <TextBlock TextWrapping="Wrap" Text="Type"/>
+                        <ComboBox Text="{Binding ModifierType}" ItemsSource="{common:EnumToItemsSource {x:Type en:ModifierEnum}}"/>
 
                         <Grid Margin="0, 5, 0 , 0">
                             <Grid.ColumnDefinitions>
@@ -108,7 +106,7 @@
                         </Grid>
 
                         <TextBlock TextWrapping="Wrap" Text="Operation"/>
-                        <ComboBox Text="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+                        <ComboBox Text="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:ModifierOperation}}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Priority"/>
                         <TextBox TextWrapping="Wrap" Text="{Binding Priority}"/>
@@ -127,16 +125,16 @@
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                 <GroupBox Header="Type Specific" Grid.Column="2">
                     <StackPanel>
-                        <GroupBox Header="Single Simulation" IsEnabled="False">
+                        <GroupBox Header="Single Simulation" IsEnabled="{Binding Single}">
                             <StackPanel>
                                 <TextBlock TextWrapping="Wrap" Text="Value"/>
                                 <TextBox TextWrapping="Wrap" Text="{Binding Value}"/>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Single Simulation" IsEnabled="False">
+                        <GroupBox Header="Binary Simulation" IsEnabled="{Binding Binary}">
                             <StackPanel>
                                 <TextBlock TextWrapping="Wrap" Text="Operation"/>
-                                <ComboBox Text="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+                                <ComboBox Text="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:ModifierOperation}}"/>
                                 <TextBlock TextWrapping="Wrap" Text="Left"/>
                                 <TextBox TextWrapping="Wrap" Text="{Binding Left}"/>
                                 <TextBlock TextWrapping="Wrap" Text="Right"/>
@@ -146,7 +144,7 @@
                                 </Grid>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Count Simulation" IsEnabled="False">
+                        <GroupBox Header="Count Simulation" IsEnabled="{Binding Count}">
                             <StackPanel>
                                 <TextBlock TextWrapping="Wrap" Text="Multiplier"/>
                                 <TextBox TextWrapping="Wrap" Text="{Binding Multiplier}"/>

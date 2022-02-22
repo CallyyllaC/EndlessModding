@@ -22,6 +22,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using EndlessModding.EndlessSpace2.Common.Files;
+using EndlessModding.EndlessSpace2.SimulationDescriptor;
+using EndlessModding.EndlessSpace2.SimulationModifierDescriptors;
+using EndlessModding.EndlessSpace2.SimulationPropertyDescriptors;
 
 namespace EndlessModding.EndlessSpace2
 {
@@ -31,12 +34,12 @@ namespace EndlessModding.EndlessSpace2
         public MainViewModel MainViewModel { get; set; }
         public WorkshopViewModel WorkshopViewModel { get; set; }
         public HeroViewModel HeroViewModel { get; set; }
+        public SimulationModifierDescriptorViewModel SimulationModifierDescriptorViewModel { get; set; }
+        public SimulationPropertyDescriptorViewModel SimulationPropertyDescriptorViewModel { get; set; }
+        public SimulationDescriptorViewModel SimulationDescriptorViewModel { get; set; }
         public SkillViewModel SkillViewModel { get; set; }
         public SkillTreeViewModel SkillTreeViewModel { get; set; }
         public QuestViewModel QuestViewModel { get; set; }
-        public QuestViewModel SimulationDescriptorViewModel { get; set; }
-        public QuestViewModel SimulationPropertyDescriptorViewModel { get; set; }
-        public QuestViewModel SimulationModifierDescriptorViewModel { get; set; }
         public PlanetViewModel PlanetViewModel { get; set; }
         public TechViewModel TechViewModel { get; set; }
         public TraitViewModel TraitViewModel { get; set; }
@@ -223,9 +226,9 @@ namespace EndlessModding.EndlessSpace2
             SkillViewModel skillViewModel,
             SkillTreeViewModel skillTreeViewModel,
             QuestViewModel questViewModel,
-            QuestViewModel simulationDescriptorViewModel,
-            QuestViewModel simulationPropertyDescriptorViewModel,
-            QuestViewModel simulationModifierDescriptorViewModel,
+            SimulationModifierDescriptorViewModel simulationModifierDescriptorViewModel,
+            SimulationPropertyDescriptorViewModel simulationPropertyDescriptorViewModel,
+            SimulationDescriptorViewModel simulationDescriptorViewModel,
             PlanetViewModel planetViewModel,
             TechViewModel techViewModel,
             TraitViewModel traitViewModel,

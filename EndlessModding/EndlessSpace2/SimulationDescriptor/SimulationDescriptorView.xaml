@@ -69,7 +69,7 @@
                         </DataGrid>
                     </Grid>
                 </GroupBox>
-                <Button Grid.Row="1" Command="{Binding NewSkillDefinition}">New Simulation Descriptor</Button>
+                <Button Grid.Row="1" Command="{Binding NewSim}">New Simulation Descriptor</Button>
             </Grid>
 
             <Grid Grid.Column="1">
@@ -82,10 +82,10 @@
                 <GroupBox Header="Simulation Descriptor" Grid.Column="0">
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Text="Name"/>
-                        <TextBox TextWrapping="Wrap" Text="{Binding SimName}"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Name}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Type"/>
-                        <TextBox TextWrapping="Wrap" Text="{Binding SimType}"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Type}"/>
 
                         <Grid Margin="0, 5, 0 , 0">
                             <CheckBox Grid.Column="0" IsChecked="{Binding Serialisable, Mode=TwoWay}">Serialisable</CheckBox>
@@ -110,9 +110,9 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedProperty, Mode=TwoWay}" ItemsSource="{Binding Properties, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentProperty, Mode=TwoWay}" ItemsSource="{Binding Items, Mode=TwoWay}"/>
 
-                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding PropertyBox, Mode=OneWayToSource}" ItemsSource="{Binding PropertyAvailible}"/>
+                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding SelectedCurrentProperty, Mode=OneWayToSource}" ItemsSource="{Binding Properties}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddProperty}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveProperty}">Remove</Button>
                                 </Grid>
@@ -133,9 +133,9 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedModifier, Mode=TwoWay}" ItemsSource="{Binding Modifiers, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentModifier, Mode=TwoWay}" ItemsSource="{Binding Items1, Mode=TwoWay}"/>
 
-                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding ModifierBox, Mode=OneWayToSource}" ItemsSource="{Binding ModifierAvailible}"/>
+                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding SelectedCurrentModifier, Mode=OneWayToSource}" ItemsSource="{Binding Modifiers}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddModifier}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveModifier}">Remove</Button>
                                 </Grid>

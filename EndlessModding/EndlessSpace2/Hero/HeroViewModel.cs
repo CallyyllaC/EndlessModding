@@ -584,7 +584,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         private void saveHero()
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            if (Heros.Count > 0 && CurrentHero != null && CurrentHero != null)
+            if (Heros.Count > 0 && CurrentHero != null)
             {
                 MainWindow.IsBusy = true;
                 bool modified = false;

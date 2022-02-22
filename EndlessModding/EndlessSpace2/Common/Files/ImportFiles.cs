@@ -14,6 +14,7 @@ using Castle.Core.Logging;
 using EndlessModding.Common.Import;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Gui_GuiElement;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Localisation;
+using SteamKit2.GC.TF2.Internal;
 
 namespace EndlessModding.EndlessSpace2.Common.Files
 {
@@ -63,8 +64,11 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             //Get Simulation Descriptors
             LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor>(_data.SimulationDescriptorDefinitions, "SimulationDescriptors", "SimulationDescriptor");
 
-            LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor>(_data.SimulationDescriptorDefinitions, "SimulationDescriptors", "SimulationDescriptor");
-            LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor>(_data.SimulationDescriptorDefinitions, "SimulationDescriptors", "SimulationDescriptor");
+            //Extract their Properties and Modifiers out
+            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor,
+                EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor>(_data.SimulationPropertyDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
+            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor,
+                EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor>(_data.SimulationModifierDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
 
             //Get Encounter Play Definitions
             LoadNodes<EndlessSpace2.Common.Classes.EncounterPlayDefinition.EncounterPlayDefinition>(_data.EncounterPlayDefinitions, "EncounterPlayDefinitions", "EncounterPlayDefinition");
@@ -96,6 +100,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                     item.Description = description;
                 }
             });
+
             //Get Hero Class Definitions
             LoadNodes<EndlessSpace2.Common.Classes.HeroClassDefinitions.HeroClassDefinition>(_data.HeroClassDefinitions, "HeroClassDefinitions", "HeroClassDefinition");
 
@@ -193,14 +198,57 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 input.Add(item);
             }
         }
-        private void LoadFromObject<T>(ObservableConcurrentCollection<T> output, ObservableConcurrentCollection<T> input)
+        private void LoadFromObjectByInheritence<T1, T2>(ObservableConcurrentCollection<T2> output, ObservableConcurrentCollection<T1> input) where T2 : class where T1 : class, T2
         {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            ConcurrentBag<T2> bag = new ConcurrentBag<T2>();
+
             Parallel.ForEach(input, item =>
             {
-                System.Reflection.PropertyInfo[] properties = item.GetType().GetProperties(BindingFlags.Public);
-                var tmp = properties.Where(x => x.PropertyType == T[]).ToList();
+                if (input is T2)
+                    bag.Add(input as T2);
             });
+
+            var tmpcont = bag.OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
+            output.AddFromEnumerable(tmpcont);
         }
+        private void LoadFromObjectByPropertyArray<T1, T2>(ObservableConcurrentCollection<T2> output, ObservableConcurrentCollection<T1> input)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            ConcurrentBag<T2> bag = new ConcurrentBag<T2>();
+
+            Parallel.ForEach(input, item =>
+            {
+                var info = typeof(T1).GetProperties().FirstOrDefault(x => x.PropertyType == typeof(T2[]));
+                var array = info.GetValue(item);
+
+                if (array != null)
+                {
+                    var tmp = (T2[])array;
+                    if (tmp.Length > 0) //I shouldn't have to do this, but apparently I do...
+                    {
+                        bag.AddFromEnumerable(tmp);
+                    }
+                }
+            });
+            if (bag.Count > 0)
+            {
+                try
+                {
+                    var tmpcont = bag.OrderBy(i =>
+                        (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
+                    output.AddFromEnumerable(tmpcont);
+                }
+                catch
+                {
+                    var tmpcont = bag.OrderBy(i =>
+                        (string)i.GetType().GetProperties().Where(x => x.Name == "TargetProperty").First().GetValue(i)).ToList();
+                    output.AddFromEnumerable(tmpcont);
+                }
+
+            }
+        }
+
         T SerialiseFunc<T>(XElement xml)
         {
             try

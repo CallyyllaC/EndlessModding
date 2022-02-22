@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.SimulationPropertyDescriptors"
              xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              xmlns:common="clr-namespace:EndlessModding.Common"
-             xmlns:en="clr-namespace:EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime"
+             xmlns:amplitudeSimulator="clr-namespace:EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1000">
 
@@ -39,7 +39,7 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Sims, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Properties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -82,7 +82,7 @@
                 <GroupBox Header="Simulation Property Descriptor" Grid.Column="0">
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Text="Name"/>
-                        <TextBox TextWrapping="Wrap" Text="{Binding SimName}"/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding Name}"/>
 
                         <Grid Margin="0, 5, 0 , 0">
                             <Grid.ColumnDefinitions>
@@ -90,8 +90,8 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox Grid.Column="0" IsChecked="{Binding Sealed, Mode=TwoWay}">Sealed</CheckBox>
-                            <CheckBox Grid.Column="1" IsChecked="{Binding Serialisable, Mode=TwoWay}">Serialisable</CheckBox>
+                            <CheckBox Grid.Column="0" IsChecked="{Binding IsSealed, Mode=TwoWay}">Sealed</CheckBox>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding IsSerializable, Mode=TwoWay}">Serialisable</CheckBox>
                             <CheckBox Grid.Column="2" IsChecked="{Binding Proportional, Mode=TwoWay}">Proportional</CheckBox>
                         </Grid>
 
@@ -105,10 +105,10 @@
                         <TextBox TextWrapping="Wrap" Text="{Binding MinValue}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Composition"/>
-                        <ComboBox Text="{Binding CompositionType}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+                        <ComboBox Text="{Binding Composition}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyComposition}}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Rounding Function"/>
-                        <ComboBox Text="{Binding RoundingFunction}" ItemsSource="{common:EnumToItemsSource {x:Type en:RuntimeModuleType}}"/>
+                        <ComboBox Text="{Binding RoundingFunction}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyRoundingFunction}}"/>
 
                     </StackPanel>
                 </GroupBox>
@@ -118,10 +118,10 @@
                         <TextBlock TextWrapping="Wrap" Text="Base Value"/>
                         <TextBox TextWrapping="Wrap" Text="{Binding Maximum}"/>
 
-                        <TextBlock TextWrapping="Wrap" Text="Max Value"/>
+                        <TextBlock TextWrapping="Wrap" Text="Maximum"/>
                         <TextBox TextWrapping="Wrap" Text="{Binding Minimum}"/>
 
-                        <TextBlock TextWrapping="Wrap" Text="Min Value"/>
+                        <TextBlock TextWrapping="Wrap" Text="Minimum"/>
                         <TextBox TextWrapping="Wrap" Text="{Binding StartingRatio}"/>
                     </StackPanel>
                 </GroupBox>

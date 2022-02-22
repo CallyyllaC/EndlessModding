@@ -319,3 +319,25 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.HeroPoliticsDefinitions
         }
     }
 }
+
+namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
+{
+    public partial class SimulationDescriptor
+    {
+
+        [XmlIgnore]
+        public bool Custom { get; set; } = false;
+    }
+    public partial class SimulationPropertyDescriptor
+    {
+
+        [XmlIgnore]
+        public bool Custom { get; set; } = false;
+    }
+    public partial class SimulationModifierDescriptor
+    {
+
+        [XmlIgnore]
+        public bool Custom { get; set; } = false;
+    }
+}
