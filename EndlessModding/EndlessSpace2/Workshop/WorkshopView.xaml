@@ -53,7 +53,7 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid exten:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1" ItemsSource="{Binding Mods, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid exten:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1" ItemsSource="{Binding Mods, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Title</DataGridTextColumn.Header>
@@ -132,7 +132,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedAuthor, Mode=TwoWay}" ItemsSource="{Binding Author, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedAuthor, Mode=TwoWay}" ItemsSource="{Binding Author, Mode=TwoWay}"/>
 
                                     <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding NewAuthor, Mode=OneWayToSource}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddAuthor}">Add</Button>
@@ -150,7 +150,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedTag, Mode=TwoWay}" ItemsSource="{Binding Tags, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding SelectedTag, Mode=TwoWay}" ItemsSource="{Binding Tags, Mode=TwoWay}"/>
 
                                     <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding TagsBox, Mode=OneWayToSource}" ItemsSource="{Binding TagsAvailible}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddTag}">Add</Button>
@@ -183,7 +183,7 @@
                                 <TextBox Grid.Column="1" Name="SearchBox1"></TextBox>
                             </Grid>
 
-                            <DataGrid Grid.Row="1" exten:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox1, Path=Text, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True" MaxColumnWidth="250">
+                            <DataGrid Grid.Row="1" exten:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox1, Path=Text, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True" MaxColumnWidth="250">
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Width="auto" Header="Details" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -285,7 +285,7 @@
                                 <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                                 <TextBox Grid.Column="1" Name="SearchBox2"></TextBox>
                             </Grid>
-                            <DataGrid exten:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox2, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1" ItemsSource="{Binding Exportables, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True"  MaxColumnWidth="250">
+                            <DataGrid exten:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox2, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1" ItemsSource="{Binding Exportables, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True"  MaxColumnWidth="250">
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Width="auto" Header="Enabled" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>

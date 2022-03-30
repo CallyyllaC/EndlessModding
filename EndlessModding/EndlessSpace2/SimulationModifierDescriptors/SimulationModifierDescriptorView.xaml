@@ -40,10 +40,13 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Modifiers, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Modifiers, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
+                                <DataGridTextColumn Width="auto" Binding="{Binding ModifierType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Type</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Path</DataGridTextColumn.Header>
                                 </DataGridTextColumn>
                                 <DataGridCheckBoxColumn Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
@@ -70,7 +73,7 @@
                         </DataGrid>
                     </Grid>
                 </GroupBox>
-                <Button Grid.Row="1" Command="{Binding NewSkillDefinition}" Content="New Simulation Modifier Descriptor"/>
+                <Button Grid.Row="1" Command="{Binding NewSim}" Content="New Simulation Modifier Descriptor"/>
             </Grid>
 
             <Grid Grid.Column="1">

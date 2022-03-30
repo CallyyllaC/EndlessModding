@@ -32,7 +32,8 @@
                     <TextBlock Text="Game Install Directory: " Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
                     <TextBox x:Name="TextBox_GameDir" Grid.Column="1" Grid.Row="0" Text="{Binding LocGameDir_Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button x:Name="Button_GameDir" Grid.Column="2" Grid.Row="0" Content="Browse"  Command="{Binding ButtonGameDirClick}"/>
-                    <TextBlock x:Name="Text_GameDirStatus" Text="{Binding GameDirStatus_Text}" Foreground="{Binding GameDirStatus_Foreground}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+                    <TextBlock x:Name="Text_GameDirStatus" Text="{Binding GameDirStatus_Text}" Foreground="{Binding GameDirStatus_Foreground}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
+                    <CheckBox IsChecked="{Binding LoadGameSim}" Command="{Binding CheckboxChecked}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Load Simulation Descriptors" Margin="5,0"  Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="Workshop Directory" Grid.Row="1">
@@ -61,10 +62,11 @@
                         <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding LocalModDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Grid.Column="2" Grid.Row="1" Content="Browse" Command="{Binding ButtonOutDirClick}"/>
                     </Grid>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="3">
+                    <VirtualizingStackPanel VirtualizationMode="Recycling" ScrollUnit="Pixel" Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="3">
                         <CheckBox IsEnabled="{Binding CanImportMods}" IsChecked="{Binding LoadSteamMods}" Command="{Binding CheckboxChecked}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Load Steam mods" Margin="0,0, 5, 0"/>
                         <CheckBox IsEnabled="{Binding CanImportMods}" IsChecked="{Binding LoadLocalMods}" Command="{Binding CheckboxChecked}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Load Local mods" Margin="5,0"/>
-                    </StackPanel>
+                        <CheckBox IsEnabled="{Binding CanImportMods}" IsChecked="{Binding LoadLocalSim}" Command="{Binding CheckboxChecked}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Content="Load Simulation Descriptors" Margin="5,0"/>
+                        </VirtualizingStackPanel>
                 </Grid>
             </GroupBox>
             <Grid Grid.Row="2">
@@ -72,7 +74,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
+                <VirtualizingStackPanel VirtualizationMode="Recycling" ScrollUnit="Pixel" Grid.Column="0">
                     <GroupBox Header="About">
                         <TextBlock TextWrapping="Wrap" Text="{Binding About}"/>
                     </GroupBox>
@@ -82,15 +84,15 @@
                     <GroupBox Header="Github">
                         <TextBlock TextWrapping="Wrap" Text="{Binding Github}"/>
                     </GroupBox>
-                </StackPanel>
-                <StackPanel Grid.Column="1">
+                </VirtualizingStackPanel>
+                <VirtualizingStackPanel VirtualizationMode="Recycling" ScrollUnit="Pixel" Grid.Column="1">
                     <GroupBox Header="Known bugs">
                         <TextBlock TextWrapping="Wrap" Text="{Binding Bugs}"/>
                     </GroupBox>
                     <GroupBox Header="How to use">
                         <TextBlock TextWrapping="Wrap" Text="{Binding HowTo}"/>
                     </GroupBox>
-                </StackPanel>
+                </VirtualizingStackPanel>
             </Grid>
         </Grid>
     </ScrollViewer>

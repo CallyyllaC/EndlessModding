@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Castle.Core.Logging;
+using EndlessModding.Common.DataStructures;
 using EndlessModding.Common.Import;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Gui_GuiElement;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Localisation;
+
 using SteamKit2.GC.TF2.Internal;
 
 namespace EndlessModding.EndlessSpace2.Common.Files
@@ -60,15 +62,12 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             //Get Locales
             LoadLocales();
-
             //Get Simulation Descriptors
             LoadNodes<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor>(_data.SimulationDescriptorDefinitions, "SimulationDescriptors", "SimulationDescriptor");
 
             //Extract their Properties and Modifiers out
-            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor,
-                EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor>(_data.SimulationPropertyDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
-            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor,
-                EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor>(_data.SimulationModifierDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
+            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor>(_data.SimulationPropertyDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
+            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor>(_data.SimulationModifierDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
 
             //Get Encounter Play Definitions
             LoadNodes<EndlessSpace2.Common.Classes.EncounterPlayDefinition.EncounterPlayDefinition>(_data.EncounterPlayDefinitions, "EncounterPlayDefinitions", "EncounterPlayDefinition");
@@ -143,7 +142,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 }
             };
         }
-        private void LoadNodes<T>(ObservableConcurrentCollection<T> input, string Mask, string Node)
+        private void LoadNodes<T>(EndlessObservableConcurrentCollection<T> input, string Mask, string Node)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             ConcurrentBag<T> bag = new ConcurrentBag<T>();
@@ -166,9 +165,9 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 }
             };
 
-            var tmpcont = bag.OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
+            var tmpcont = bag.AsParallel().OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
 
-            input.AddFromEnumerable(tmpcont);
+            input.AddRange(tmpcont);
         }
         private void LoadGuiElements<T>(HashSet<T> input, string Mask)
         {
@@ -198,7 +197,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 input.Add(item);
             }
         }
-        private void LoadFromObjectByInheritence<T1, T2>(ObservableConcurrentCollection<T2> output, ObservableConcurrentCollection<T1> input) where T2 : class where T1 : class, T2
+        private void LoadFromObjectByInheritence<T1, T2>(EndlessObservableConcurrentCollection<T2> output, EndlessObservableConcurrentCollection<T1> input) where T2 : class where T1 : class, T2
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             ConcurrentBag<T2> bag = new ConcurrentBag<T2>();
@@ -210,9 +209,9 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             });
 
             var tmpcont = bag.OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
-            output.AddFromEnumerable(tmpcont);
+            output.AddRange(tmpcont);
         }
-        private void LoadFromObjectByPropertyArray<T1, T2>(ObservableConcurrentCollection<T2> output, ObservableConcurrentCollection<T1> input)
+        private void LoadFromObjectByPropertyArray<T1, T2>(EndlessObservableConcurrentCollection<T2> output, EndlessObservableConcurrentCollection<T1> input)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             ConcurrentBag<T2> bag = new ConcurrentBag<T2>();
@@ -237,13 +236,13 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 {
                     var tmpcont = bag.OrderBy(i =>
                         (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
-                    output.AddFromEnumerable(tmpcont);
+                    output.AddRange(tmpcont);
                 }
                 catch
                 {
                     var tmpcont = bag.OrderBy(i =>
                         (string)i.GetType().GetProperties().Where(x => x.Name == "TargetProperty").First().GetValue(i)).ToList();
-                    output.AddFromEnumerable(tmpcont);
+                    output.AddRange(tmpcont);
                 }
 
             }

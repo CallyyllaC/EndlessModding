@@ -173,7 +173,9 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
         private ImportMods _importMods;
         private Data _data;
         private bool _loadLocalMods = false;
+        private bool _loadLocalSim = false;
         private bool _loadSteamlMods = false;
+        private bool _loadGameSim = false;
         private string _localModDirector;
         private string _steamModDirectory;
         private string _gameDirStatus_Text = "Please locate the game install directory.";

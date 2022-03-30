@@ -10,15 +10,19 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Castle.Core.Logging;
 using EndlessModding.Common;
+using EndlessModding.Common.DataStructures;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator;
 using EndlessModding.EndlessSpace2.Common.Files;
+using SteamKit2.GC.Dota.Internal;
+
 
 namespace EndlessModding.EndlessSpace2.SimulationPropertyDescriptors
 {
     public class SimulationPropertyDescriptorViewModel : INotifyPropertyChanged
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
-        public ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor> Properties { get; set; }
+        public EndlessObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor> Properties { get; set; }
+
         //properties
         public ICommand LoadSim { get; }
         public ICommand NewSim { get; }
@@ -253,7 +257,7 @@ namespace EndlessModding.EndlessSpace2.SimulationPropertyDescriptors
         private void newSim(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            Properties.AddFromEnumerable(new Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor[] { new Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor() { Custom = true } });
+            Properties.Add(new Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor() { Custom = true });
             CurrentSim = Properties.Last();
         }
 
@@ -320,25 +324,32 @@ namespace EndlessModding.EndlessSpace2.SimulationPropertyDescriptors
                 }
                 if (Proportional)
                 {
-                    var tmp = (SimulationPropertyDescriptor_Proportional)CurrentSim;
+                    if (CurrentSim is SimulationPropertyDescriptor_Proportional)
+                    {
+                        var tmp = (SimulationPropertyDescriptor_Proportional)CurrentSim;
 
-                    if (tmp.StartingRatio != StartingRatio)
-                    {
-                        tmp.StartingRatio = StartingRatio;
-                        RaisePropertyChanged(tmp, "StartingRatio");
-                        modified = true;
+                        if (tmp.StartingRatio != StartingRatio)
+                        {
+                            tmp.StartingRatio = StartingRatio;
+                            RaisePropertyChanged(tmp, "StartingRatio");
+                            modified = true;
+                        }
+                        if (tmp.Maximum != Maximum)
+                        {
+                            tmp.Maximum = Maximum;
+                            RaisePropertyChanged(tmp, "Maximum");
+                            modified = true;
+                        }
+                        if (tmp.Minimum != Minimum)
+                        {
+                            tmp.Minimum = Minimum;
+                            RaisePropertyChanged(tmp, "Minimum");
+                            modified = true;
+                        }
                     }
-                    if (tmp.Maximum != Maximum)
+                    else
                     {
-                        tmp.Maximum = Maximum;
-                        RaisePropertyChanged(tmp, "Maximum");
-                        modified = true;
-                    }
-                    if (tmp.Minimum != Minimum)
-                    {
-                        tmp.Minimum = Minimum;
-                        RaisePropertyChanged(tmp, "Minimum");
-                        modified = true;
+                        _logger.Error($"{CurrentSim}: {CurrentSim.Name} Should be proportional : probably scrolled too fast");
                     }
                 }
 

@@ -17,7 +17,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using EndlessModding.Common.DataStructures;
 using EndlessModding.EndlessSpace2.Common.Files;
+
 
 namespace EndlessModding.EndlessSpace2.Workshop
 {
@@ -48,7 +50,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 }
             }
         }
-        public ObservableConcurrentCollection<RuntimePlugin> Plugins
+        public EndlessObservableConcurrentCollection<RuntimePlugin> Plugins
         {
             get => _plugins;
             set
@@ -204,7 +206,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 }
             }
         }
-        public ObservableConcurrentCollection<RuntimeModule> Mods
+        public EndlessObservableConcurrentCollection<RuntimeModule> Mods
         {
             get => _mods;
             set
@@ -216,7 +218,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 }
             }
         }
-        public ObservableConcurrentCollection<IExportable> Exportables
+        public EndlessObservableConcurrentCollection<IExportable> Exportables
         {
             get => _exportables;
             set
@@ -263,14 +265,14 @@ namespace EndlessModding.EndlessSpace2.Workshop
         //Fields
         private string[] _tags;
         private string _tagsBox;
-        private ObservableConcurrentCollection<RuntimePlugin> _plugins = new ObservableConcurrentCollection<RuntimePlugin>();
+        private EndlessObservableConcurrentCollection<RuntimePlugin> _plugins = new EndlessObservableConcurrentCollection<RuntimePlugin>();
         private RuntimeModule _currentMod = null;
         private int _selectedAuthor = 0;
         private int _selectedTag = 0;
         private string _newAuthor = "";
         private readonly ILogger _logger;
-        private ObservableConcurrentCollection<RuntimeModule> _mods;
-        private ObservableConcurrentCollection<IExportable> _exportables;
+        private EndlessObservableConcurrentCollection<RuntimeModule> _mods;
+        private EndlessObservableConcurrentCollection<IExportable> _exportables;
         private string _version;
         private string _releaseNotes;
         private string[] _author;
@@ -334,7 +336,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
         private void newMod(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            Mods.AddFromEnumerable(new RuntimeModule[] { new RuntimeModule() { Type = RuntimeModuleType.Extension } });
+            Mods.Add( new RuntimeModule() { Type = RuntimeModuleType.Extension });
             CurrentMod = Mods.Last();
         }
         private bool canNewMod(object obj)
@@ -397,7 +399,7 @@ namespace EndlessModding.EndlessSpace2.Workshop
                 {
                     foreach (var item in CurrentMod.Plugins)
                     {
-                        Plugins.AddFromEnumerable(new RuntimePlugin[] { item });
+                        Plugins.Add(item);
                     }
                 }
                 MainWindow.IsBusy = false;

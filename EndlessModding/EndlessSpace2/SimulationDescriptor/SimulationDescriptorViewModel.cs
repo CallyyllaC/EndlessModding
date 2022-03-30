@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Castle.Core.Logging;
 using EndlessModding.Common;
+using EndlessModding.Common.DataStructures;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition;
 using EndlessModding.EndlessSpace2.Common.Files;
+
 using SteamKit2.Internal;
 
 namespace EndlessModding.EndlessSpace2.SimulationDescriptor
@@ -21,9 +23,9 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
 
-        public ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor> Sims { get; set; }
-        public ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor> Properties { get; set; }
-        public ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor> Modifiers { get; set; }
+        public EndlessObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor> Sims { get; set; }
+        public EndlessObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor> Properties { get; set; }
+        public EndlessObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor> Modifiers { get; set; }
 
         //properties
         public string Name
@@ -99,6 +101,10 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
             }
         }
 
+        //TODO: Take a look at items boxes in sim desk
+        //TODO: Implement skills and skill trees
+        //TODO: Add saving
+
         //fields
 
         private readonly ILogger _logger;
@@ -151,7 +157,7 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
         private void newSim(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            Sims.AddFromEnumerable(new Common.Classes.Amplitude_Simulator.SimulationDescriptor[] { new Common.Classes.Amplitude_Simulator.SimulationDescriptor() { Custom = true } });
+            Sims.Add(new Common.Classes.Amplitude_Simulator.SimulationDescriptor() { Custom = true });
             CurrentSim = Sims.Last();
         }
 
@@ -188,16 +194,18 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
                     modified = true;
                 }
 
-                if (!CurrentSim.Items.Select(x => x.Name)
-                    .SequenceEqual(Items.Select(x => x.Name)))
+                if (CurrentSim?.Items?.Length > 0 &&
+                    !CurrentSim.Items.Select(x => x.Name)
+                        .SequenceEqual(Items.Select(x => x.Name)))
                 {
                     GetObjectFromArray(CurrentSim.Items, Items);
                     RaisePropertyChanged(CurrentSim, "Items");
                     modified = true;
                 }
 
-                if (!CurrentSim.Items1.Select(x => x)
-                    .SequenceEqual(Items1.Select(x => x)))
+                if (CurrentSim?.Items1?.Length > 0 &&
+                    !CurrentSim.Items1.Select(x => x)
+                        .SequenceEqual(Items1.Select(x => x)))
                 {
                     GetObjectFromArray(CurrentSim.Items1, Items1);
                     RaisePropertyChanged(CurrentSim, "Items1");

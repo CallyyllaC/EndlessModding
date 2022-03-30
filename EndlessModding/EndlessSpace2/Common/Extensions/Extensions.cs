@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.ServiceModel.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Caching;
@@ -14,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime;
+using EndlessModding.EndlessSpace2.SimulationModifierDescriptors;
 using SteamKit2.Internal;
 
 namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Runtime
@@ -162,7 +164,8 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.HeroSkillDefinition
         public bool Enabled { get; set; } = false;
 
         [XmlIgnore]
-        public int LevelCount {
+        public int LevelCount
+        {
             get
             {
                 return SkillLevel.Length;
@@ -324,20 +327,139 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
 {
     public partial class SimulationDescriptor
     {
-
         [XmlIgnore]
         public bool Custom { get; set; } = false;
+        public override string ToString()
+        {
+            return $"{this.Custom} {this.Name} Items:{this.Items?.Length} Items1:{this.Items1?.Length}";
+        }
     }
     public partial class SimulationPropertyDescriptor
     {
-
         [XmlIgnore]
         public bool Custom { get; set; } = false;
+
+        [XmlIgnore]
+        private bool _proportional = false;
+
+        [XmlIgnore]
+        public bool Proportional
+        {
+            get
+            {
+                if (this is SimulationPropertyDescriptor_Proportional)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            private set => _proportional = value;
+        }
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+    public partial class SimulationPropertyDescriptor_Proportional
+    {
+        public override string ToString()
+        {
+            return Name;
+        }
     }
     public partial class SimulationModifierDescriptor
     {
+        [XmlIgnore]
+        public string Name = "null";
 
         [XmlIgnore]
         public bool Custom { get; set; } = false;
+
+        private string GetName()
+        {
+            string output = $"Unknown: {TargetProperty} {Operation}";
+
+            if (Custom)
+            {
+                output = "C: " + output;
+            }
+
+            return output;
+        }
+
+        public override string ToString()
+        {
+            Name = GetName();
+            return Name;
+        }
+    }
+    public partial class BinarySimulationModifierDescriptor
+    {
+        [XmlIgnore]
+        public ModifierEnum ModifierType { get; } = ModifierEnum.Binary;
+        private string GetName()
+        {
+            string output = $"Binary: {TargetProperty} {Operation} {BinaryOperation}";
+
+            if (Custom)
+            {
+                output = "C: " + output;
+            }
+
+            return output;
+        }
+
+        public override string ToString()
+        {
+            Name = GetName();
+            return Name;
+        }
+    }
+    public partial class CountSimulationModifierDescriptor
+    {
+        [XmlIgnore]
+        public ModifierEnum ModifierType { get; } = ModifierEnum.Count;
+        private string GetName()
+        {
+            string output = $"Count: {TargetProperty} {Operation} {Multiplier}";
+
+            if (Custom)
+            {
+                output = "C: " + output;
+            }
+
+            return output;
+        }
+
+        public override string ToString()
+        {
+            Name = GetName();
+            return Name;
+        }
+    }
+    public partial class SingleSimulationModifierDescriptor
+    {
+        [XmlIgnore]
+        public new string Name = null;
+        [XmlIgnore]
+        public ModifierEnum ModifierType { get; } = ModifierEnum.Single;
+        private string GetName()
+        {
+            string output = $"Single: {TargetProperty} {Operation} {Value}";
+
+            if (Custom)
+            {
+                output = "C: " + output;
+            }
+
+            return output;
+        }
+
+        public override string ToString()
+        {
+            Name = GetName();
+            return Name;
+        }
     }
 }

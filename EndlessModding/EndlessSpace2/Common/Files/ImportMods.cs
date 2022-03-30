@@ -10,6 +10,8 @@ using System.Windows;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Castle.Core.Logging;
+using EndlessModding.Common.DataStructures;
+
 
 namespace EndlessModding.EndlessSpace2.Common.Files
 {
@@ -38,8 +40,13 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             }
             _modFiles = tmplist.ToHashSet();
             LoadMods(_data.RuntimeModules, "RuntimeModule");
+
+            //Get Simulation Descriptors
+            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor>(_data.SimulationPropertyDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
+            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor>(_data.SimulationModifierDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
+
         }
-        private void LoadMods(ObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> input, string Node)
+        private void LoadMods(EndlessObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> input, string Node)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var bag = new ConcurrentBag<Classes.Amplitude_Runtime.RuntimeModule>();
@@ -77,7 +84,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             var tmpcont = bag.OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
 
-            input.AddFromEnumerable(tmpcont);
+            input.AddRange(tmpcont);
         }
         private void LoadPlugins(Classes.Amplitude_Runtime.RuntimePlugin[] input, string fileDirectory)
         {
@@ -123,7 +130,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                         string[] files = tmp.FilePath;
                         Type tmp2 = GetTypeOfFile(tmp.DataType);
                         plugin.Type = tmp2 == null ? "DatabasePlugin" : tmp2.Name;
-                        Debug.Write(tmp2);
+                        Debug.WriteLine(tmp2);
                         if (tmp.ExtraTypes != null && tmp.ExtraTypes.Length > 0)
                         {
                             plugin.ExtraTypesString = string.Join(" \n", tmp.ExtraTypes.Select(x => x.DataType.Replace(", Assembly-CSharp", "")).ToArray());
@@ -161,7 +168,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 }
             };
 
-            foreach (var mod in input)
+            Parallel.ForEach(input, mod =>
             {
                 try
                 {
@@ -171,13 +178,13 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 {
                     _logger.Error($"Failed to load plugins: {mod}: {e.Message}");
                 }
-            }
+            });
             Application.Current.Dispatcher.BeginInvoke(new Action(() => LoadHeroGUIElements(fileDirectory + "\\")));
         }
         private bool MatchTypes(FieldInfo arg, Type tmp3)
         {
             var argtype = arg.FieldType.GetGenericTypeDefinition();
-            if (argtype == typeof(ObservableConcurrentCollection<object>).GetGenericTypeDefinition())
+            if (argtype == typeof(EndlessObservableConcurrentCollection<object>).GetGenericTypeDefinition())
             {
                 var argparam = arg.FieldType.GetGenericArguments()[0];
                 if (argparam == tmp3)
@@ -189,9 +196,9 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         }
         private void LoadNodes(object input, string FilePath, string[] Files, Type Node, Type FieldType, out string Name)
         {
-            ConcurrentBag<object> bag = new ConcurrentBag<object>();
+            List<object> bag = new List<object>();
 
-            foreach (var file in Files)
+            foreach(var file in Files)
             {
                 try
                 {
@@ -212,7 +219,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 {
                     _logger.Error($"Failed to load file: {file}: {e.Message}");
                 }
-            };
+            }
 
             var tmpcont = bag.OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
             Name = string.Join(", ", bag.Select(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)));
@@ -221,25 +228,16 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             foreach (var item in tmpcont)
             {
-                //enable the custom attribute
-                if (item is EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition) //TODO make generic has custom attribute
+                foreach (var bool_field in item.GetType()
+                             .GetProperties()
+                             .Where(x => x.PropertyType == false.GetType() && x.Name == "Custom"))
                 {
-                    var hero = (EndlessSpace2.Common.Classes.HeroDefinition.HeroDefinition)item;
-                    hero.Custom = true;
-
-                    var type = input.GetType();
-                    var method = type.GetMethod("TryAdd", BindingFlags.NonPublic | BindingFlags.Instance);
-                    method.Invoke(input, new object[] { hero });
-                }
-                else
-                {
-
-                    var type = input.GetType();
-                    var method = type.GetMethod("TryAdd", BindingFlags.NonPublic | BindingFlags.Instance);
-                    _ = method.Invoke(input, new object[] { item });
+                    bool_field.SetValue(item, true, null);
                 }
 
-
+                var type = input.GetType();
+                var method = type.GetMethod("Add");
+                _ = method.Invoke(input, new object[] { item });
             }
         }
         private void LoadNodes(string FilePath, string[] Files)
@@ -247,29 +245,29 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             foreach (var file in Files)
             {
                 var subfiles = Directory.GetFiles(FilePath + "\\" + file + "\\english\\", "*.xml", SearchOption.AllDirectories);
-                foreach (var xmls in subfiles)
-                {
-                    try
+                    foreach (var xmls in subfiles)
                     {
-                        XElement document = XElement.Load(xmls);
-
-                        var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
-                            .Select(SerialiseFunc<Classes.Amplitude_Localisation.LocalizationPair>)
-                            .ToArray();
-                        _logger.Info($"Load file: {file}");
-
-                        foreach (var item in definitions)
+                        try
                         {
-                            LocalizationPairs.Add((Classes.Amplitude_Localisation.LocalizationPair)item);
-                        }
+                            XElement document = XElement.Load(xmls);
 
+                            var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
+                                .Select(SerialiseFunc<Classes.Amplitude_Localisation.LocalizationPair>)
+                                .ToArray();
+                            _logger.Info($"Load file: {file}");
+
+                            foreach (var item in definitions)
+                            {
+                                LocalizationPairs.Add((Classes.Amplitude_Localisation.LocalizationPair)item);
+                            }
+
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Error($"Failed to load file: {file}: {e.Message}");
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        _logger.Error($"Failed to load file: {file}: {e.Message}");
-                    }
-                }
-            };
+                };
         }
         private void LoadModImage(string FilePath, EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule Mod)
         {
@@ -419,5 +417,43 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                 return null;
             }
         }
+
+        private void LoadFromObjectByPropertyArray<T1, T2>(EndlessObservableConcurrentCollection<T2> output, EndlessObservableConcurrentCollection<T1> input)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            ConcurrentBag<T2> bag = new ConcurrentBag<T2>();
+
+            Parallel.ForEach(input, item =>
+            {
+                var info = typeof(T1).GetProperties().FirstOrDefault(x => x.PropertyType == typeof(T2[]));
+                var array = info.GetValue(item);
+
+                if (array != null)
+                {
+                    var tmp = (T2[])array;
+                    if (tmp.Length > 0) //I shouldn't have to do this, but apparently I do...
+                    {
+                        bag.AddFromEnumerable(tmp);
+                    }
+                }
+            });
+            if (bag.Count > 0)
+            {
+                try
+                {
+                    var tmpcont = bag.OrderBy(i =>
+                        (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
+                    output.AddRange(tmpcont);
+                }
+                catch
+                {
+                    var tmpcont = bag.OrderBy(i =>
+                        (string)i.GetType().GetProperties().Where(x => x.Name == "TargetProperty").First().GetValue(i)).ToList();
+                    output.AddRange(tmpcont);
+                }
+
+            }
+        }
+
     }
 }

@@ -8,15 +8,17 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Castle.Core.Logging;
+using EndlessModding.Common.DataStructures;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroSkillTreeDefinitions;
 using EndlessModding.EndlessSpace2.Common.Files;
+
 
 namespace EndlessModding.EndlessSpace2.SkillTree
 {
     public class SkillTreeViewModel : INotifyPropertyChanged
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
-        public ObservableConcurrentCollection<HeroSkillTreeDefinition> SkillTrees { get; set; }
+        public EndlessObservableConcurrentCollection<HeroSkillTreeDefinition> SkillTrees { get; set; }
 
         private readonly ILogger _logger;
         public SkillTreeViewModel(ILogger Logger, Data data)

@@ -21,6 +21,8 @@ using EndlessModding.EndlessSpace2.Common.Classes.TraitorBonusThresholdDefinitio
 using EndlessModding.EndlessSpace2.Common.Files;
 using log4net.Repository.Hierarchy;
 using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition.XmlNamedReference;
+using EndlessModding.Common.DataStructures;
+
 
 namespace EndlessModding.EndlessSpace2.Hero
 {
@@ -220,13 +222,13 @@ namespace EndlessModding.EndlessSpace2.Hero
         public ICommand LoadMediumImage { get; }
         //field
 
-        public ObservableConcurrentCollection<HeroDefinition> Heros { get; set; }
-        public ObservableConcurrentCollection<HeroAffinityDefinition> Affinities { get; set; }
-        public ObservableConcurrentCollection<HeroClassDefinition> Classes { get; set; }
-        public ObservableConcurrentCollection<HeroPoliticsDefinition> Politics { get; set; }
-        public ObservableConcurrentCollection<ShipDesignDefinition> Ships { get; set; }
-        public ObservableConcurrentCollection<Common.Classes.HeroSkillDefinition.HeroSkillDefinition> Skills { get; set; }
-        public ObservableConcurrentCollection<Common.Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition> SkillTrees { get; set; }
+        public EndlessObservableConcurrentCollection<HeroDefinition> Heros { get; set; }
+        public EndlessObservableConcurrentCollection<HeroAffinityDefinition> Affinities { get; set; }
+        public EndlessObservableConcurrentCollection<HeroClassDefinition> Classes { get; set; }
+        public EndlessObservableConcurrentCollection<HeroPoliticsDefinition> Politics { get; set; }
+        public EndlessObservableConcurrentCollection<ShipDesignDefinition> Ships { get; set; }
+        public EndlessObservableConcurrentCollection<Common.Classes.HeroSkillDefinition.HeroSkillDefinition> Skills { get; set; }
+        public EndlessObservableConcurrentCollection<Common.Classes.HeroSkillTreeDefinitions.HeroSkillTreeDefinition> SkillTrees { get; set; }
 
 
 
@@ -499,7 +501,7 @@ namespace EndlessModding.EndlessSpace2.Hero
                 return null;
             }
         }
-        private void GetObjectFromReference<T>(BindingList<T> output, ObservableConcurrentCollection<T> lookup, XmlNamedReference[] input)
+        private void GetObjectFromReference<T>(BindingList<T> output, EndlessObservableConcurrentCollection<T> lookup, XmlNamedReference[] input)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             output.Clear();
@@ -520,7 +522,7 @@ namespace EndlessModding.EndlessSpace2.Hero
                 }
             }
         }
-        private T GetObjectFromReference<T>(ObservableConcurrentCollection<T> lookup, XmlNamedReference input)
+        private T GetObjectFromReference<T>(EndlessObservableConcurrentCollection<T> lookup, XmlNamedReference input)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             var lookfor = lookup.ElementAt(0).GetType().GetProperties().First(x => x.Name == "Name");
@@ -572,7 +574,7 @@ namespace EndlessModding.EndlessSpace2.Hero
         private void newHero(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            Heros.AddFromEnumerable(new HeroDefinition[] { new HeroDefinition() { Custom = true } });
+            Heros.AddRange(new HeroDefinition[] { new HeroDefinition() { Custom = true } });
             CurrentHero = Heros.Last();
         }
 

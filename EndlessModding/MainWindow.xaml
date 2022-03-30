@@ -31,7 +31,7 @@
 
             <Image Source="/EndlessSpace2/EndlessModding.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" Grid.ColumnSpan="2" Width="540" Height="540"/>
 
-            <StackPanel Margin="5" Grid.Column="0">
+            <VirtualizingStackPanel VirtualizationMode="Recycling" ScrollUnit="Pixel" Margin="5" Grid.Column="0">
                 <Button x:Name="Endless_Legend" Opacity="0.3" IsEnabled="False">
                     Placeholder Game
                 </Button>
@@ -44,10 +44,10 @@
                 <Button x:Name="Humankind" Opacity="0.3"  IsEnabled="False">
                     Placeholder Game
                 </Button>
-            </StackPanel>
+            </VirtualizingStackPanel>
 
             <GroupBox Header="News" Margin="5" Grid.Column="1" Opacity="0.5" Background="Transparent">
-                <DataGrid Opacity="0.8" Background="Transparent" SelectedIndex="{Binding SelectedNews}" ItemsSource="{Binding News, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" SelectionMode="Single"  AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False" IsSynchronizedWithCurrentItem="True">
+                <DataGrid Opacity="0.8" Background="Transparent" SelectedIndex="{Binding SelectedNews}" ItemsSource="{Binding News, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" SelectionMode="Single"  AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="False" IsSynchronizedWithCurrentItem="True">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
                             <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>

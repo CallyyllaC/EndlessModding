@@ -39,10 +39,13 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Sims, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Sims, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Type</DataGridTextColumn.Header>
                                 </DataGridTextColumn>
                                 <DataGridCheckBoxColumn Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
@@ -88,7 +91,7 @@
                         <TextBox TextWrapping="Wrap" Text="{Binding Type}"/>
 
                         <Grid Margin="0, 5, 0 , 0">
-                            <CheckBox Grid.Column="0" IsChecked="{Binding Serialisable, Mode=TwoWay}">Serialisable</CheckBox>
+                            <CheckBox Grid.Column="0" IsChecked="{Binding IsSerializable, Mode=TwoWay}">Serialisable</CheckBox>
                         </Grid>
 
                     </StackPanel>
@@ -110,9 +113,9 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentProperty, Mode=TwoWay}" ItemsSource="{Binding Items, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentProperty, Mode=TwoWay}" ItemsSource="{Binding Items, Mode=TwoWay}"/>
 
-                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding SelectedCurrentProperty, Mode=OneWayToSource}" ItemsSource="{Binding Properties}"/>
+                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding SelectedCurrentProperty.ToString(), Mode=OneWayToSource}" ItemsSource="{Binding Properties}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddProperty}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveProperty}">Remove</Button>
                                 </Grid>
@@ -133,9 +136,9 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentModifier, Mode=TwoWay}" ItemsSource="{Binding Items1, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentModifier, Mode=TwoWay}" ItemsSource="{Binding Items1, Mode=TwoWay}"/>
 
-                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding SelectedCurrentModifier, Mode=OneWayToSource}" ItemsSource="{Binding Modifiers}"/>
+                                    <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding SelectedCurrentModifier.ToString(), Mode=OneWayToSource}" ItemsSource="{Binding Modifiers}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddModifier}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveModifier}">Remove</Button>
                                 </Grid>

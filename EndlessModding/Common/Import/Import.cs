@@ -16,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using EndlessModding.Common.DataStructures;
+
 
 namespace EndlessModding.Common.Import
 {
@@ -27,10 +29,10 @@ namespace EndlessModding.Common.Import
             return new WriteableBitmap(img);
         }
 
-        public static ObservableConcurrentCollection<object> CreateGenericList(Type typeInList)
+        public static EndlessObservableConcurrentCollection<object> CreateGenericList(Type typeInList)
         {
-            var genericListType = typeof(ObservableConcurrentCollection<>).MakeGenericType(new[] { typeInList });
-            return (ObservableConcurrentCollection<object>)Activator.CreateInstance(genericListType);
+            var genericListType = typeof(EndlessObservableConcurrentCollection<>).MakeGenericType(new[] { typeInList });
+            return (EndlessObservableConcurrentCollection<object>)Activator.CreateInstance(genericListType);
         }
     }
 }

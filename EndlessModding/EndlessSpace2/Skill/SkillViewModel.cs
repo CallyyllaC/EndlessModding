@@ -11,11 +11,13 @@ using System.Windows.Input;
 using Castle.Core.Logging;
 using Castle.MicroKernel.Registration;
 using EndlessModding.Common;
+using EndlessModding.Common.DataStructures;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator;
 using EndlessModding.EndlessSpace2.Common.Classes.EncounterPlayDefinition;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroSkillDefinition;
 using EndlessModding.EndlessSpace2.Common.Files;
+
 using SteamKit2.Internal;
 using SimulationDescriptorReference = EndlessModding.EndlessSpace2.Common.Classes.HeroSkillDefinition.SimulationDescriptorReference;
 using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition.XmlNamedReference;
@@ -25,7 +27,7 @@ namespace EndlessModding.EndlessSpace2.Skill
     public class SkillViewModel : INotifyPropertyChanged
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
-        public ObservableConcurrentCollection<HeroSkillDefinition> Skills { get; set; }
+        public EndlessObservableConcurrentCollection<HeroSkillDefinition> Skills { get; set; }
         public HeroSkillDefinition CurrentSkill
         {
             get => _currentSkill;
@@ -361,7 +363,7 @@ namespace EndlessModding.EndlessSpace2.Skill
         private void newSkill(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            Skills.AddFromEnumerable(new HeroSkillDefinition[] { new HeroSkillDefinition() { Custom = true } });
+            Skills.Add(new HeroSkillDefinition() { Custom = true });
             CurrentSkill = Skills.Last();
         }
 

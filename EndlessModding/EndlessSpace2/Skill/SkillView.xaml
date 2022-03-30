@@ -37,7 +37,7 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Skills, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSkill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Skills, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSkill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -104,7 +104,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentTag, Mode=TwoWay}" ItemsSource="{Binding Tags, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentTag, Mode=TwoWay}" ItemsSource="{Binding Tags, Mode=TwoWay}"/>
                                     <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding NewTag, Mode=OneWayToSource}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddTag}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveTag}">Remove</Button>
@@ -121,7 +121,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSkillLevel, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillLevels, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSkillLevel, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillLevels, Mode=TwoWay}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
                                 </Grid>
@@ -145,7 +145,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHeroSDR, Mode=TwoWay}" ItemsSource="{Binding HeroSDR, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHeroSDR, Mode=TwoWay}" ItemsSource="{Binding HeroSDR, Mode=TwoWay}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
                                 </Grid>
@@ -161,7 +161,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSenateSDR, Mode=TwoWay}" ItemsSource="{Binding SenateSDR, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSenateSDR, Mode=TwoWay}" ItemsSource="{Binding SenateSDR, Mode=TwoWay}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
                                 </Grid>
@@ -177,7 +177,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentShipSDR, Mode=TwoWay}" ItemsSource="{Binding ShipSDR, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentShipSDR, Mode=TwoWay}" ItemsSource="{Binding ShipSDR, Mode=TwoWay}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
                                 </Grid>
@@ -193,7 +193,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSystemSDR, Mode=TwoWay}" ItemsSource="{Binding SystemSDR, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSystemSDR, Mode=TwoWay}" ItemsSource="{Binding SystemSDR, Mode=TwoWay}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
                                 </Grid>
@@ -209,7 +209,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMasteryLevel, Mode=TwoWay}" ItemsSource="{Binding MasteryLevels, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMasteryLevel, Mode=TwoWay}" ItemsSource="{Binding MasteryLevels, Mode=TwoWay}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
                                 </Grid>
@@ -225,7 +225,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentEncounter, Mode=TwoWay}" ItemsSource="{Binding Encounters, Mode=TwoWay}"/>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentEncounter, Mode=TwoWay}" ItemsSource="{Binding Encounters, Mode=TwoWay}"/>
                                     <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
                                     <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
                                 </Grid>

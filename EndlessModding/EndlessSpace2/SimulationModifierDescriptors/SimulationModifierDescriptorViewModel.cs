@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Castle.Core.Logging;
 using EndlessModding.Common;
+using EndlessModding.Common.DataStructures;
 using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator;
 using EndlessModding.EndlessSpace2.Common.Files;
+
 
 namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
 {
@@ -19,7 +21,7 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
 
-        public ObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor> Modifiers { get; set; }
+        public EndlessObservableConcurrentCollection<EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor> Modifiers { get; set; }
 
         //properties
         public ICommand LoadSim { get; }
@@ -282,41 +284,63 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                 {
                     _modifierType = value;
                     RaisePropertyChanged();
-                    RaisePropertyChanged("Single");
-                    RaisePropertyChanged("Binary");
-                    RaisePropertyChanged("Count");
+
+                    switch (_modifierType)
+                    {
+                        case ModifierEnum.Binary:
+                            Binary = true;
+                            Single = false;
+                            Count = false;
+                            break;
+                        case ModifierEnum.Count:
+                            Count = true;
+                            Single = false;
+                            Binary = false;
+                            break;
+                        case ModifierEnum.Single:
+                            Single = true;
+                            Binary = false;
+                            Count = false;
+                            break;
+                    }
                 }
             }
         }
 
         public bool Single
         {
-            get
+            get => _single;
+            set
             {
-                if (ModifierType == ModifierEnum.Single)
-                    return true;
-                else
-                    return false;
+                if (_single != value)
+                {
+                    _single = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public bool Binary
         {
-            get
+            get => _binary;
+            set
             {
-                if (ModifierType == ModifierEnum.Single)
-                    return true;
-                else
-                    return false;
+                if (_binary != value)
+                {
+                    _binary = value;
+                    RaisePropertyChanged();
+                }
             }
         }
         public bool Count
         {
-            get
+            get => _count;
+            set
             {
-                if (ModifierType == ModifierEnum.Single)
-                    return true;
-                else
-                    return false;
+                if (_count != value)
+                {
+                    _count = value;
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -345,6 +369,9 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
         private bool _forceFrom;
         private bool _enforceContext;
         private string _path;
+        private bool _count;
+        private bool _binary;
+        private bool _single = true;
 
 
         public SimulationModifierDescriptorViewModel(ILogger Logger, Data data)
@@ -412,7 +439,7 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
         private void newSim(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            Modifiers.AddFromEnumerable(new Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor[] { new Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor() { Custom = true } });
+            Modifiers.Add(new Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor() { Custom = true } );
             CurrentSim = Modifiers.Last();
         }
 

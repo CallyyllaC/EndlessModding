@@ -55,6 +55,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             //Loop through the modules
             foreach (var mods in modules)
             {
+                //TODO possibly make generic
                 //work out what the module is
                 if (mods is Classes.HeroDefinition.HeroDefinition)
                 {
