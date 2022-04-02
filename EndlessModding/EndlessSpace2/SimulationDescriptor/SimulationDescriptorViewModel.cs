@@ -52,6 +52,12 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
                 }
             }
         }
+
+        public BindingList<string> Types
+        {
+            get;
+            set;
+        } = new BindingList<string>();
         public bool IsSerializable
         {
             get => _isSerializable;
@@ -145,6 +151,9 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
                 IsSerializable = CurrentSim.IsSerializable;
                 GetObjectFromArray(Items, CurrentSim.Items);
                 GetObjectFromArray(Items1, CurrentSim.Items1);
+
+                //update combo boxes
+                GetObjectFromArray(Types, Sims.Select(x => x.Type).Distinct().ToArray());
                 MainWindow.IsBusy = false;
             }
         }
@@ -194,20 +203,45 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
                     modified = true;
                 }
 
-                if (CurrentSim?.Items?.Length > 0 &&
-                    !CurrentSim.Items.Select(x => x.Name)
-                        .SequenceEqual(Items.Select(x => x.Name)))
+                if (Items.Count != 0 && CurrentSim.Items != null)
                 {
-                    GetObjectFromArray(CurrentSim.Items, Items);
+                    if (CurrentSim.Items != null && !CurrentSim.Items.Select(x => x)
+                            .SequenceEqual(Items.Select(x => x)))
+                    {
+                        CurrentSim.Items = Items.ToArray();
+                        RaisePropertyChanged(CurrentSim, "Items");
+                        modified = true;
+                    }
+                }
+                else if (Items.Count == 0 && CurrentSim.Items == null)
+                {
+                    //both null ignore
+                }
+                else
+                {
+                    CurrentSim.Items = Items.ToArray();
                     RaisePropertyChanged(CurrentSim, "Items");
                     modified = true;
                 }
 
-                if (CurrentSim?.Items1?.Length > 0 &&
-                    !CurrentSim.Items1.Select(x => x)
-                        .SequenceEqual(Items1.Select(x => x)))
+                if (Items1.Count != 0 && CurrentSim.Items1 != null)
                 {
-                    GetObjectFromArray(CurrentSim.Items1, Items1);
+                    if (CurrentSim.Items1 != null && !CurrentSim.Items1.Select(x => x)
+                            .SequenceEqual(Items1.Select(x => x)))
+                    {
+                        CurrentSim.Items1 = Items1.ToArray();
+                        RaisePropertyChanged(CurrentSim, "Items1");
+                        modified = true;
+                    }
+                }
+                else if (Items1.Count == 0 && CurrentSim.Items1 == null)
+                {
+                    //both null ignore
+                }
+                else
+                {
+
+                    CurrentSim.Items1 = Items1.ToArray();
                     RaisePropertyChanged(CurrentSim, "Items1");
                     modified = true;
                 }
@@ -240,11 +274,6 @@ namespace EndlessModding.EndlessSpace2.SimulationDescriptor
                     _logger.Error(e.Message, e.InnerException);
                 }
             }
-        }
-        private void GetObjectFromArray<T>(T[] output, BindingList<T> input)
-        {
-            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            output = input.ToArray();
         }
 
         private void removeModifier(object obj)

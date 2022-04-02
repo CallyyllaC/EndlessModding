@@ -8,11 +8,15 @@
         Title="Endless Modding" Height="605" Width="550"
         ResizeMode="NoResize"
         GlowBrush="Black"
-        ShowIconOnTitleBar="True"
         BorderThickness="0"
         BorderBrush="Black"
         TitleAlignment="Center"
-        TitleBarHeight="30">
+        TitleBarHeight="30"
+                 mah:ScrollViewerHelper.IsHorizontalScrollWheelEnabled="True"
+                 Icon="/EndlessSpace2/EndlessModdingLogo.ico"
+                 IconBitmapScalingMode="HighQuality"
+                 IconEdgeMode="Aliased"
+                 ShowIconOnTitleBar="False">
 
     <Grid x:Name="Main" Margin="5">
         <Grid.RowDefinitions>
@@ -21,7 +25,7 @@
         </Grid.RowDefinitions>
 
         <Grid Margin="5" Grid.Row="0" Height="25">
-            <TextBlock Text="Endless Modding is a tool for a variety of endless games. Made by Cali."/>
+            <TextBlock Text="Endless Modding is a tool currently for modding Endless Space 2. Made by Cali."/>
         </Grid>
         <Grid Grid.Row="1" Width="540" Height="540">
             <Grid.ColumnDefinitions>
@@ -32,17 +36,17 @@
             <Image Source="/EndlessSpace2/EndlessModding.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" Grid.ColumnSpan="2" Width="540" Height="540"/>
 
             <VirtualizingStackPanel VirtualizationMode="Recycling" ScrollUnit="Pixel" Margin="5" Grid.Column="0">
-                <Button x:Name="Endless_Legend" Opacity="0.3" IsEnabled="False">
+                <!--<Button x:Name="Endless_Legend" Opacity="0.3" IsEnabled="False">
                     Placeholder Game
                 </Button>
                 <Button x:Name="Dungeon_of_the_Endless" Opacity="0.3"  IsEnabled="False">
                     Placeholder Game
-                </Button>
+                </Button>-->
                 <Button x:Name="Endless_Space_2" Opacity="0.3"  Command="{Binding EndlessSpace2Clicked}" IsEnabled="True">
                     Endless Space 2
                 </Button>
                 <Button x:Name="Humankind" Opacity="0.3"  IsEnabled="False">
-                    Placeholder Game
+                    More Games to come?
                 </Button>
             </VirtualizingStackPanel>
 

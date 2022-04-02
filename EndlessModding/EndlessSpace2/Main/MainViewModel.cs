@@ -117,18 +117,8 @@ namespace EndlessModding.EndlessSpace2.Main
             get;
         } = @"This is the new version of my ES2 Hero Designer, as you can see it has been expanded upon greatly since the last version, and now (not now now though) includes a large variety of modding tools. There have also been a lot of under the hood improvements to this tool that many of you will not be able to notice. However the original tool was both rushed in about a week, and written by a uni student with very limited experience. Not to say that this is greatly done, I have made a lot of shortcuts that will make many developers cry, however compared to the last one, this should be a lot easier to expand upon in the future as and when needed. I would also like to thank the community for their support over the years and for making developing these tools worth it.
 
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding
-I hate UI coding";
+There have been a whole bunch of performance optimisations since the last release, enjoy!";
+
         public string Steam
         {
             get;
@@ -144,7 +134,7 @@ I hate UI coding";
 
 Next, if you want to load in previously developed mods, ensure that you have the correct workshop directory selected and then tick the Load other mods box
 
-After this, you're ready to go and make your first hero, head over to the heros tab, click new hero at the bottom left, and get to it. You can also edit the original games heros too!
+After this, you're ready to go and make your first mod, head over to any of the mod tab, click new mod at the bottom left, and get to it. You can also edit the original games objects too!
 
 Once this is done, head over to the Workshop tab and do the same, click new mod (or edit an old mod) and fill out the details
 
@@ -152,9 +142,9 @@ Once that is done, go ahead and click export!";
         public string Bugs
         {
             get;
-        } = @"I've done my best, but there are a lot of things to test, and a lot of weird things that C# just does anyway from time to time.
+        } = @"I've done my best, but there are a lot of things to test, and a lot of weird things that .net just does anyway from time to time.
 
-The UI has a thing about not wanting to shrink, so resize things at your own risk, they will get bigger but not always go back.
+The UI has a thing about not wanting to shrink on its own, so resizing things might need a manual touch, they will get bigger very nicely but not always go back as easily.
 
 Logging has now been added! Log files are located in %appdata%\Cali\EndlessModding\Logging";
         public bool CanImportMods

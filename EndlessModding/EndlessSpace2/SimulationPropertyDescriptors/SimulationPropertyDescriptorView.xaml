@@ -13,7 +13,8 @@
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="200"/>
+                <ColumnDefinition Width="*" MinWidth="200" />
+                <ColumnDefinition Width="2" />
                 <ColumnDefinition Width="3*" MinWidth="600"/>
             </Grid.ColumnDefinitions>
 
@@ -39,7 +40,7 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Properties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  ColumnWidth="*"  Grid.Row="1"  ItemsSource="{Binding Properties, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -75,10 +76,12 @@
                 <Button Grid.Row="1" Command="{Binding NewSim}" Content="New Simulation Property Descriptor"/>
             </Grid>
 
-            <Grid Grid.Column="1">
+            <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+
+            <Grid Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
@@ -108,14 +111,14 @@
                         <TextBox TextWrapping="Wrap" Text="{Binding MinValue}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Composition"/>
-                        <ComboBox Text="{Binding Composition}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyComposition}}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Composition}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyComposition}}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Rounding Function"/>
-                        <ComboBox Text="{Binding RoundingFunction}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyRoundingFunction}}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding RoundingFunction}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyRoundingFunction}}"/>
 
                     </StackPanel>
                 </GroupBox>
-                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                <GridSplitter Grid.Column="1" Background="MidnightBlue" HorizontalAlignment="Stretch" Width="2"/>
                 <GroupBox Header="Proportional" Grid.Column="2">
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Text="Base Value"/>

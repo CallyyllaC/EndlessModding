@@ -331,7 +331,7 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
         public bool Custom { get; set; } = false;
         public override string ToString()
         {
-            return $"{this.Custom} {this.Name} Items:{this.Items?.Length} Items1:{this.Items1?.Length}";
+            return Name;
         }
     }
     public partial class SimulationPropertyDescriptor
@@ -371,12 +371,52 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
     public partial class SimulationModifierDescriptor
     {
         [XmlIgnore]
-        public string Name = "null";
+        public ModifierEnum ModifierType
+        {
+            get
+            {
+                if (this is BinarySimulationModifierDescriptor)
+                {
+                    return ModifierEnum.Binary;
+                }
+                else if (this is SingleSimulationModifierDescriptor)
+                {
+                    return ModifierEnum.Single;
+                }
+                else if (this is CountSimulationModifierDescriptor)
+                {
+                    return ModifierEnum.Count;
+                }
+                else
+                {
+                    return ModifierEnum.Unknown;
+                }
+
+            }
+        }
+
+        [XmlIgnore]
+        public string Name
+        {
+            get {
+                if (_name == null)
+                {
+                    _name = GetName();
+                }
+
+                return _name;
+            }
+
+            set { _name = value; }
+        }
+
+        [XmlIgnore]
+        private string _name;
 
         [XmlIgnore]
         public bool Custom { get; set; } = false;
 
-        private string GetName()
+        protected virtual string GetName()
         {
             string output = $"Unknown: {TargetProperty} {Operation}";
 
@@ -390,15 +430,12 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
 
         public override string ToString()
         {
-            Name = GetName();
             return Name;
         }
     }
     public partial class BinarySimulationModifierDescriptor
     {
-        [XmlIgnore]
-        public ModifierEnum ModifierType { get; } = ModifierEnum.Binary;
-        private string GetName()
+        protected override string GetName()
         {
             string output = $"Binary: {TargetProperty} {Operation} {BinaryOperation}";
 
@@ -412,15 +449,12 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
 
         public override string ToString()
         {
-            Name = GetName();
             return Name;
         }
     }
     public partial class CountSimulationModifierDescriptor
     {
-        [XmlIgnore]
-        public ModifierEnum ModifierType { get; } = ModifierEnum.Count;
-        private string GetName()
+        protected override string GetName()
         {
             string output = $"Count: {TargetProperty} {Operation} {Multiplier}";
 
@@ -434,17 +468,13 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
 
         public override string ToString()
         {
-            Name = GetName();
             return Name;
         }
     }
     public partial class SingleSimulationModifierDescriptor
     {
-        [XmlIgnore]
-        public new string Name = null;
-        [XmlIgnore]
-        public ModifierEnum ModifierType { get; } = ModifierEnum.Single;
-        private string GetName()
+
+        protected override string GetName()
         {
             string output = $"Single: {TargetProperty} {Operation} {Value}";
 
@@ -458,7 +488,6 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
 
         public override string ToString()
         {
-            Name = GetName();
             return Name;
         }
     }

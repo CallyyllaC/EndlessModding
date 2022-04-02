@@ -6,12 +6,13 @@
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.Skill"
              xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="1000">
+             d:DesignHeight="1000" d:DesignWidth="1000">
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="200"/>
+                <ColumnDefinition Width="*" MinWidth="200" />
+                <ColumnDefinition Width="2" />
                 <ColumnDefinition Width="3*" MinWidth="600"/>
             </Grid.ColumnDefinitions>
 
@@ -37,7 +38,7 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Skills, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSkill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  ColumnWidth="*"  Grid.Row="1"  ItemsSource="{Binding Skills, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSkill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -76,13 +77,15 @@
                 <Button Grid.Row="1" Command="{Binding NewSkillDefinition}">New Skill</Button>
             </Grid>
 
-            <Grid Grid.Column="1">
+            <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+
+            <Grid Grid.Column="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="2"/>
                         <ColumnDefinition Width="1*"/><!--
-                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="2"/>
                         <ColumnDefinition Width="1*"/>-->
                     </Grid.ColumnDefinitions>
                     <GroupBox Header="Skill Definition" Grid.Column="0">
@@ -128,7 +131,7 @@
                             </GroupBox>
                         </StackPanel>
                     </GroupBox>
-                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                    <GridSplitter Grid.Column="1" Background="MidnightBlue" HorizontalAlignment="Stretch" Width="2"/>
                     <GroupBox Header="Skill Level" Grid.Column="2">
                         <StackPanel>
                             <TextBlock TextWrapping="Wrap" Text="Name"/>
@@ -145,9 +148,17 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHeroSDR, Mode=TwoWay}" ItemsSource="{Binding HeroSDR, Mode=TwoWay}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHeroSDR, Mode=TwoWay}" ItemsSource="{Binding CurrentHeroSDRs, Mode=TwoWay}"/>
+
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding ComboHeroSDR, Mode=TwoWay}" ItemsSource="{Binding HeroSDRs, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddHeroSDR}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveHeroSDR}">Remove</Button>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="Senate Simulation" Margin="0,5,0,0">
@@ -161,9 +172,17 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSenateSDR, Mode=TwoWay}" ItemsSource="{Binding SenateSDR, Mode=TwoWay}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSenateSDR, Mode=TwoWay}" ItemsSource="{Binding CurrentSenateSDRs, Mode=TwoWay}"/>
+
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding ComboSenateSDR, Mode=TwoWay}" ItemsSource="{Binding SenateSDRs, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddSenateSDR}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveSenateSDR}">Remove</Button>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="Ship Simulation" Margin="0,5,0,0">
@@ -177,9 +196,17 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentShipSDR, Mode=TwoWay}" ItemsSource="{Binding ShipSDR, Mode=TwoWay}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentShipSDR, Mode=TwoWay}" ItemsSource="{Binding CurrentShipSDRs, Mode=TwoWay}"/>
+
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding ComboShipSDR, Mode=TwoWay}" ItemsSource="{Binding ShipSDRs, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddShipSDR}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveShipSDR}">Remove</Button>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="System Simulation" Margin="0,5,0,0">
@@ -193,9 +220,17 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSystemSDR, Mode=TwoWay}" ItemsSource="{Binding SystemSDR, Mode=TwoWay}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSystemSDR, Mode=TwoWay}" ItemsSource="{Binding CurrentSystemSDRs, Mode=TwoWay}"/>
+
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding ComboSystemSDR, Mode=TwoWay}" ItemsSource="{Binding SystemSDRs, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddSystemSDR}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveSystemSDR}">Remove</Button>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="Mastery Levels" Margin="0,5,0,0">
@@ -209,9 +244,16 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMasteryLevel, Mode=TwoWay}" ItemsSource="{Binding MasteryLevels, Mode=TwoWay}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMasteryLevel, Mode=TwoWay}" ItemsSource="{Binding CurrentMasteryLevels, Mode=TwoWay}"/>
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding ComboMasteryLevel, Mode=TwoWay}" ItemsSource="{Binding MasteryLevels, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddMastery}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveMastery}">Remove</Button>
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="Encounter Plays" Margin="0,5,0,0">
@@ -225,20 +267,20 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentEncounter, Mode=TwoWay}" ItemsSource="{Binding Encounters, Mode=TwoWay}"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddLevel}">Add</Button>
-                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveLevel}">Remove</Button>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentEncounter, Mode=TwoWay}" ItemsSource="{Binding CurrentEncounters, Mode=TwoWay}"/>
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding ComboEncounter, Mode=TwoWay}" ItemsSource="{Binding Encounters, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddEncounter}">Add</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveEncounter}">Remove</Button>
                                 </Grid>
                             </GroupBox>
                         </StackPanel>
                     </GroupBox>
-                    <!--<GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
-                    <GroupBox Header="Simulation Descriptor" Grid.Column="4">
-                        <StackPanel>
-                            <TextBlock TextWrapping="Wrap" Text="Name"/>
-                            <TextBox TextWrapping="Wrap" Text="{Binding CurrentSimulationDescriptor.Name}"/>
-                        </StackPanel>
-                    </GroupBox>-->
                 </Grid>
             </Grid>
 

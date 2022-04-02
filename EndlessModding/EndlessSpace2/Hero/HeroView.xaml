@@ -24,7 +24,7 @@
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="200" />
-                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="2" />
                 <ColumnDefinition Width="3*" MinWidth="600"/>
             </Grid.ColumnDefinitions>
 
@@ -33,7 +33,7 @@
                     <RowDefinition Height="15*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <GroupBox Header="Heroes" Grid.Row="0">
+                <GroupBox Header="Heroes" Grid.Row="0" HorizontalAlignment="Stretch">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -50,7 +50,7 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="1"  ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  ColumnWidth="*"  Grid.Row="1"  ItemsSource="{Binding Heros, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentHero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
@@ -95,16 +95,16 @@
                 <Button Grid.Row="1" Command="{Binding NewHero}">New Hero</Button>
             </Grid>
 
-            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+            <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
 
             <Grid Grid.Column="2" MinHeight="400" x:Name="prop" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" MinWidth="300"/>
-                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="2" />
                     <ColumnDefinition Width="*" MinWidth="300"/>
                 </Grid.ColumnDefinitions>
                 <!--<li:LoadingIndicator Grid.Column="0" Grid.Row="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsArcsActive}" Mode="Arcs" />-->
-                <GroupBox Header="Hero Details:">
+                <GroupBox Header="Hero Details:" HorizontalAlignment="Stretch">
                     <StackPanel Grid.Column="0" Margin="5">
                         <TextBlock>Hero Module Name:</TextBlock>
                         <TextBox Text="{Binding Name, Mode=TwoWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}" />
@@ -125,16 +125,16 @@
                         </Grid>
 
                         <TextBlock>Affinity:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Affinity, Mode=TwoWay}" ItemsSource="{Binding Affinities, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Affinity, Mode=TwoWay}" ItemsSource="{Binding Affinities, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Class:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Class, Mode=TwoWay}" ItemsSource="{Binding Classes, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Class, Mode=TwoWay}" ItemsSource="{Binding Classes, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Politics:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Politic, Mode=TwoWay}" ItemsSource="{Binding Politics, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Politic, Mode=TwoWay}" ItemsSource="{Binding Politics, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Ship:</TextBlock>
-                        <ComboBox SelectedItem="{Binding Ship, Mode=TwoWay}" ItemsSource="{Binding Ships, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Ship, Mode=TwoWay}" ItemsSource="{Binding Ships, Mode=OneWay}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}"/>
 
                         <TextBlock>Model Path:</TextBlock>
                         <TextBox Text="{Binding ModelPath, Mode=TwoWay}"  IsEnabled="{Binding ModelPathEnabled}" MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}, Path=ActualWidth}" TextWrapping="Wrap"/>
@@ -169,8 +169,8 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                <StackPanel Grid.Column="2">
+                <GridSplitter Grid.Column="1" Background="MidnightBlue" HorizontalAlignment="Stretch" Width="2"/>
+                <StackPanel Grid.Column="2"  HorizontalAlignment="Stretch">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -220,7 +220,7 @@
                                     </ListView.View>
                                 </ListView>
 
-                                <ComboBox Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding SelectedCurrentSkill, Mode=TwoWay}" ItemsSource="{Binding Skills, Mode=OneWay}">
+                                <ComboBox Grid.Row="1" Grid.ColumnSpan="2" ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True"  SelectedItem="{Binding SelectedCurrentSkill, Mode=TwoWay}" ItemsSource="{Binding Skills, Mode=OneWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Name, Mode=OneWay}" />
@@ -296,7 +296,7 @@
                                     </ListView.View>
                                 </ListView>
 
-                                <ComboBox Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding SelectedCurrentSkillTree, Mode=TwoWay}" ItemsSource="{Binding SkillTrees, Mode=OneWay}">
+                                <ComboBox Grid.Row="1" Grid.ColumnSpan="2" ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True"  SelectedItem="{Binding SelectedCurrentSkillTree, Mode=TwoWay}" ItemsSource="{Binding SkillTrees, Mode=OneWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Name, Mode=OneWay}" />

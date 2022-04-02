@@ -12,15 +12,14 @@ using Castle.Core.Logging;
 using Castle.MicroKernel.Registration;
 using EndlessModding.Common;
 using EndlessModding.Common.DataStructures;
-using EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator;
+using EndlessModding.EndlessSpace2.Common.Classes.EncounterFormationDefinition;
 using EndlessModding.EndlessSpace2.Common.Classes.EncounterPlayDefinition;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition;
+using EndlessModding.EndlessSpace2.Common.Classes.HeroMasteryDefinitions;
 using EndlessModding.EndlessSpace2.Common.Classes.HeroSkillDefinition;
 using EndlessModding.EndlessSpace2.Common.Files;
-
-using SteamKit2.Internal;
 using SimulationDescriptorReference = EndlessModding.EndlessSpace2.Common.Classes.HeroSkillDefinition.SimulationDescriptorReference;
-using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroDefinition.XmlNamedReference;
+using XmlNamedReference = EndlessModding.EndlessSpace2.Common.Classes.HeroSkillDefinition.XmlNamedReference;
 
 namespace EndlessModding.EndlessSpace2.Skill
 {
@@ -28,6 +27,13 @@ namespace EndlessModding.EndlessSpace2.Skill
     {
         public EndlessSpace2ViewModel MainWindow { get; set; }
         public EndlessObservableConcurrentCollection<HeroSkillDefinition> Skills { get; set; }
+        public EndlessObservableConcurrentCollection<EncounterPlayDefinition> Encounters { get; set; }
+        public EndlessObservableConcurrentCollection<HeroMasteryDefinition> MasteryLevels { get; set; }
+        public EndlessObservableConcurrentCollection<Common.Classes.Amplitude_Simulator.SimulationDescriptor> SimulationDescriptorDefinitions { get; set; }/*
+        public EndlessObservableConcurrentCollection<Common.Classes.Amplitude_Simulator.SimulationDescriptor> SystemSDRs { get => SimulationDescriptorDefinitions.Where(x=> x.Type == "System")}
+        public EndlessObservableConcurrentCollection<Common.Classes.Amplitude_Simulator.SimulationDescriptor> ShipSDRs { get => }
+        public EndlessObservableConcurrentCollection<Common.Classes.Amplitude_Simulator.SimulationDescriptor> SenateSDRs { get => }
+        public EndlessObservableConcurrentCollection<Common.Classes.Amplitude_Simulator.SimulationDescriptor> HeroSDRs { get =>  }*/
         public HeroSkillDefinition CurrentSkill
         {
             get => _currentSkill;
@@ -81,6 +87,9 @@ namespace EndlessModding.EndlessSpace2.Skill
             }
         }
 
+        /// <summary>
+        /// Skill definition skill levels
+        /// </summary>
         public BindingList<HeroSkillLevelDefinition> CurrentSkillLevels { get; set; } =
             new BindingList<HeroSkillLevelDefinition>();
         public int Cost
@@ -131,18 +140,6 @@ namespace EndlessModding.EndlessSpace2.Skill
                 }
             }
         }
-        public HeroSkillLevelDefinition SkillLevel
-        {
-            get => _skillLevel;
-            set
-            {
-                if (_skillLevel != value)
-                {
-                    _skillLevel = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
         public HeroSkillLevelDefinition CurrentSkillLevel
         {
             get => _currentSkillLevel;
@@ -157,6 +154,8 @@ namespace EndlessModding.EndlessSpace2.Skill
         }
 
         #endregion
+
+
         #region Skill Level
 
         public string SkillLevelName
@@ -171,21 +170,10 @@ namespace EndlessModding.EndlessSpace2.Skill
                 }
             }
         }
-        #endregion
-        public BindingList<SimulationDescriptorReference> HeroSDR { get; set; } =
-            new BindingList<SimulationDescriptorReference>();
-        public BindingList<SimulationDescriptorReference> SenateSDR { get; set; } =
-            new BindingList<SimulationDescriptorReference>();
-        public BindingList<SimulationDescriptorReference> ShipSDR { get; set; } =
-            new BindingList<SimulationDescriptorReference>();
-        public BindingList<SimulationDescriptorReference> SystemSDR { get; set; } =
-            new BindingList<SimulationDescriptorReference>();
-        public BindingList<EncounterPlayDefinition> Encounters { get; set; } =
-            new BindingList<EncounterPlayDefinition>();
-        public BindingList<MasteryLevel> MasteryLevels { get; set; } =
-            new BindingList<MasteryLevel>();
 
-        public SimulationDescriptorReference CurrentHeroSDR
+        public ICommand AddHeroSDR { get; }
+        public ICommand RemoveHeroSDR { get; }
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor CurrentHeroSDR
         {
             get => _currentHeroSDR;
             set
@@ -193,12 +181,26 @@ namespace EndlessModding.EndlessSpace2.Skill
                 if (_currentHeroSDR != value)
                 {
                     _currentHeroSDR = value;
-                    _currentSimulationDescriptor = value;
                     RaisePropertyChanged();
                 }
             }
         }
-        public SimulationDescriptorReference CurrentSenateSDR
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor ComboHeroSDR
+        {
+            get => _comboHeroSDR;
+            set
+            {
+                if (_comboHeroSDR != value)
+                {
+                    _comboHeroSDR = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public ICommand AddSenateSDR { get; }
+        public ICommand RemoveSenateSDR { get; }
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor CurrentSenateSDR
         {
             get => _currentSenateSDR;
             set
@@ -206,12 +208,26 @@ namespace EndlessModding.EndlessSpace2.Skill
                 if (_currentSenateSDR != value)
                 {
                     _currentSenateSDR = value;
-                    _currentSimulationDescriptor = value;
                     RaisePropertyChanged();
                 }
             }
         }
-        public SimulationDescriptorReference CurrentShipSDR
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor ComboSenateSDR
+        {
+            get => _comboSenateSDR;
+            set
+            {
+                if (_comboSenateSDR != value)
+                {
+                    _comboSenateSDR = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public ICommand AddShipSDR { get; }
+        public ICommand RemoveShipSDR { get; }
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor CurrentShipSDR
         {
             get => _currentShipSDR;
             set
@@ -219,12 +235,26 @@ namespace EndlessModding.EndlessSpace2.Skill
                 if (_currentShipSDR != value)
                 {
                     _currentShipSDR = value;
-                    _currentSimulationDescriptor = value;
                     RaisePropertyChanged();
                 }
             }
         }
-        public SimulationDescriptorReference CurrentSystemSDR
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor ComboShipSDR
+        {
+            get => _comboShipSDR;
+            set
+            {
+                if (_comboShipSDR != value)
+                {
+                    _comboShipSDR = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public ICommand AddSystemSDR { get; }
+        public ICommand RemoveSystemSDR { get; }
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor CurrentSystemSDR
         {
             get => _currentSystemSDR;
             set
@@ -232,23 +262,24 @@ namespace EndlessModding.EndlessSpace2.Skill
                 if (_currentSystemSDR != value)
                 {
                     _currentSystemSDR = value;
-                    _currentSimulationDescriptor = value;
                     RaisePropertyChanged();
                 }
             }
         }
-        public EncounterPlayDefinition CurrentEncounter
+        public Common.Classes.Amplitude_Simulator.SimulationDescriptor ComboSystemSDR
         {
-            get => _currentEncounter;
+            get => _comboSystemSDR;
             set
             {
-                if (_currentEncounter != value)
+                if (_comboSystemSDR != value)
                 {
-                    _currentEncounter = value;
+                    _comboSystemSDR = value;
                     RaisePropertyChanged();
                 }
             }
         }
+        public ICommand AddMastery { get; }
+        public ICommand RemoveMastery { get; }
         public MasteryLevel CurrentMasteryLevel
         {
             get => _currentMasteryLevel;
@@ -261,18 +292,68 @@ namespace EndlessModding.EndlessSpace2.Skill
                 }
             }
         }
-        public SimulationDescriptorReference CurrentSimulationDescriptor
+        public MasteryLevel ComboMasteryLevel
         {
-            get => _currentSimulationDescriptor;
+            get => _comboMasteryLevel;
             set
             {
-                if (_currentSimulationDescriptor != value)
+                if (_comboMasteryLevel != value)
                 {
-                    _currentSimulationDescriptor = value;
+                    _comboMasteryLevel = value;
                     RaisePropertyChanged();
                 }
             }
         }
+        public ICommand AddEncounter { get; }
+        public ICommand RemoveEncounter { get; }
+        public EncounterPlayDefinition CurrentEncounter
+        {
+            get => _currentEncounter;
+            set
+            {
+                if (_currentEncounter != value)
+                {
+                    _currentEncounter = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public EncounterPlayDefinition ComboEncounter
+        {
+            get => _comboEncounter;
+            set
+            {
+                if (_comboEncounter != value)
+                {
+                    _comboEncounter = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> HeroSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> SenateSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> ShipSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> SystemSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> CurrentHeroSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> CurrentSenateSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> CurrentShipSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor> CurrentSystemSDRs { get; set; } =
+            new BindingList<Common.Classes.Amplitude_Simulator.SimulationDescriptor>();
+        public BindingList<MasteryLevel> CurrentMasteryLevels { get; set; } =
+            new BindingList<MasteryLevel>();
+        public BindingList<EncounterPlayDefinition> CurrentEncounters { get; set; } =
+            new BindingList<EncounterPlayDefinition>();
+        #endregion
+
+        #region fields
         private string _skillName;
         private string _skillLevelName;
         private Common.Classes.Amplitude_Simulator.SimulationDescriptor simdes;
@@ -285,15 +366,21 @@ namespace EndlessModding.EndlessSpace2.Skill
         private HeroSkillLevelDefinition _currentSkillLevel;
         private string _skillTreeRef = "";
         private string _newTag = "";
-        private HeroSkillLevelDefinition _skillLevel;
         private HeroSkillDefinition _currentSkill;
         private MasteryLevel _currentMasteryLevel;
         private EncounterPlayDefinition _currentEncounter;
-        private SimulationDescriptorReference _currentSystemSDR;
-        private SimulationDescriptorReference _currentShipSDR;
-        private SimulationDescriptorReference _currentSenateSDR;
-        private SimulationDescriptorReference _currentHeroSDR;
-        private SimulationDescriptorReference _currentSimulationDescriptor;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _currentSystemSDR;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _currentShipSDR;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _currentSenateSDR;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _currentHeroSDR;
+        private MasteryLevel _comboMasteryLevel;
+        private EncounterPlayDefinition _comboEncounter;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _comboSystemSDR;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _comboShipSDR;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _comboSenateSDR;
+        private Common.Classes.Amplitude_Simulator.SimulationDescriptor _comboHeroSDR;
+        #endregion
+
 
         public SkillViewModel(ILogger Logger, Data data)
         {
@@ -303,6 +390,10 @@ namespace EndlessModding.EndlessSpace2.Skill
             _logger = Logger;
             _data = data;
             Skills = _data.HeroSkillDefinitions;
+            Encounters = _data.EncounterPlayDefinitions;
+            MasteryLevels = _data.MasteryLevelDefinitions;
+            SimulationDescriptorDefinitions = _data.SimulationDescriptorDefinitions;
+
             LoadSkill = new RelayCommand(canLoadSkill, loadSkill);
             NewSkill = new RelayCommand(canNewSkill, newSkill);
         }
@@ -319,6 +410,48 @@ namespace EndlessModding.EndlessSpace2.Skill
                 try
                 {
                     output.Add(item);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message, e.InnerException);
+                }
+            }
+        }
+        private void GetObjectFromReference<T>(BindingList<T> output, EndlessObservableConcurrentCollection<T> lookup, XmlNamedReference[] input)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            output.Clear();
+            var lookfor = lookup.ElementAt(0).GetType().GetProperties().Where(x => x.Name == "Name").First();
+            if (input == null)
+            {
+                return;
+            }
+            foreach (XmlNamedReference item in input)
+            {
+                try
+                {
+                    output.Add(lookup.First(x => lookfor.GetValue(x).Equals(item.Name)));
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message, e.InnerException);
+                }
+            }
+        }
+        private void GetObjectFromReference<T>(BindingList<T> output, EndlessObservableConcurrentCollection<T> lookup, SimulationDescriptorReference[] input)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            output.Clear();
+            var lookfor = lookup.ElementAt(0).GetType().GetProperties().Where(x => x.Name == "Name").First();
+            if (input == null)
+            {
+                return;
+            }
+            foreach (SimulationDescriptorReference item in input)
+            {
+                try
+                {
+                    output.Add(lookup.First(x => lookfor.GetValue(x).Equals(item.Name)));
                 }
                 catch (Exception e)
                 {
@@ -345,31 +478,21 @@ namespace EndlessModding.EndlessSpace2.Skill
                     CurrentSkillLevel = CurrentSkillLevels[0];
 
                     SkillLevelName = CurrentSkillLevel.Name;
-                    AddArrayToList(HeroSDR, CurrentSkillLevel.HeroSimulationDescriptorReference);
-                    AddArrayToList(SenateSDR, CurrentSkillLevel.SenateSimulationDescriptorReference);
-                    AddArrayToList(ShipSDR, CurrentSkillLevel.ShipSimulationDescriptorReference);
-                    AddArrayToList(SystemSDR, CurrentSkillLevel.SystemSimulationDescriptorReference);
-                    //AddArrayToList(Encounters, CurrentSkillLevel.EncounterPlayReference);
-                    AddArrayToList(MasteryLevels, CurrentSkillLevel.MasteryLevel);
+                    GetObjectFromReference(CurrentHeroSDRs, SimulationDescriptorDefinitions, CurrentSkillLevel.HeroSimulationDescriptorReference);
+                    GetObjectFromReference(CurrentSenateSDRs, SimulationDescriptorDefinitions, CurrentSkillLevel.SenateSimulationDescriptorReference);
+                    GetObjectFromReference(CurrentShipSDRs, SimulationDescriptorDefinitions, CurrentSkillLevel.ShipSimulationDescriptorReference);
+                    GetObjectFromReference(CurrentSystemSDRs, SimulationDescriptorDefinitions, CurrentSkillLevel.SystemSimulationDescriptorReference);
+                    GetObjectFromReference(CurrentEncounters, Encounters, CurrentSkillLevel.EncounterPlayReference);
+                    AddArrayToList(CurrentMasteryLevels, CurrentSkillLevel.MasteryLevel);
+
+
+                    //update the comboboxes
+                    AddArrayToList(SystemSDRs, _data.SimulationDescriptorDefinitions.Where(x => x.Type == "HeroSkillSystem").ToArray());
+                    AddArrayToList(ShipSDRs, _data.SimulationDescriptorDefinitions.Where(x => x.Type == "HeroSkillShip").ToArray());
+                    AddArrayToList(SenateSDRs, _data.SimulationDescriptorDefinitions.Where(x => x.Type == "HeroSkillSenator").ToArray());
+                    AddArrayToList(HeroSDRs, _data.SimulationDescriptorDefinitions.Where(x => x.Type == "HeroSkill").ToArray());
                 }
             }
-        }
-
-        private bool canLoadSkill(object obj)
-        {
-            return !MainWindow.IsBusy;
-        }
-
-        private void newSkill(object obj)
-        {
-            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            Skills.Add(new HeroSkillDefinition() { Custom = true });
-            CurrentSkill = Skills.Last();
-        }
-
-        private bool canNewSkill(object obj)
-        {
-            return !MainWindow.IsBusy;
         }
 
         private void saveHero()
@@ -490,6 +613,23 @@ namespace EndlessModding.EndlessSpace2.Skill
                 MainWindow.IsBusy = false;
             }*/
         }
+        private bool canLoadSkill(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private void newSkill(object obj)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            Skills.Add(new HeroSkillDefinition() { Custom = true });
+            CurrentSkill = Skills.Last();
+        }
+
+        private bool canNewSkill(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
         #region INotifyPropertyChanged
         /// <summary>
         /// Occurs when [property changed].

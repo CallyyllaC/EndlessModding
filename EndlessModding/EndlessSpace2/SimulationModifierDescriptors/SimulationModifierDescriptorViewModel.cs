@@ -649,6 +649,7 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
     {
         Single,
         Binary,
-        Count
+        Count,
+        Unknown
     }
 }
