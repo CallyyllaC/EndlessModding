@@ -97,6 +97,7 @@ namespace EndlessModding.EndlessSpace2.Main
                 {
                     _loadLocalMods = value;
                     RaisePropertyChanged();
+                    LoadLocalModsOpposite = value;
                 }
             }
         }
@@ -108,6 +109,31 @@ namespace EndlessModding.EndlessSpace2.Main
                 if (_loadSteamlMods != value)
                 {
                     _loadSteamlMods = value;
+                    RaisePropertyChanged();
+                    LoadSteamModsOpposite = value;
+                }
+            }
+        }
+        public bool LoadLocalModsOpposite
+        {
+            get => _loadLocalModsOpposite;
+            set
+            {
+                if (CanImportMods)
+                {
+                    _loadLocalModsOpposite = !value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+        public bool LoadSteamModsOpposite
+        {
+            get => _loadSteamlModsOpposite;
+            set
+            {
+                if (CanImportMods)
+                {
+                    _loadSteamlModsOpposite = !value;
                     RaisePropertyChanged();
                 }
             }
@@ -154,6 +180,8 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
             {
                 _canImportMods = value;
                 RaisePropertyChanged();
+                LoadSteamModsOpposite = LoadSteamMods;
+                LoadLocalModsOpposite = LoadLocalMods;
             }
         }
 
@@ -164,7 +192,9 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
         private Data _data;
         private bool _loadLocalMods = false;
         private bool _loadLocalSim = false;
+        private bool _loadLocalModsOpposite = false;
         private bool _loadSteamlMods = false;
+        private bool _loadSteamlModsOpposite = false;
         private bool _loadGameSim = false;
         private string _localModDirector;
         private string _steamModDirectory;
@@ -262,11 +292,7 @@ Logging has now been added! Log files are located in %appdata%\Cali\EndlessModdi
             if (tmp.IsChecked == true)
             {
                 var tf = new TaskFactory();
-                if (LoadSteamMods && LoadLocalMods)
-                {
-                    await tf.StartNew(new Action(() => { _importMods.LoadMods(LocalModDirectory, SteamModDirectory); }));
-                }
-                else if (LoadLocalMods)
+                if (LoadLocalMods)
                 {
                     await tf.StartNew(new Action(() => { _importMods.LoadMods(LocalModDirectory); }));
                 }

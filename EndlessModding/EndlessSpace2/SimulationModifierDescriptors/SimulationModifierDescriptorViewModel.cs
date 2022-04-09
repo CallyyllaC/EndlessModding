@@ -283,7 +283,6 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                 if (_modifierType != value)
                 {
                     _modifierType = value;
-                    RaisePropertyChanged();
 
                     switch (_modifierType)
                     {
@@ -303,6 +302,7 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                             Count = false;
                             break;
                     }
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -410,6 +410,13 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                     ModifierType = ModifierEnum.Single;
                     var tmp = (SingleSimulationModifierDescriptor)CurrentSim;
                     Value = tmp.Value;
+                    //reset
+                    BinaryOperation = ModifierOperation.Addition;
+                    EnforceRightAsPer = false;
+                    Left = "N/A";
+                    Right = "N/A";
+                    CountPath = "N/A";
+                    Multiplier = "N/A";
                 }
                 else if (CurrentSim is BinarySimulationModifierDescriptor)
                 {
@@ -419,6 +426,10 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                     EnforceRightAsPer = tmp.EnforceRightAsPer;
                     Left = tmp.Left;
                     Right = tmp.Right;
+                    //reset
+                    Value = "N/A";
+                    CountPath = "N/A";
+                    Multiplier = "N/A";
                 }
                 else if (CurrentSim is CountSimulationModifierDescriptor)
                 {
@@ -426,6 +437,24 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                     var tmp = (CountSimulationModifierDescriptor)CurrentSim;
                     CountPath = tmp.CountPath;
                     Multiplier = tmp.Multiplier;
+                    //reset
+                    Value = "N/A";
+                    BinaryOperation = ModifierOperation.Addition;
+                    EnforceRightAsPer = false;
+                    Left = "N/A";
+                    Right = "N/A";
+                }
+                else
+                {
+                    ModifierType = ModifierEnum.Unknown;
+                    //reset
+                    Value = "N/A";
+                    BinaryOperation = ModifierOperation.Addition;
+                    EnforceRightAsPer = false;
+                    Left = "N/A";
+                    Right = "N/A";
+                    CountPath = "N/A";
+                    Multiplier = "N/A";
                 }
                 MainWindow.IsBusy = false;
             }
@@ -456,6 +485,93 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                 MainWindow.IsBusy = true;
                 bool modified = false;
 
+                if (ModifierType == ModifierEnum.Single)
+                {
+                    SingleSimulationModifierDescriptor tmp;
+                    if (CurrentSim.ModifierType != ModifierType)
+                    {
+                        tmp = new SingleSimulationModifierDescriptor(CurrentSim);
+                        Modifiers.Add(tmp);
+                        _currentSim = Modifiers.Last();
+                    }
+                    else
+                    {
+                        tmp = (SingleSimulationModifierDescriptor)CurrentSim;
+                    }
+
+                    if (tmp.Value != Value)
+                    {
+                        tmp.Value = Value;
+                        RaisePropertyChanged(tmp, "Value");
+                        modified = true;
+                    }
+                }
+                else if (ModifierType == ModifierEnum.Binary)
+                {
+                    BinarySimulationModifierDescriptor tmp;
+                    if (CurrentSim.ModifierType != ModifierType)
+                    {
+                        tmp = new BinarySimulationModifierDescriptor(CurrentSim);
+                        Modifiers.Add(tmp);
+                        _currentSim = Modifiers.Last();
+                    }
+                    else
+                    {
+                        tmp = (BinarySimulationModifierDescriptor)CurrentSim;
+                    }
+
+                    if (tmp.BinaryOperation != BinaryOperation)
+                    {
+                        tmp.BinaryOperation = BinaryOperation;
+                        RaisePropertyChanged(tmp, "BinaryOperation");
+                        modified = true;
+                    }
+                    if (tmp.EnforceRightAsPer != EnforceRightAsPer)
+                    {
+                        tmp.EnforceRightAsPer = EnforceRightAsPer;
+                        RaisePropertyChanged(tmp, "EnforceRightAsPer");
+                        modified = true;
+                    }
+                    if (tmp.Left != Left)
+                    {
+                        tmp.Left = Left;
+                        RaisePropertyChanged(tmp, "Left");
+                        modified = true;
+                    }
+                    if (tmp.Right != Right)
+                    {
+                        tmp.Right = Right;
+                        RaisePropertyChanged(tmp, "Right");
+                        modified = true;
+                    }
+                }
+                else if (ModifierType == ModifierEnum.Count)
+                {
+                    CountSimulationModifierDescriptor tmp;
+                    if (CurrentSim.ModifierType != ModifierType)
+                    {
+                        tmp = new CountSimulationModifierDescriptor(CurrentSim);
+                        Modifiers.Add(tmp);
+                        _currentSim = Modifiers.Last();
+                    }
+                    else
+                    {
+                        tmp = (CountSimulationModifierDescriptor)CurrentSim;
+                    }
+
+                    if (tmp.CountPath != CountPath)
+                    {
+                        tmp.CountPath = CountPath;
+                        RaisePropertyChanged(tmp, "CountPath");
+                        modified = true;
+                    }
+                    if (tmp.Multiplier != Multiplier)
+                    {
+                        tmp.Multiplier = Multiplier;
+                        RaisePropertyChanged(tmp, "Multiplier");
+                        modified = true;
+                    }
+                }
                 if (CurrentSim.Path != Path)
                 {
                     CurrentSim.Path = Path;
@@ -527,60 +643,6 @@ namespace EndlessModding.EndlessSpace2.SimulationModifierDescriptors
                     CurrentSim.ValueMustBePositive = ValueMustBePositive;
                     RaisePropertyChanged(CurrentSim, "ValueMustBePositive");
                     modified = true;
-                }
-                if (ModifierType == ModifierEnum.Single)
-                {
-                    var tmp = (SingleSimulationModifierDescriptor)CurrentSim;
-                    if (tmp.Value != Value)
-                    {
-                        tmp.Value = Value;
-                        RaisePropertyChanged(tmp, "Value");
-                        modified = true;
-                    }
-                }
-                else if (ModifierType == ModifierEnum.Binary)
-                {
-                    var tmp = (BinarySimulationModifierDescriptor)CurrentSim;
-                    if (tmp.BinaryOperation != BinaryOperation)
-                    {
-                        tmp.BinaryOperation = BinaryOperation;
-                        RaisePropertyChanged(tmp, "BinaryOperation");
-                        modified = true;
-                    }
-                    if (tmp.EnforceRightAsPer != EnforceRightAsPer)
-                    {
-                        tmp.EnforceRightAsPer = EnforceRightAsPer;
-                        RaisePropertyChanged(tmp, "EnforceRightAsPer");
-                        modified = true;
-                    }
-                    if (tmp.Left != Left)
-                    {
-                        tmp.Left = Left;
-                        RaisePropertyChanged(tmp, "Left");
-                        modified = true;
-                    }
-                    if (tmp.Right != Right)
-                    {
-                        tmp.Right = Right;
-                        RaisePropertyChanged(tmp, "Right");
-                        modified = true;
-                    }
-                }
-                else if (ModifierType == ModifierEnum.Count)
-                {
-                    var tmp = (CountSimulationModifierDescriptor)CurrentSim;
-                    if (tmp.CountPath != CountPath)
-                    {
-                        tmp.CountPath = CountPath;
-                        RaisePropertyChanged(tmp, "CountPath");
-                        modified = true;
-                    }
-                    if (tmp.Multiplier != Multiplier)
-                    {
-                        tmp.Multiplier = Multiplier;
-                        RaisePropertyChanged(tmp, "Multiplier");
-                        modified = true;
-                    }
                 }
 
                 if (modified)

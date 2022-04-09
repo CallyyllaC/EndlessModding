@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:EndlessModding"
+             xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,7 +12,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/styles/LoadingArcs.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
+            <extensions:EnumConverter x:Key="EnumConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

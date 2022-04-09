@@ -340,9 +340,6 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
         public bool Custom { get; set; } = false;
 
         [XmlIgnore]
-        private bool _proportional = false;
-
-        [XmlIgnore]
         public bool Proportional
         {
             get
@@ -354,8 +351,18 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
 
                 return false;
             }
-            private set => _proportional = value;
         }
+
+        public SimulationPropertyDescriptor(SimulationPropertyDescriptor_Proportional baseClass)
+        {
+            this.Custom = baseClass.Custom;
+            this.BaseValue = baseClass.BaseValue;
+            this.Composition = baseClass.Composition;
+            this.RoundingFunction = baseClass.RoundingFunction;
+            this.IsSealed = baseClass.IsSealed;
+            this.IsSerializable = baseClass.IsSerializable;
+        }
+
         public override string ToString()
         {
             return Name;
@@ -363,6 +370,16 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
     }
     public partial class SimulationPropertyDescriptor_Proportional
     {
+        public SimulationPropertyDescriptor_Proportional(SimulationPropertyDescriptor baseClass)
+        {
+            this.Custom = baseClass.Custom;
+            this.BaseValue = baseClass.BaseValue;
+            this.Composition = baseClass.Composition;
+            this.RoundingFunction = baseClass.RoundingFunction;
+            this.IsSealed = baseClass.IsSealed;
+            this.IsSerializable = baseClass.IsSerializable;
+        }
+        public SimulationPropertyDescriptor_Proportional(){}
         public override string ToString()
         {
             return Name;
@@ -398,7 +415,8 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
         [XmlIgnore]
         public string Name
         {
-            get {
+            get
+            {
                 if (_name == null)
                 {
                     _name = GetName();
@@ -447,6 +465,21 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
             return output;
         }
 
+        public BinarySimulationModifierDescriptor(SimulationModifierDescriptor baseClass)
+        {
+            this.Name = baseClass.Name;
+            this.Custom = baseClass.Custom;
+            this.SearchValueFromPath = baseClass.SearchValueFromPath;
+            this.Priority = baseClass.Priority;
+            this.TooltipOverride = baseClass.TooltipOverride;
+            this.TooltipHidden = baseClass.TooltipHidden;
+            this.TooltipHiddenIfPathInvalid = baseClass.TooltipHiddenIfPathInvalid;
+            this.EnforceContext = baseClass.EnforceContext;
+            this.ValueMustBePositive = baseClass.ValueMustBePositive;
+            this.UseIfInsteadOfWhere = baseClass.UseIfInsteadOfWhere;
+            this.ForceFrom = baseClass.ForceFrom;
+        }
+
         public override string ToString()
         {
             return Name;
@@ -464,6 +497,21 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
             }
 
             return output;
+        }
+
+        public CountSimulationModifierDescriptor(SimulationModifierDescriptor baseClass)
+        {
+            this.Name = baseClass.Name;
+            this.Custom = baseClass.Custom;
+            this.SearchValueFromPath = baseClass.SearchValueFromPath;
+            this.Priority = baseClass.Priority;
+            this.TooltipOverride = baseClass.TooltipOverride;
+            this.TooltipHidden = baseClass.TooltipHidden;
+            this.TooltipHiddenIfPathInvalid = baseClass.TooltipHiddenIfPathInvalid;
+            this.EnforceContext = baseClass.EnforceContext;
+            this.ValueMustBePositive = baseClass.ValueMustBePositive;
+            this.UseIfInsteadOfWhere = baseClass.UseIfInsteadOfWhere;
+            this.ForceFrom = baseClass.ForceFrom;
         }
 
         public override string ToString()
@@ -484,6 +532,26 @@ namespace EndlessModding.EndlessSpace2.Common.Classes.Amplitude_Simulator
             }
 
             return output;
+        }
+
+        public SingleSimulationModifierDescriptor(SimulationModifierDescriptor baseClass)
+        {
+            this.Name = baseClass.Name;
+            this.Custom = baseClass.Custom;
+            this.SearchValueFromPath = baseClass.SearchValueFromPath;
+            this.Priority = baseClass.Priority;
+            this.TooltipOverride = baseClass.TooltipOverride;
+            this.TooltipHidden = baseClass.TooltipHidden;
+            this.TooltipHiddenIfPathInvalid = baseClass.TooltipHiddenIfPathInvalid;
+            this.EnforceContext = baseClass.EnforceContext;
+            this.ValueMustBePositive = baseClass.ValueMustBePositive;
+            this.UseIfInsteadOfWhere = baseClass.UseIfInsteadOfWhere;
+            this.ForceFrom = baseClass.ForceFrom;
+        }
+
+        public SingleSimulationModifierDescriptor()
+        {
+
         }
 
         public override string ToString()

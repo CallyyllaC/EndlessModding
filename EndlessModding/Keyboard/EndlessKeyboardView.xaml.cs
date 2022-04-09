@@ -11,25 +11,21 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ControlzEx.Theming;
+using EndlessModding.Common;
 using MahApps.Metro.Controls;
-using static EndlessModding.Common.BootStrapper;
 
-namespace EndlessModding.EndlessSpace2
+namespace EndlessModding.Keyboard
 {
     /// <summary>
-    /// Interaction logic for EndlessSpace2.xaml
+    /// Interaction logic for EndlessKeyboardView.xaml
     /// </summary>
-    public partial class EndlessSpace2View : MetroWindow
+    public partial class EndlessKeyboardView : MetroWindow
     {
-        public EndlessSpace2View()
+        public EndlessKeyboardView()
         {
             this.FontFamily = new FontFamily("AmplitudeFont");
             InitializeComponent();
-        }
-
-        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Application.Current.Shutdown();
         }
     }
 }

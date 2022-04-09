@@ -230,20 +230,27 @@ namespace EndlessModding.EndlessSpace2.SimulationPropertyDescriptors
             {
                 MainWindow.IsBusy = true;
                 Name = CurrentSim.Name;
-                CurrentSim.MaxValue = MaxValue;
-                CurrentSim.MinValue = MinValue;
-                CurrentSim.BaseValue = BaseValue;
-                CurrentSim.Composition = Composition;
-                CurrentSim.RoundingFunction = RoundingFunction;
-                CurrentSim.IsSealed = IsSealed;
-                CurrentSim.IsSerializable = IsSerializable;
+                MaxValue = CurrentSim.MaxValue;
+                MinValue = CurrentSim.MinValue;
+                BaseValue = CurrentSim.BaseValue;
+                Composition = CurrentSim.Composition;
+                RoundingFunction = CurrentSim.RoundingFunction;
+                IsSealed = CurrentSim.IsSealed;
+                IsSerializable = CurrentSim.IsSerializable;
                 if (CurrentSim is SimulationPropertyDescriptor_Proportional)
                 {
                     Proportional = true;
                     var tmp = (SimulationPropertyDescriptor_Proportional)CurrentSim;
-                    tmp.StartingRatio = StartingRatio;
-                    tmp.Maximum = Maximum;
-                    tmp.Minimum = Minimum;
+                    StartingRatio = tmp.StartingRatio;
+                    Maximum = tmp.Maximum;
+                    Minimum = tmp.Minimum;
+                }
+                else
+                {
+                    Proportional = false;
+                    StartingRatio = 0f;
+                    Maximum = "N/A";
+                    Minimum = "N/A";
                 }
                 MainWindow.IsBusy = false;
             }
@@ -273,6 +280,70 @@ namespace EndlessModding.EndlessSpace2.SimulationPropertyDescriptors
             {
                 MainWindow.IsBusy = true;
                 bool modified = false;
+
+                if (Proportional)
+                {
+                    if (CurrentSim is SimulationPropertyDescriptor_Proportional) //if we are already proportional
+                    {
+                        var tmp = (SimulationPropertyDescriptor_Proportional)CurrentSim;
+
+                        if (tmp.StartingRatio != StartingRatio)
+                        {
+                            tmp.StartingRatio = StartingRatio;
+                            RaisePropertyChanged(tmp, "StartingRatio");
+                            modified = true;
+                        }
+
+                        if (tmp.Maximum != Maximum)
+                        {
+                            tmp.Maximum = Maximum;
+                            RaisePropertyChanged(tmp, "Maximum");
+                            modified = true;
+                        }
+
+                        if (tmp.Minimum != Minimum)
+                        {
+                            tmp.Minimum = Minimum;
+                            RaisePropertyChanged(tmp, "Minimum");
+                            modified = true;
+                        }
+                    }
+                    else //if we are becoming proportional
+                    {
+                        var tmp = new SimulationPropertyDescriptor_Proportional(CurrentSim);
+
+                        if (tmp.StartingRatio != StartingRatio)
+                        {
+                            tmp.StartingRatio = StartingRatio;
+                            RaisePropertyChanged(tmp, "StartingRatio");
+                            modified = true;
+                        }
+
+                        if (tmp.Maximum != Maximum)
+                        {
+                            tmp.Maximum = Maximum;
+                            RaisePropertyChanged(tmp, "Maximum");
+                            modified = true;
+                        }
+
+                        if (tmp.Minimum != Minimum)
+                        {
+                            tmp.Minimum = Minimum;
+                            RaisePropertyChanged(tmp, "Minimum");
+                            modified = true;
+                        }
+
+                        Properties.Add(tmp);
+                        _currentSim = Properties.Last();
+                    }
+                }
+                else if(Proportional != CurrentSim.Proportional) //if we arnt proportional but used to be
+                {
+                    var tmp = new SimulationPropertyDescriptor((SimulationPropertyDescriptor_Proportional)CurrentSim);
+                    Properties.Add(tmp);
+                    _currentSim = Properties.Last();
+                }
+
                 if (CurrentSim.Name != Name)
                 {
                     CurrentSim.Name = Name;
@@ -321,36 +392,6 @@ namespace EndlessModding.EndlessSpace2.SimulationPropertyDescriptors
                     CurrentSim.IsSerializable = IsSerializable;
                     RaisePropertyChanged(CurrentSim, "IsSerializable");
                     modified = true;
-                }
-                if (Proportional)
-                {
-                    if (CurrentSim is SimulationPropertyDescriptor_Proportional)
-                    {
-                        var tmp = (SimulationPropertyDescriptor_Proportional)CurrentSim;
-
-                        if (tmp.StartingRatio != StartingRatio)
-                        {
-                            tmp.StartingRatio = StartingRatio;
-                            RaisePropertyChanged(tmp, "StartingRatio");
-                            modified = true;
-                        }
-                        if (tmp.Maximum != Maximum)
-                        {
-                            tmp.Maximum = Maximum;
-                            RaisePropertyChanged(tmp, "Maximum");
-                            modified = true;
-                        }
-                        if (tmp.Minimum != Minimum)
-                        {
-                            tmp.Minimum = Minimum;
-                            RaisePropertyChanged(tmp, "Minimum");
-                            modified = true;
-                        }
-                    }
-                    else
-                    {
-                        _logger.Error($"{CurrentSim}: {CurrentSim.Name} Should be proportional : probably scrolled too fast");
-                    }
                 }
 
 

@@ -29,21 +29,13 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             _logger = logger;
             _data = data;
         }
-        public void LoadMods(string dir, string dir2 = null)
+        public void LoadMods(string dir)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _data.RuntimeModules.Clear();
             var tmplist = Directory.GetFiles(dir, "*.xml", SearchOption.AllDirectories).ToList();
-            if (dir2 != null)
-            {
-                tmplist.AddRange(Directory.GetFiles(dir2, "*.xml", SearchOption.AllDirectories));
-            }
             _modFiles = tmplist.ToHashSet();
             LoadMods(_data.RuntimeModules, "RuntimeModule");
-
-            //Get Simulation Descriptors
-            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor>(_data.SimulationPropertyDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
-            LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor>(_data.SimulationModifierDescriptorDefinitions, _data.SimulationDescriptorDefinitions);
 
         }
         private void LoadMods(EndlessObservableConcurrentCollection<Classes.Amplitude_Runtime.RuntimeModule> input, string Node)
@@ -86,6 +78,8 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             input.AddRange(tmpcont);
         }
+
+        //I dont know how this works, it just does
         private void LoadPlugins(Classes.Amplitude_Runtime.RuntimePlugin[] input, string fileDirectory)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
@@ -198,7 +192,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
         {
             List<object> bag = new List<object>();
 
-            foreach(var file in Files)
+            foreach (var file in Files)
             {
                 try
                 {
@@ -233,10 +227,18 @@ namespace EndlessModding.EndlessSpace2.Common.Files
                              .Where(x => x.PropertyType == false.GetType() && x.Name == "Custom"))
                 {
                     bool_field.SetValue(item, true, null);
+
+                    if (item is EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor)
+                    {
+                        //Get Simulation Descriptors
+                        LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationPropertyDescriptor>(_data.SimulationPropertyDescriptorDefinitions, (EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor)item);
+                        LoadFromObjectByPropertyArray<EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor, EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationModifierDescriptor>(_data.SimulationModifierDescriptorDefinitions, (EndlessSpace2.Common.Classes.Amplitude_Simulator.SimulationDescriptor)item);
+                    }
+
                 }
 
                 var type = input.GetType();
-                var method = type.GetMethod("Add");
+                var method = type.GetMethod("AddFont");
                 _ = method.Invoke(input, new object[] { item });
             }
         }
@@ -245,29 +247,29 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             foreach (var file in Files)
             {
                 var subfiles = Directory.GetFiles(FilePath + "\\" + file + "\\english\\", "*.xml", SearchOption.AllDirectories);
-                    foreach (var xmls in subfiles)
+                foreach (var xmls in subfiles)
+                {
+                    try
                     {
-                        try
+                        XElement document = XElement.Load(xmls);
+
+                        var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
+                            .Select(SerialiseFunc<Classes.Amplitude_Localisation.LocalizationPair>)
+                            .ToArray();
+                        _logger.Info($"Load file: {file}");
+
+                        foreach (var item in definitions)
                         {
-                            XElement document = XElement.Load(xmls);
-
-                            var definitions = document.Elements(typeof(Classes.Amplitude_Localisation.LocalizationPair).Name)
-                                .Select(SerialiseFunc<Classes.Amplitude_Localisation.LocalizationPair>)
-                                .ToArray();
-                            _logger.Info($"Load file: {file}");
-
-                            foreach (var item in definitions)
-                            {
-                                LocalizationPairs.Add((Classes.Amplitude_Localisation.LocalizationPair)item);
-                            }
-
+                            LocalizationPairs.Add((Classes.Amplitude_Localisation.LocalizationPair)item);
                         }
-                        catch (Exception e)
-                        {
-                            _logger.Error($"Failed to load file: {file}: {e.Message}");
-                        }
+
                     }
-                };
+                    catch (Exception e)
+                    {
+                        _logger.Error($"Failed to load file: {file}: {e.Message}");
+                    }
+                }
+            };
         }
         private void LoadModImage(string FilePath, EndlessSpace2.Common.Classes.Amplitude_Runtime.RuntimeModule Mod)
         {
@@ -418,25 +420,26 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             }
         }
 
-        private void LoadFromObjectByPropertyArray<T1, T2>(EndlessObservableConcurrentCollection<T2> output, EndlessObservableConcurrentCollection<T1> input)
+        private void LoadFromObjectByPropertyArray<T1, T2>(EndlessObservableConcurrentCollection<T2> output, T1 item)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            ConcurrentBag<T2> bag = new ConcurrentBag<T2>();
+            List<T2> bag = new List<T2>();
 
-            Parallel.ForEach(input, item =>
+            var info = typeof(T1).GetProperties().FirstOrDefault(x => x.PropertyType == typeof(T2[]));
+            var array = info.GetValue(item);
+
+            if (array != null)
             {
-                var info = typeof(T1).GetProperties().FirstOrDefault(x => x.PropertyType == typeof(T2[]));
-                var array = info.GetValue(item);
-
-                if (array != null)
+                var tmp = (T2[])array;
+                if (tmp.Length > 0) //I shouldn't have to do this, but apparently I do...
                 {
-                    var tmp = (T2[])array;
-                    if (tmp.Length > 0) //I shouldn't have to do this, but apparently I do...
+                    foreach (T2 t in tmp)
                     {
-                        bag.AddFromEnumerable(tmp);
+                        t.GetType().GetProperties().Where(x => x.Name == "Custom").First().SetValue(t, true);
                     }
+                    bag.AddRange(tmp);
                 }
-            });
+            }
             if (bag.Count > 0)
             {
                 try

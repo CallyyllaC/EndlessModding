@@ -46,8 +46,8 @@
                                 <DataGridTextColumn Width="auto" Binding="{Binding ModifierType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Type</DataGridTextColumn.Header>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Width="auto" Binding="{Binding Path, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <DataGridTextColumn.Header>Path</DataGridTextColumn.Header>
+                                <DataGridTextColumn Width="auto" Binding="{Binding TargetProperty, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Target Property</DataGridTextColumn.Header>
                                 </DataGridTextColumn>
                                 <DataGridCheckBoxColumn Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
@@ -89,7 +89,7 @@
                 <GroupBox Header="Simulation Modifier Descriptor" Grid.Column="0">
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Text="Type"/>
-                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding ModifierType}" ItemsSource="{common:EnumToItemsSource {x:Type en:ModifierEnum}}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding ModifierType, Mode=TwoWay, Converter={StaticResource EnumConverter}}" IsSynchronizedWithCurrentItem="True" ItemsSource="{common:EnumToItemsSource {x:Type en:ModifierEnum}}"/>
 
                         <Grid Margin="0, 5, 0 , 0">
                             <Grid.ColumnDefinitions>
@@ -112,7 +112,7 @@
                         </Grid>
 
                         <TextBlock TextWrapping="Wrap" Text="Operation"/>
-                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:ModifierOperation}}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Operation, Mode=TwoWay, Converter={StaticResource EnumConverter}}" IsSynchronizedWithCurrentItem="True" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:ModifierOperation}}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Priority"/>
                         <TextBox TextWrapping="Wrap" Text="{Binding Priority}"/>
@@ -142,7 +142,7 @@
                         <GroupBox Header="Binary Simulation" IsEnabled="{Binding Binary}">
                             <StackPanel>
                                 <TextBlock TextWrapping="Wrap" Text="Operation"/>
-                                <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Operation}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:ModifierOperation}}"/>
+                                <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Operation, Mode=TwoWay, Converter={StaticResource EnumConverter}}" IsSynchronizedWithCurrentItem="True" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:ModifierOperation}}"/>
                                 <TextBlock TextWrapping="Wrap" Text="Left"/>
                                 <TextBox TextWrapping="Wrap" Text="{Binding Left}"/>
                                 <TextBlock TextWrapping="Wrap" Text="Right"/>

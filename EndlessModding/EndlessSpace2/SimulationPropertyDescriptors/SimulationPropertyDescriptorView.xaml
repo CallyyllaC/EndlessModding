@@ -111,10 +111,10 @@
                         <TextBox TextWrapping="Wrap" Text="{Binding MinValue}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Composition"/>
-                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Composition}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyComposition}}"/>
+                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding Composition, Mode=TwoWay, Converter={StaticResource EnumConverter}}" IsSynchronizedWithCurrentItem="True" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyComposition}}"/>
 
                         <TextBlock TextWrapping="Wrap" Text="Rounding Function"/>
-                        <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding RoundingFunction}" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyRoundingFunction}}"/>
+                            <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" SelectedItem="{Binding RoundingFunction, Mode=TwoWay, Converter={StaticResource EnumConverter}}" IsSynchronizedWithCurrentItem="True" ItemsSource="{common:EnumToItemsSource {x:Type amplitudeSimulator:SimulationPropertyRoundingFunction}}"/>
 
                     </StackPanel>
                 </GroupBox>

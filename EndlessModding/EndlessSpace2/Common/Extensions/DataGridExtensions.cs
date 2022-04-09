@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +58,26 @@ namespace EndlessModding.EndlessSpace2.Common.Extensions
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
             return null;
+        }
+    }
+    public class EnumConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            try
+            {
+                var tmp = value as Enum;
+                return Enum.Parse(targetType, (string)value);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Failed to convert enum: {value} to {targetType}");
+            }
         }
     }
 }

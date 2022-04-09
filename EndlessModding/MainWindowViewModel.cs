@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using EndlessModding.Keyboard;
 using SteamKit2;
 using SteamKit2.Internal;
 
@@ -20,15 +21,19 @@ namespace EndlessModding
     {
         //Public View Models
         public EndlessSpace2ViewModel EndlessSpace2 { get; }
+        public EndlessKeyboardViewModel EndlessKeyboard { get; }
         public BindingList<NewsObject> News { get; }
         public int SelectedNews { get; set; }
 
         //Private Views
         private EndlessSpace2View EndlessSpace2Window;
 
+        private EndlessKeyboardView EndlessKeyboardWindow;
+
 
         //Commands
         public ICommand EndlessSpace2Clicked { get; }
+        public ICommand EndlessKeyboardClicked { get; }
 
 
         //Fields
@@ -40,27 +45,55 @@ namespace EndlessModding
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
         /// <param name="es2vm">The endless space 2 view model.</param>
-        public MainWindowViewModel(ILogger castleLogger, EndlessSpace2ViewModel es2vm)
+        public MainWindowViewModel(ILogger castleLogger, EndlessSpace2ViewModel es2vm, EndlessKeyboardViewModel ekvm)
         {
             castleLogger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //setup injections
             _logger = castleLogger;
             EndlessSpace2 = es2vm;
+            EndlessKeyboard = ekvm;
             //setup commands
             EndlessSpace2Clicked = new RelayCommand(Can_Endless_Space_2_Click, Endless_Space_2_Click);
+            EndlessKeyboardClicked = new RelayCommand(Can_Endless_Keyboard_Click, Endless_Keyboard_Click);
 
             News = GetNews(392110);
+
+        }
+        private void EndlessSpace2WindowOnClosed(object sender, EventArgs e)
+        {
+            EndlessSpace2Window = null;
+        }
+        private void EndlessKeyboardWindowOnClosed(object sender, EventArgs e)
+        {
+            EndlessKeyboardWindow = null;
         }
 
+        private void Endless_Keyboard_Click(object obj)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            EndlessKeyboardWindow = new EndlessKeyboardView() { DataContext = EndlessKeyboard };
+            EndlessKeyboardWindow.Show();
+            EndlessKeyboardWindow.Closed -= EndlessKeyboardWindowOnClosed;
+            EndlessKeyboardWindow.Closed += EndlessKeyboardWindowOnClosed;
+        }
 
+        private bool Can_Endless_Keyboard_Click(object obj)
+        {
+            if (EndlessKeyboardWindow == null)
+            {
+                return true;
+            }
 
+            return false;
+        }
 
         private void Endless_Space_2_Click(object obj)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            EndlessSpace2Window = new EndlessSpace2.EndlessSpace2View() { DataContext = EndlessSpace2 };
+            EndlessSpace2Window = new EndlessSpace2View() { DataContext = EndlessSpace2 };
             EndlessSpace2Window.Show();
-            Application.Current.MainWindow?.Hide();
+            EndlessSpace2Window.Closed -= EndlessSpace2WindowOnClosed;
+            EndlessSpace2Window.Closed += EndlessSpace2WindowOnClosed;
         }
         private bool Can_Endless_Space_2_Click(object obj)
         {
