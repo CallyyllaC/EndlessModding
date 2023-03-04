@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using EndlessModding.FactionHeroStart;
 using EndlessModding.Keyboard;
 using SteamKit2;
 using SteamKit2.Internal;
@@ -22,6 +23,7 @@ namespace EndlessModding
         //Public View Models
         public EndlessSpace2ViewModel EndlessSpace2 { get; }
         public EndlessKeyboardViewModel EndlessKeyboard { get; }
+        public FactionHeroStartViewModel EndlessFactionHero { get; }
         public BindingList<NewsObject> News { get; }
         public int SelectedNews { get; set; }
 
@@ -30,10 +32,13 @@ namespace EndlessModding
 
         private EndlessKeyboardView EndlessKeyboardWindow;
 
+        private FactionHeroStartView EndlessFactionHeroWindow;
+
 
         //Commands
         public ICommand EndlessSpace2Clicked { get; }
         public ICommand EndlessKeyboardClicked { get; }
+        public ICommand EndlessFactionHeroClicked { get; }
 
 
         //Fields
@@ -45,20 +50,42 @@ namespace EndlessModding
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
         /// </summary>
         /// <param name="es2vm">The endless space 2 view model.</param>
-        public MainWindowViewModel(ILogger castleLogger, EndlessSpace2ViewModel es2vm, EndlessKeyboardViewModel ekvm)
+        public MainWindowViewModel(ILogger castleLogger, EndlessSpace2ViewModel es2vm, EndlessKeyboardViewModel ekvm, FactionHeroStartViewModel efvm)
         {
             castleLogger.Info($"{MethodBase.GetCurrentMethod().Name}");
             //setup injections
             _logger = castleLogger;
             EndlessSpace2 = es2vm;
             EndlessKeyboard = ekvm;
+            EndlessFactionHero = efvm;
             //setup commands
             EndlessSpace2Clicked = new RelayCommand(Can_Endless_Space_2_Click, Endless_Space_2_Click);
             EndlessKeyboardClicked = new RelayCommand(Can_Endless_Keyboard_Click, Endless_Keyboard_Click);
+            EndlessFactionHeroClicked = new RelayCommand(Can_Endless_FactionHero_Click, Endless_FactionHero_Click);
 
             News = GetNews(392110);
 
         }
+
+        private void Endless_FactionHero_Click(object obj)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            EndlessFactionHeroWindow = new FactionHeroStartView() { DataContext = EndlessFactionHero };
+            EndlessFactionHeroWindow.Show();
+            EndlessFactionHeroWindow.Closed -= EndlessFactionHeroWindowOnClosed;
+            EndlessFactionHeroWindow.Closed += EndlessFactionHeroWindowOnClosed;
+        }
+
+        private bool Can_Endless_FactionHero_Click(object obj)
+        {
+            if (EndlessKeyboardWindow == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void EndlessSpace2WindowOnClosed(object sender, EventArgs e)
         {
             EndlessSpace2Window = null;
@@ -66,6 +93,10 @@ namespace EndlessModding
         private void EndlessKeyboardWindowOnClosed(object sender, EventArgs e)
         {
             EndlessKeyboardWindow = null;
+        }
+        private void EndlessFactionHeroWindowOnClosed(object sender, EventArgs e)
+        {
+            EndlessFactionHeroWindow = null;
         }
 
         private void Endless_Keyboard_Click(object obj)

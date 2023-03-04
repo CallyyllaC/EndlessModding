@@ -239,7 +239,14 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
                 var type = input.GetType();
                 var method = type.GetMethod("AddFont");
-                _ = method.Invoke(input, new object[] { item });
+                try
+                {
+                    _ = method.Invoke(input, new object[] { item });
+                }
+                catch (Exception e)
+                {
+                    _logger.Error($"Failed to add font: {tmpcont} - {input}: {e.Message}");
+                }
             }
         }
         private void LoadNodes(string FilePath, string[] Files)

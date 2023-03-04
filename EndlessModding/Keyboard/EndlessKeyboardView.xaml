@@ -7,10 +7,11 @@
         xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:keyboard="clr-namespace:EndlessModding.Keyboard"
                  xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
                  xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
-                 d:DataContext="{d:DesignInstance Type=keyboard:EndlessKeyboardViewModel}"
+                 xmlns:common="clr-namespace:EndlessModding.Common"
                  mc:Ignorable="d"
-        Title="Endless Space 2"
-        Height="720" Width="1280"
+                 d:DataContext="{d:DesignInstance Type=keyboard:EndlessKeyboardViewModel}"
+        Title="Endless Keyboard"
+        Height="720" Width="1000"
         BorderThickness="0"
         GlowBrush="Black"
         ResizeMode="CanResizeWithGrip"
@@ -34,23 +35,49 @@
                 </TabItem.HeaderTemplate>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto" MinWidth="500"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Grid.ColumnSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <keyboard:SelectionBindingTextBox Grid.Column="0" Text="{Binding TextText, Mode=TwoWay}" FontSize="18" FontFamily="{Binding AmplitudeFont, Mode=OneTime}" BindableSelectionStart="{Binding SelectionStart, Mode=OneWayToSource}" BindableSelectionLength="{Binding SelectionLength, Mode=OneWayToSource}"/>
-                        <Button Grid.Column="1" Content="Copy" FontSize="18" Command="{Binding CopyText}"/>
-                    </Grid>
-                    <Grid Grid.Row="1" Grid.Column="0">
-                        <Grid.RowDefinitions>
+                    <GroupBox Header="Game Directory" Grid.Row="0" Grid.ColumnSpan="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Game Install Directory: " Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="TextBox_GameDir" Grid.Column="1" Grid.Row="0" Text="{Binding LocGameDir_Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button x:Name="Button_GameDir" Grid.Column="2" Grid.Row="0" Content="Browse"  Command="{Binding ButtonGameDirClick}"/>
+                            <TextBlock x:Name="Text_GameDirStatus" Text="{Binding GameDirStatus_Text}" Foreground="{Binding GameDirStatus_Foreground}" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"/>
+                            <TextBlock Text="These are taken from the games language files, there may be more in the game that are unused, this is not a complete list, for example try experiment with 'Colored' and non-'Colored' varients even if they are not shown, I have added a few to show up that arnt in the games files but I doubt I have all of them" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" TextWrapping="Wrap"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Text Builder" Grid.Row="1" Grid.ColumnSpan="2" IsEnabled="{Binding GameFound, Mode=OneWay}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <common:SelectionBindingTextBox Grid.Column="0" Text="{Binding TextText, Mode=TwoWay}" FontSize="18" FontFamily="{Binding AmplitudeFont, Mode=OneTime}" BindableSelectionStart="{Binding SelectionStart, Mode=OneWayToSource}" BindableSelectionLength="{Binding SelectionLength, Mode=OneWayToSource}"/>
+                            <Button Grid.Column="1" Content="Copy" FontSize="18" Command="{Binding CopyText}"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Localisation Lookup" Grid.Row="2" Grid.Column="0" IsEnabled="{Binding GameFound, Mode=OneWay}">
+                        <Grid >
+                            <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
@@ -62,54 +89,58 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="18">Search:</TextBlock>
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="18">Search:</TextBlock>
                                 <TextBox Grid.Column="1" Name="SearchBox0" FontSize="18"></TextBox>
                             </Grid>
-                            <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}" ColumnWidth="*" Grid.Row="1" ItemsSource="{Binding Texts, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                            <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}" ColumnWidth="*" Grid.Row="1" ItemsSource="{Binding Texts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding SelectedText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False">
 
-                            <b:Interaction.Triggers>
-                                <b:EventTrigger EventName="MouseDoubleClick">
-                                    <b:InvokeCommandAction Command="{Binding AddText}" />
-                                </b:EventTrigger>
-                            </b:Interaction.Triggers>
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="MouseDoubleClick">
+                                        <b:InvokeCommandAction Command="{Binding AddText}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
 
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" FontSize="32" Binding="{Binding Icon, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <DataGridTextColumn.Header>Icon</DataGridTextColumn.Header>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Width="4*" FontSize="24" Binding="{Binding Character, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <DataGridTextColumn.Header>Character</DataGridTextColumn.Header>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="*"  FontSize="32" Binding="{Binding Icon, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <DataGridTextColumn.Header>Icon</DataGridTextColumn.Header>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Width="4*" FontSize="24" Binding="{Binding Character, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <DataGridTextColumn.Header>Character</DataGridTextColumn.Header>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
 
-                            <DataGrid.Resources>
-                                <extensions:SearchValueConverter x:Key="SearchValueConverter"/>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Setter Property="extensions:DataGridTextSearch.IsTextMatch">
-                                        <Setter.Value>
-                                            <MultiBinding Converter="{StaticResource SearchValueConverter}">
-                                                <Binding RelativeSource="{RelativeSource Self}" Path="Content.Text" />
-                                                <Binding RelativeSource="{RelativeSource Self}" Path="(extensions:DataGridTextSearch.SearchValue)" />
-                                            </MultiBinding>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="extensions:DataGridTextSearch.IsTextMatch" Value="True">
-                                            <Setter Property="Background" Value="Orange" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.Resources>
-                        </DataGrid>
-                    </Grid>
-                    <Grid Grid.Column="1" Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="7*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <mah:ColorCanvas Grid.Row="0" SelectedColor="{Binding Colour, Mode=OneWayToSource}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-                        <Button Grid.Row="1" Command="{Binding AddColour}" Content="Set Colour"/>
-                    </Grid>
+                                <DataGrid.Resources>
+                                    <extensions:SearchValueConverter x:Key="SearchValueConverter"/>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="extensions:DataGridTextSearch.IsTextMatch">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource SearchValueConverter}">
+                                                    <Binding RelativeSource="{RelativeSource Self}" Path="Content.Text" />
+                                                    <Binding RelativeSource="{RelativeSource Self}" Path="(extensions:DataGridTextSearch.SearchValue)" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="extensions:DataGridTextSearch.IsTextMatch" Value="True">
+                                                <Setter Property="Background" Value="Orange" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                            </DataGrid>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Colour Picker" Grid.Column="1" Grid.Row="2" IsEnabled="{Binding GameFound, Mode=OneWay}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="7*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <mah:ColorCanvas Grid.Row="0" SelectedColor="{Binding Colour, Mode=OneWayToSource}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                            <Button Grid.Row="1" Command="{Binding AddColour}" Content="Set Colour"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </mah:MetroTabItem>
 
@@ -130,37 +161,43 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="9*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0"  Text="{Binding FontText, Mode=TwoWay}" FontSize="32" FontFamily="{Binding AmplitudeFont}"/>
-                        <Button Grid.Column="1" Content="Copy" FontSize="32" Command="{Binding CopyFont}"/>
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <ListView  ItemsSource="{Binding Characters, Mode=OneTime}" SelectedItem="{Binding SelectedFont, Mode=OneWayToSource}" SelectionMode="Single" Style="{StaticResource MahApps.Styles.ListBox.Virtualized}">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="10"/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
 
-                            <b:Interaction.Behaviors>
-                                <keyboard:ItemDoubleClickBehavior/>
-                            </b:Interaction.Behaviors>
+                    <GroupBox Header="Text Builder" Grid.Row="0">
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"  Text="{Binding FontText, Mode=TwoWay}" FontSize="32" FontFamily="{Binding AmplitudeFont}"/>
+                            <Button Grid.Column="1" Content="Copy" FontSize="32" Command="{Binding CopyFont}"/>
+                        </Grid>
+                    </GroupBox>
 
-                            <ListBox.InputBindings>
-                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding AddFont}"/>
-                            </ListBox.InputBindings>
+                    <GroupBox Header="Font Keyboard" Grid.Row="1">
+                        <Grid Grid.Row="1">
+                            <ListView  ItemsSource="{Binding Characters, Mode=OneTime}" SelectedItem="{Binding SelectedFont, Mode=OneWayToSource}" SelectionMode="Single" Style="{StaticResource MahApps.Styles.ListBox.Virtualized}">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="10"/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
 
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Character}" FontStretch="Expanded" FontSize="72"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListView>
-                    </Grid>
+                                <b:Interaction.Behaviors>
+                                    <common:ItemDoubleClickBehavior/>
+                                </b:Interaction.Behaviors>
+
+                                <ListBox.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding AddFont}"/>
+                                </ListBox.InputBindings>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Character}" FontStretch="Expanded" FontSize="72"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </mah:MetroTabItem>
 

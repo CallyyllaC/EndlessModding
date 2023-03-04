@@ -48,7 +48,7 @@
                 <Button x:Name="Keyboard" Opacity="0.3"  Command="{Binding EndlessKeyboardClicked}" IsEnabled="True">
                     Endless Space 2 Keyboard
                 </Button>
-                <Button x:Name="StartingHero" Opacity="0.3"  IsEnabled="False">
+                <Button x:Name="StartingHero" Opacity="0.3"  Command="{Binding EndlessFactionHeroClicked}" IsEnabled="True">
                     Faction Starting Hero Configuration
                 </Button>
             </VirtualizingStackPanel>

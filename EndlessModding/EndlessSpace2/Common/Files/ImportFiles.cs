@@ -169,6 +169,33 @@ namespace EndlessModding.EndlessSpace2.Common.Files
 
             input.AddRange(tmpcont);
         }
+        public static void LoadNodes<T>(EndlessObservableConcurrentCollection<T> input, string Node, string[] Files, ILogger Logger)
+        {
+            Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            ConcurrentBag<T> bag = new ConcurrentBag<T>();
+
+            foreach (var file in Files)
+            {
+                try
+                {
+                    XElement document = XElement.Load(file);
+
+                    var definitions = document.Elements(Node)
+                        .Select( x => SerialiseFunc<T>(x, Logger))
+                        .ToArray();
+
+                    Parallel.ForEach(definitions, item => bag.Add(item));
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Failed to load file: {file}: {e.Message}");
+                }
+            };
+
+            var tmpcont = bag.AsParallel().OrderBy(i => (string)i.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(i)).ToList();
+
+            input.AddRange(tmpcont);
+        }
         private void LoadGuiElements<T>(HashSet<T> input, string Mask)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
@@ -248,7 +275,7 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             }
         }
 
-        T SerialiseFunc<T>(XElement xml)
+        private T SerialiseFunc<T>(XElement xml)
         {
             try
             {
@@ -261,6 +288,22 @@ namespace EndlessModding.EndlessSpace2.Common.Files
             catch (Exception e)
             {
                 _logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
+                return default;
+            }
+        }
+        private static T SerialiseFunc<T>(XElement xml, ILogger Logger)
+        {
+            try
+            {
+                XmlSerializer serialist = new XmlSerializer(typeof(T));
+                var reader = xml.CreateReader();
+                T tmp = (T)serialist.Deserialize(reader);
+                reader.Dispose();
+                return tmp;
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed to load item: {xml.Name}: {e.Message}");
                 return default;
             }
         }

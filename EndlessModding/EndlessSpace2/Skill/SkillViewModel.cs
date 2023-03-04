@@ -44,7 +44,7 @@ namespace EndlessModding.EndlessSpace2.Skill
                     if (MainWindow != null)
                         MainWindow.IsBusy = true;
 
-                    saveHero();
+                    saveSkill();
                     _currentSkill = value;
                     loadSkill(null);
                     RaisePropertyChanged();
@@ -386,8 +386,6 @@ namespace EndlessModding.EndlessSpace2.Skill
         {
             Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             _logger = Logger;
-            Logger.Info($"{MethodBase.GetCurrentMethod().Name}");
-            _logger = Logger;
             _data = data;
             Skills = _data.HeroSkillDefinitions;
             Encounters = _data.EncounterPlayDefinitions;
@@ -396,7 +394,86 @@ namespace EndlessModding.EndlessSpace2.Skill
 
             LoadSkill = new RelayCommand(canLoadSkill, loadSkill);
             NewSkill = new RelayCommand(canNewSkill, newSkill);
+
+            AddHeroSDR = new RelayCommand(canAddHeroSDR, addHeroSDR);
+            RemoveHeroSDR = new RelayCommand(canRemoveHeroSDR, removeHeroSDR);
+
+            AddSenateSDR = new RelayCommand(canAddSenateSDR, addSenateSDR);
+            RemoveSenateSDR = new RelayCommand(canRemoveSenateSDR, removeSenateSDR);
+
+            AddShipSDR = new RelayCommand(canAddShipSDR, addShipSDR);
+            RemoveShipSDR = new RelayCommand(canRemoveShipSDR, removeShipSDR);
+
+            AddSystemSDR = new RelayCommand(canAddSystemSDR, addSystemSDR);
+            RemoveSystemSDR = new RelayCommand(canRemoveSystemSDR, removeSystemSDR);
+
+            AddMastery = new RelayCommand(canAddMastery, addMastery);
+            RemoveMastery = new RelayCommand(canRemoveMastery, removeMastery);
+
+            AddEncounter = new RelayCommand(canAddEncounter, addEncounter);
+            RemoveEncounter = new RelayCommand(canRemoveEncounter, removeEncounter);
         }
+
+        private void removeEncounter(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void addEncounter(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void removeMastery(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void addMastery(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void removeSystemSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void addSystemSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void removeShipSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void addShipSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void removeSenateSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void addSenateSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void removeHeroSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void addHeroSDR(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
         private void AddArrayToList<T>(BindingList<T> output, T[] input)
         {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
@@ -495,113 +572,50 @@ namespace EndlessModding.EndlessSpace2.Skill
             }
         }
 
-        private void saveHero()
-        {/*
+        private void saveSkill()
+        {
             _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
             if (Skills.Count > 0 && CurrentSkill != null && CurrentSkill != null)
             {
                 MainWindow.IsBusy = true;
                 bool modified = false;
-                if (CurrentSkill.Name != Name)
+                if (CurrentSkill.Name != SkillName)
                 {
-                    CurrentSkill.Name = Name;
+                    CurrentSkill.Name = SkillName;
                     RaisePropertyChanged(CurrentSkill, "Name");
                     modified = true;
                 }
-                if (CurrentSkill.RealName != RealName)
+                if (CurrentSkill.Tags != null)
                 {
-                    CurrentSkill.RealName = RealName;
-                    RaisePropertyChanged(CurrentSkill, "RealName");
-                    modified = true;
-                }
-                if (CurrentSkill.Description != Description)
-                {
-                    CurrentSkill.Description = Description;
-                    RaisePropertyChanged(CurrentSkill, "Description");
-                    modified = true;
-                }
-                if (CurrentSkill.Hidden != Hidden)
-                {
-                    CurrentSkill.Hidden = Hidden;
-                    RaisePropertyChanged(CurrentSkill, "Hidden");
-                    modified = true;
-                }
-                if (CurrentSkill.IgnoreInstanceNumber != IgnoreInstanceNumber)
-                {
-                    CurrentSkill.IgnoreInstanceNumber = IgnoreInstanceNumber;
-                    RaisePropertyChanged(CurrentSkill, "IgnoreInstanceNumber");
-                    modified = true;
-                }
-                if (CurrentSkill.ModelPath != ModelPath)
-                {
-                    CurrentSkill.ModelPath = ModelPath;
-                    RaisePropertyChanged(CurrentSkill, "ModelPath");
-                    modified = true;
-                }
-                if (CurrentSkill.Affinity == null || CurrentSkill.Affinity.Name != GetReferenceFromObject(Affinity)?.Name)
-                {
-                    CurrentSkill.Affinity = GetReferenceFromObject(Affinity);
-                    RaisePropertyChanged(CurrentSkill, "Affinity");
-                    modified = true;
-                }
-                if (CurrentSkill.Class == null || CurrentSkill.Class.Name != GetReferenceFromObject(CEcon_GetAssetClassInfo_Request.Class)?.Name)
-                {
-                    CurrentSkill.Class = GetReferenceFromObject(CEcon_GetAssetClassInfo_Request.Class);
-                    RaisePropertyChanged(CurrentSkill, "Class");
-                    modified = true;
-                }
-                if (CurrentSkill.Politics == null || CurrentSkill.Politics.Name != GetReferenceFromObject(Politic)?.Name)
-                {
-                    CurrentSkill.Politics = GetReferenceFromObject(Politic);
-                    RaisePropertyChanged(CurrentSkill, "Politics");
-                    modified = true;
-                }
-                if (CurrentSkill.ShipDesign == null || CurrentSkill.ShipDesign.Name != GetReferenceFromObject(Ship)?.Name)
-                {
-                    CurrentSkill.ShipDesign = GetReferenceFromObject(Ship);
-                    RaisePropertyChanged(CurrentSkill, "ShipDesign");
-                    modified = true;
-                }
-
-                if (CurrentSkills.Count != 0 && CurrentSkill.Skill != null)
-                {
-                    if (!CurrentSkill.Skill.Select(x => x.Name)
-                        .SequenceEqual(GetReferenceFromObject(CurrentSkills).Select(x => x.Name))) //compare and change if not the same
+                    if (CurrentSkill.Tags.Value != Tags.Value)
                     {
-                        CurrentSkill.Skill = GetReferenceFromObject(CurrentSkills);
-                        RaisePropertyChanged(CurrentSkill, "Skill");
+                        CurrentSkill.Tags = Tags;
+                        RaisePropertyChanged(CurrentSkill, "Tags");
                         modified = true;
                     }
                 }
-                else if (CurrentSkills.Count == 0 && CurrentSkill.Skill == null)
+
+
+                //TODO Need to find a way of saving skill levels, but my brain is currently dead af
+                //TODO we can probably do it by handling the reference stuff outside of the save function and do it as stuff is added
+                if (CurrentSkillLevels.Count != 0 && CurrentSkill.SkillLevel != null)
+                {
+                    if (!CurrentSkill.SkillLevel.Select(x => x.Name)
+                        .SequenceEqual(GetSkillDefinitionFromObject(CurrentSkillLevels).Select(x => x.Name))) //compare and change if not the same
+                    {
+                        CurrentSkill.SkillLevel = GetSkillDefinitionFromObject(CurrentSkillLevels);
+                        RaisePropertyChanged(CurrentSkill, "SkillLevel");
+                        modified = true;
+                    }
+                }
+                else if (CurrentSkillLevels.Count == 0 && CurrentSkill.SkillLevel == null)
                 {
                     //both null, ignore
                 }
                 else
                 {
-                    CurrentSkill.Skill = GetReferenceFromObject(CurrentSkills);
-                    RaisePropertyChanged(CurrentSkill, "Skill");
-                    modified = true;
-                }
-
-                if (CurrentSkillTrees.Count != 0 && CurrentSkill.SkillTree != null)
-                {
-                    if (!CurrentSkill.SkillTree.Select(x => x.Name)
-                        .SequenceEqual(GetReferenceFromObject(CurrentSkillTrees).Select(x => x.Name)))
-                    {
-                        CurrentSkill.SkillTree = GetReferenceFromObject(CurrentSkillTrees);
-                        RaisePropertyChanged(CurrentSkill, "SkillTree");
-                        modified = true;
-                    }
-                }
-                else if (CurrentSkillTrees.Count == 0 && CurrentSkill.SkillTree == null)
-                {
-                    //both null, ignore
-                }
-                else
-                {
-                    CurrentSkill.SkillTree = GetReferenceFromObject(CurrentSkillTrees);
-                    RaisePropertyChanged(CurrentSkill, "SkillTree");
+                    CurrentSkill.SkillLevel = GetSkillDefinitionFromObject(CurrentSkillLevels);
+                    RaisePropertyChanged(CurrentSkill, "SkillLevel");
                     modified = true;
                 }
 
@@ -611,8 +625,72 @@ namespace EndlessModding.EndlessSpace2.Skill
                     RaisePropertyChanged(CurrentSkill, "Custom");
                 }
                 MainWindow.IsBusy = false;
-            }*/
+            }
         }
+
+        private HeroSkillLevelDefinition[] GetSkillDefinitionFromObject<T>(BindingList<T> input)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            List<HeroSkillLevelDefinition> output = new List<HeroSkillLevelDefinition>();
+            if (input == null)
+            {
+                return null;
+            }
+
+            foreach (T item in input)
+            {
+                try
+                {
+                    output.Add(new HeroSkillLevelDefinition() { Name = (string)item.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(item) });
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message, e.InnerException);
+                }
+            }
+            return output.ToArray();
+        }
+        private XmlNamedReference[] GetReferenceFromObject<T>(BindingList<T> input)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            List<XmlNamedReference> output = new List<XmlNamedReference>();
+            if (input == null)
+            {
+                return null;
+            }
+
+            foreach (T item in input)
+            {
+                try
+                {
+                    output.Add(new XmlNamedReference() { Name = (string)item.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(item) });
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message, e.InnerException);
+                }
+            }
+            return output.ToArray();
+        }
+        private XmlNamedReference GetReferenceFromObject<T>(T input)
+        {
+            _logger.Info($"{MethodBase.GetCurrentMethod().Name}");
+            if (input == null)
+            {
+                return null;
+            }
+            try
+            {
+                return new XmlNamedReference() { Name = (string)input.GetType().GetProperties().Where(x => x.Name == "Name").First().GetValue(input) };
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message, e.InnerException);
+                return null;
+            }
+        }
+
+        //Can accessors
         private bool canLoadSkill(object obj)
         {
             return !MainWindow.IsBusy;
@@ -630,6 +708,65 @@ namespace EndlessModding.EndlessSpace2.Skill
             return !MainWindow.IsBusy;
         }
 
+        private bool canRemoveEncounter(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canAddEncounter(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canRemoveMastery(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canAddMastery(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canRemoveSystemSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canAddSystemSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canRemoveShipSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canAddShipSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canRemoveSenateSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canAddSenateSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canRemoveHeroSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
+
+        private bool canAddHeroSDR(object obj)
+        {
+            return !MainWindow.IsBusy;
+        }
         #region INotifyPropertyChanged
         /// <summary>
         /// Occurs when [property changed].

@@ -25,6 +25,7 @@ using EndlessModding.EndlessSpace2.Common.Files;
 using EndlessModding.EndlessSpace2.SimulationDescriptor;
 using EndlessModding.EndlessSpace2.SimulationModifierDescriptors;
 using EndlessModding.EndlessSpace2.SimulationPropertyDescriptors;
+using EndlessModding.FactionHeroStart;
 using EndlessModding.Keyboard;
 
 namespace EndlessModding.Common
@@ -46,6 +47,7 @@ namespace EndlessModding.Common
 			container.Register(Component.For<MainWindowViewModel>().ImplementedBy<MainWindowViewModel>());
 			container.Register(Component.For<EndlessSpace2ViewModel>().ImplementedBy<EndlessSpace2ViewModel>());
 			container.Register(Component.For<EndlessKeyboardViewModel>().ImplementedBy<EndlessKeyboardViewModel>());
+			container.Register(Component.For<FactionHeroStartViewModel>().ImplementedBy<FactionHeroStartViewModel>());
 			container.Register(Component.For<MainViewModel>().ImplementedBy<MainViewModel>());
 			container.Register(Component.For<WorkshopViewModel>().ImplementedBy<WorkshopViewModel>());
 			container.Register(Component.For<HeroViewModel>().ImplementedBy<HeroViewModel>());

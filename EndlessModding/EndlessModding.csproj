@@ -307,6 +307,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="FactionHeroStart\FactionHeroStartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Keyboard\EndlessKeyboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -608,10 +612,19 @@
       <DependentUpon>WorkshopView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EndlessSpace2\Workshop\WorkshopViewModel.cs" />
+    <Compile Include="FactionHeroStart\FactionHeroStartView.xaml.cs">
+      <DependentUpon>FactionHeroStartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FactionHeroStart\FactionHeroStartViewModel.cs" />
+    <Compile Include="Keyboard\AmplitudeFontCharacter.cs" />
+    <Compile Include="Keyboard\AmplitudeTextCharacter.cs" />
     <Compile Include="Keyboard\EndlessKeyboardView.xaml.cs">
       <DependentUpon>EndlessKeyboardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Keyboard\EndlessKeyboardViewModel.cs" />
+    <Compile Include="Common\ItemDoubleClickBehavior.cs" />
+    <Compile Include="Common\SelectionBindingTextBox.cs" />
+    <Compile Include="Common\UIHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -651,7 +664,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Export\" />
-    <Folder Include="FactionHeroStart\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationConfiguration\CastleConfig.xml">

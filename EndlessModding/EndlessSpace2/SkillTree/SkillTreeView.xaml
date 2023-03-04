@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:EndlessModding.EndlessSpace2.SkillTree"
              xmlns:extensions="clr-namespace:EndlessModding.EndlessSpace2.Common.Extensions"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="1000">
+             d:DesignHeight="1000" d:DesignWidth="1000">
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -38,10 +38,16 @@
                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Search:</TextBlock>
                             <TextBox Grid.Column="1" Name="SearchBox0"></TextBox>
                         </Grid>
-                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  ColumnWidth="*"  Grid.Row="1"  ItemsSource="{Binding Mods, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentMod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
+                        <DataGrid extensions:DataGridTextSearch.SearchValue="{Binding ElementName=SearchBox0, Path=Text, UpdateSourceTrigger=PropertyChanged}"  ColumnWidth="*"  Grid.Row="1"  ItemsSource="{Binding Skills, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding CurrentSkill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  Style="{StaticResource MahApps.Styles.DataGrid.Azure}" CanUserAddRows="False" CanUserSortColumns="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="auto" Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridTextColumn.Header>Name</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding Cost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Cost</DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Width="auto" Binding="{Binding LevelCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridTextColumn.Header>Levels</DataGridTextColumn.Header>
                                 </DataGridTextColumn>
                                 <DataGridCheckBoxColumn Width="auto" Binding="{Binding Custom, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridCheckBoxColumn.Header>Custom</DataGridCheckBoxColumn.Header>
@@ -68,12 +74,164 @@
                         </DataGrid>
                     </Grid>
                 </GroupBox>
-                <Button Grid.Row="1" Command="{Binding NewSkillDefinition}">New Mod</Button>
+                <Button Grid.Row="1" Command="{Binding NewSkillDefinition}">New Skill Tree</Button>
             </Grid>
 
             <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
 
             <Grid Grid.Column="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="1*"/>
+                        <!--
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="1*"/>-->
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Skill Definition" Grid.Column="0">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Text="Name"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding SkillName}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Specializations"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding SkillTreeSpecializations}"/>
+                            <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding SkillTreeSpecializations, Mode=TwoWay}" ItemsSource="{Binding SkillTreeStages, Mode=OneWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <GroupBox Header="Stages" Margin="0,5,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" MinHeight="50"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedIndex="{Binding CurrentSkillTreeStage, Mode=TwoWay}" ItemsSource="{Binding SkillTreeStages, Mode=TwoWay}"/>
+                                    <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding NewStage, Mode=OneWayToSource}"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddStage}">Add Stage</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveStage}">Remove Stage</Button>
+                                </Grid>
+                            </GroupBox>
+                        </StackPanel>
+                    </GroupBox>
+                    <GridSplitter Grid.Column="1" Background="MidnightBlue" HorizontalAlignment="Stretch" Width="2"/>
+                    <GroupBox Header="Skill Tree Stage" Grid.Column="2">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Text="Name"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding SkillLevelName}"/>
+
+                            <TextBlock TextWrapping="Wrap" Text="Level"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding CurrentSkillTreeStageLevel}"/>
+
+                            <GroupBox Header="Skills" Margin="0,5,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" MinHeight="50"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding addme, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillTreeStageSkills, Mode=TwoWay}"/>
+
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding addme, Mode=TwoWay}" ItemsSource="{Binding addme, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddStageSkill}">Add Skill</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveStageSkill}">Remove Skill</Button>
+                                </Grid>
+                            </GroupBox>
+                        </StackPanel>
+                    </GroupBox>
+                    <GridSplitter Grid.Column="3" Background="MidnightBlue" HorizontalAlignment="Stretch" Width="2"/>
+                    <GroupBox Header="Skill" Grid.Column="4">
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" Text="Name"/>
+                            <TextBox TextWrapping="Wrap" Text="{Binding SkillLevelName}"/>
+                            <TextBlock TextWrapping="Wrap" Text="Skill"/>
+                            <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding CurrentSkillTreeStageRequiredSkill, Mode=TwoWay}" ItemsSource="{Binding Skills, Mode=OneWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <TextBlock TextWrapping="Wrap" Text="Required Skill"/>
+                            <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding CurrentSkillTreeStageSkill, Mode=TwoWay}" ItemsSource="{Binding Skills, Mode=OneWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <GroupBox Header="Alternate Skills" Margin="0,5,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" MinHeight="50"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding addme, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillTreeStageAlternateSkill, Mode=TwoWay}"/>
+
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding addme, Mode=TwoWay}" ItemsSource="{Binding addme, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddStageSkill}">Add Skill</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemoveStageSkill}">Remove Skill</Button>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Header="Prerequisites" Margin="0,5,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" MinHeight="50"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <ListView Grid.Row="0" Grid.ColumnSpan="2" ScrollViewer.CanContentScroll="True" HorizontalAlignment="Stretch" IsSynchronizedWithCurrentItem="True" SelectionMode="Single" SelectedItem="{Binding addme, Mode=TwoWay}" ItemsSource="{Binding CurrentSkillTreeStageItems, Mode=TwoWay}"/>
+
+                                    <ComboBox ShouldPreserveUserEnteredPrefix="False" IsEditable="True" StaysOpenOnEdit="True" Grid.Row="1" Grid.ColumnSpan="2"  SelectedItem="{Binding addme, Mode=TwoWay}" ItemsSource="{Binding addme, Mode=OneWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Grid.Row="2" Grid.Column="0" Command="{Binding AddPrereq}">Add Prereq</Button>
+                                    <Button Grid.Row="2" Grid.Column="1" Command="{Binding RemovePrereq}">Remove Prereq</Button>
+                                </Grid>
+                            </GroupBox>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
             </Grid>
 
         </Grid>
